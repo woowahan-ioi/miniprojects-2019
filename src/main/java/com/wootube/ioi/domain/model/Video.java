@@ -49,4 +49,16 @@ public class Video {
 	public void setContentPath(String contentPath) {
 		this.contentPath = contentPath;
 	}
+
+	public void update(Video updateVideo) {
+		if (updateVideo.title != null) {
+			this.title = updateVideo.title;
+		}
+		if (updateVideo.description != null) {
+			this.description = updateVideo.description;
+		}
+		if (updateVideo.contentPath != null) {
+			this.contentPath = updateVideo.contentPath;
+		}
+	}
 }

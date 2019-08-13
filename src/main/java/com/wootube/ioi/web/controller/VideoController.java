@@ -5,10 +5,7 @@ import com.wootube.ioi.service.VideoService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("/videos")
@@ -35,5 +32,17 @@ public class VideoController {
 	public String video(@PathVariable Long id, Model model) {
 		model.addAttribute("video", videoService.findById(id));
 		return "video";
+	}
+
+	@GetMapping("/{id}/edit")
+	public String updateVideoPage(@PathVariable Long id, Model model) {
+		model.addAttribute("video", videoService.findById(id));
+		return "video-edit";
+	}
+
+	@PutMapping("/{id}")
+	public String updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoDto videoDto) {
+		videoService.update(id, uploadFile, videoDto);
+		return "redirect:/videos/"+id;
 	}
 }

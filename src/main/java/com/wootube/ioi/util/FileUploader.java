@@ -52,4 +52,8 @@ public class FileUploader {
 		}
 		return Optional.empty();
 	}
+
+	public void deleteFile(String directoryName, String originFileName) {
+		amazonS3Client.deleteObject(bucket, directoryName + "/" + originFileName);
+	}
 }

@@ -1,6 +1,7 @@
 package com.wootube.ioi.service;
 
 import java.io.IOException;
+import javax.transaction.Transactional;
 
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
@@ -43,6 +44,18 @@ public class VideoService {
 	private Video findVideo(Long id) {
 		return videoRepository.findById(id)
 				.orElseThrow(NotFoundVideoException::new);
+	}
+
+	@Transactional
+	public void update(Long id, MultipartFile uploadFile, VideoDto videoDto) {
+		Video video = findVideo(id);
+		if(!uploadFile.isEmpty()) {
+			fileUploader.deleteFile(directoryName, video.getOriginFileName());
+			String videoUrl = uploadFile(uploadFile, directoryName);
+			video.setContentPath(videoUrl);
+		}
+		video.update(modelMapper.map(videoDto, Video.class));
+		videoRepository.save(video);
 	}
 
 	public String uploadFile(MultipartFile uploadFile, String directoryName) {
