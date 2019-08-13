@@ -45,4 +45,10 @@ public class VideoController {
 		videoService.update(id, uploadFile, videoDto);
 		return "redirect:/videos/"+id;
 	}
+
+	@DeleteMapping("/{id}")
+	public String video(@PathVariable Long id) {
+		videoService.deleteById(id);
+		return "redirect:/";
+	}
 }
