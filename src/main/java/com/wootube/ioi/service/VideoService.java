@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.exception.FileUploadException;
+import com.wootube.ioi.exception.NotFoundVideoException;
 import com.wootube.ioi.request.VideoDto;
 import com.wootube.ioi.util.FileUploader;
 import org.modelmapper.ModelMapper;
@@ -33,6 +34,15 @@ public class VideoService {
 		video.setContentPath(videoUrl);
 		video.setOriginFileName(originFileName);
 		videoRepository.save(video);
+	}
+
+	public VideoDto findById(Long id) {
+		return modelMapper.map(findVideo(id), VideoDto.class);
+	}
+
+	private Video findVideo(Long id) {
+		return videoRepository.findById(id)
+				.orElseThrow(NotFoundVideoException::new);
 	}
 
 	public String uploadFile(MultipartFile uploadFile, String directoryName) {
