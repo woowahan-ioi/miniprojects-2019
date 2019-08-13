@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
@@ -66,9 +66,14 @@
                         <i class="material-icons">notifications</i>
                     </a>
                 </li>
-                <li class="user-profile">
+                <li th:if="${session.user}" class="user-profile">
                     <a>
                         <img class="profile-img img-fluid" src="../static/images/default/eastjun_profile.jpg" alt="">
+                    </a>
+                </li>
+                <li th:unless="${session.user}">
+                    <a class="pointer">
+                        <i class="material-icons">account_circle</i>
                     </a>
                 </li>
             </ul>

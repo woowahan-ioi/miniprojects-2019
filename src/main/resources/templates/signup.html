@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wootube</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans|Noto+Sans+KR&display=swap" rel="stylesheet">
+  <style>
+    .input {
+      padding: 0px;
+    }
+
+    .login-title {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.3333;
+    }
+
+    .login-desc {
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: .1px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <v-app>
+    <v-content>
+      <v-container fill-height>
+        <v-col justify="center" align="center">
+          <div style="border: 1px solid #DADCE0; border-radius: 10px; padding: 48px 40px 36px; overflow-x: hidden; max-width: 451px;">
+            <form>
+              <v-col justify="center" align="center">
+                <v-row class="pb-3 px-2" justify="start" pb-2>
+                  <img src="../static/images/asset/woogle_logo.png" style="height: 24px"/>
+                </v-row>
+                <v-row class="pb-3 px-2" justify="start">
+                  <div class="login-title">Woogle 계정 만들기</div>
+                </v-row>
+                <v-row class="pb-5 px-2" justify="start">
+                  <div class="login-desc">Wootube로 이동</div>
+                </v-row>
+                <v-col class="input pt-5" cols="12">
+                  <v-text-field
+                    v-model="name"
+                    label="이름"
+                    outlined
+                    required
+                    type="name"
+                    :rules="[rules.nameRequired, rules.namePattern]"
+                  ></v-text-field>
+                </v-col>
+                <v-col class="input" cols="12">
+                  <v-text-field
+                    v-model="email"
+                    label="이메일 주소"
+                    outlined
+                    required
+                    type="name"
+                    :rules="[rules.emailRequired, rules.emailPattern]"
+                  ></v-text-field>
+                </v-col>
+                <v-col class="input" cols="12">
+                  <v-text-field
+                    v-model="password"
+                    label="비밀번호"
+                    outlined
+                    required
+                    type="password"
+                    :rules="[rules.passwordRequired, rules.passwordPattern]"
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="passwordCheck"
+                    label="확인"
+                    outlined
+                    required
+                    type="password"
+                    :rules="[rules.passwordChecking]"
+                  ></v-text-field>
+                </v-col>
+                <v-row class="pt-5 px-2">
+                  <v-spacer></v-spacer>
+                  <v-btn class="primary" depressed width="75px">회원가입</v-btn>
+                </v-row>
+              </v-col>
+            </form>
+          </div>
+        </v-col>
+      </v-container>
+    </v-content>
+  </v-app>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script>
+    const vue = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: {
+            email: '',
+            name: '',
+            password: '',
+            passwordCheck: '',
+            rules: {
+                emailRequired: value => !!value || '이메일을 입력해주세요.',
+                emailPattern: value => {
+                    const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
+
+                    if (!regExp.test(value)) {
+                        return '올바른 이메일을 입력해주세요.'
+                    }
+
+                    return true
+                },
+                nameRequired: value => !!value || '이름을 입력해주세요.',
+                namePattern: value => {
+                    const regExp = /^[^ \-!@#$%^&*(),.?":{}|<>0-9]{2,10}$/i
+
+                    if (!regExp.test(value)) {
+                        return '이름은 2-10자, 영문자와 한글만 가능합니다.'
+                    }
+
+                    return true
+                },
+                passwordRequired: value => !!value || '비밀번호를 입력해주세요.',
+                passwordPattern: value => {
+                    if (!value.match(/[a-z]/g) ||
+                        !value.match(/[0-9]/g) ||
+                        value.length < 8) {
+                        return '강력한 비밀번호를 설정해주세요'
+                    }
+
+                    if (value.length >= 32) {
+                        return '너무 깁니다.'
+                    }
+
+                    return true
+                },
+                passwordChecking: (value) => {
+                    if (vue.password !== value) {
+                        return '일치하지 않습니다.'
+                    }
+
+                    return true
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>
