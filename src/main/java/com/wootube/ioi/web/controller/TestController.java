@@ -13,4 +13,9 @@ public class TestController {
         return "index.html";
     }
 
+    @GetMapping("/video")
+    public String video() {
+        return "video.html";
+    }
+
 }

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/config :: configFragment"/>
+    <title>Wootube</title>
+    <link rel="stylesheet" href="/css/video.css">
+</head>
+
+<body>
+<div class="app">
+    <th:block th:replace="fragments/header :: headerFragment"/>
+
+    <div class="row padding-80 pdd-top-75">
+        <div class="col-lg-8 col-md-8 ">
+            <iframe class="width-100" height="550px" preload controls
+                    src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen>
+            </iframe>
+            <hr class="hr-style">
+
+            <div class="width-100 row">
+                <div class="col-sm-2">
+                    <img class="video-owner-img img-circle" src="/images/default/eastjun_big.jpg"
+                         alt="">
+                </div>
+                <div class="relative banner-info d-inline-block col-sm-8">
+                    <span class="left-30 bottom-35 font-size-17 text-bold">UserName</span><br>
+                    <span class="left-30 bottom-35 font-size-13">DateTime: 19.08.13</span>
+                    <div class="left-30 mrg-vertical-10">
+                    <span>description<span id="dots">...</span>
+                        <span style="display:none" id="more"> erisque enim ligula venenatis dolor.
+                            Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.
+                            Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac.
+                            In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis.
+                            Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.
+                        </span>
+                    </span>
+                    </div>
+                    <span class="mrg-vertical-20 left-30" onclick="readMoreTag()" id="readMoreSpan">더보기</span>
+                </div>
+                <div class="left-30 col-sm-2">
+                    <button class="subscribe-btn font-size-13">구독 <span id="subscribe_number"> 00명</span>
+                    </button>
+                </div>
+            </div>
+            <hr class="hr-style">
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+            <div class="row">
+                <div class="col-sm-8">
+                    <span class="font-size-17 text-bold">다음 동영상</span>
+                </div>
+                <div class="col-sm-4 auto-play-div">
+                    <span class="font-size-12 auto-play-span">자동재생</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <hr class="hr-style">
+
+            <div class="row pdd-horizon-10">
+                <div class="padding-2">
+                    <div class="card bg-transparent no-border">
+                        <div class="card-media row">
+                            <div class="col-md-6">
+                                <img class="img-responsive" src="/images/default/thumb_001.jpeg" alt="">
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
+                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
+                                <span class="font-size-11">우아한Tech</span>
+                                <div class="font-size-11">
+                                    <span>조회수 952회</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding-2">
+                    <div class="card bg-transparent no-border">
+                        <div class="card-media row">
+                            <div class="col-md-6">
+                                <img class="img-responsive" src="/images/default/thumb_002.jpeg" alt="">
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
+                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
+                                <span class="font-size-11">우아한Tech</span>
+                                <div class="font-size-11">
+                                    <span>조회수 952회</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding-2">
+                    <div class="card bg-transparent no-border">
+                        <div class="card-media row">
+                            <div class="col-md-6">
+                                <img class="img-responsive" src="/images/default/thumb_003.jpeg" alt="">
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
+                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
+                                <span class="font-size-11">우아한Tech</span>
+                                <div class="font-size-11">
+                                    <span>조회수 952회</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding-2">
+                    <div class="card bg-transparent no-border">
+                        <div class="card-media row">
+                            <div class="col-md-6">
+                                <img class="img-responsive" src="/images/default/thumb_004.jpeg" alt="">
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
+                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
+                                <span class="font-size-11">우아한Tech</span>
+                                <div class="font-size-11">
+                                    <span>조회수 952회</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding-2">
+                    <div class="card bg-transparent no-border">
+                        <div class="card-media row">
+                            <div class="col-md-6">
+                                <img class="img-responsive" src="/images/default/thumb_005.jpeg" alt="">
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
+                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
+                                <span class="font-size-11">우아한Tech</span>
+                                <div class="font-size-11">
+                                    <span>조회수 952회</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script>
+        function readMoreTag() {
+            var dots = document.getElementById("dots");
+            var moreText = document.getElementById("more");
+            var btnText = document.getElementById("readMoreSpan");
+
+            if (dots.style.display === "none") {
+                dots.style.display = "inline";
+                btnText.innerHTML = "더보기";
+                moreText.style.display = "none";
+            } else {
+                dots.style.display = "none";
+                btnText.innerHTML = "간략히";
+                moreText.style.display = "inline";
+            }
+        }
+    </script>
+</body>
+</html>
