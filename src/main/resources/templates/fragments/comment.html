@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="commentFragment">
+<div>
+    <div>댓글 <span id="comment-count">1,131</span>개</div>
+    <div class="comment mrg-btm-50">
+        <i class="user-logo"></i>
+        <div class="mrg-top-5">
+            <div class="reply-area">
+                <div class="mrg-btm-10">
+                    <i class="ti-truck"></i>
+                    <input id="comment-input-text" class="comment-input" type="text" placeholder="공개 댓글 추가...">
+                </div>
+                <div id="comment-button-area" class="display-none">
+                    <button id="comment-save-button" class="btn comment-btn comment-save-btn disabled">댓글</button>
+                    <button id="comment-cancel-button" class="btn comment-btn comment-cancel-btn">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul id="comment-area">
+        <li class="comment mrg-btm-30">
+            <i class="user-logo"></i>
+            <div class="font-size-13">
+                <span class="user-name">name</span>
+                <span class="update-date">date</span>
+            </div>
+            <button class="more-button display-none">
+                <i class="ti-more-alt"></i>
+            </button>
+            <span class="comment-contents font-size-15">contents</span>
+            <div class="mrg-top-5">
+                <button class="like-btn">
+                    <i class="ti-thumb-up"></i>
+                </button>
+                <span>3.5천</span>
+                <button class="reply-toggle-btn">답글</button>
+                <div class="reply-area display-none">
+                    <div class="mrg-btm-10">
+                        <i class="ti-truck"></i>
+                        <input class="comment-input" type="text" placeholder="공개 답글 추가...">
+                    </div>
+                    <button class="btn comment-btn comment-save-btn disabled">답글</button>
+                    <button class="btn comment-btn comment-cancel-btn">취소</button>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+</div>
+</th:block>
+</html>
