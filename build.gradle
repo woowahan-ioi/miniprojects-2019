@@ -26,21 +26,24 @@ repositories {
 }
 
 dependencies {
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.projectlombok:lombok'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation group: 'org.passay', name: 'passay', version: '1.5.0'
-	implementation 'org.springframework.boot:spring-boot-devtools'
-	implementation "org.apache.tomcat.embed:tomcat-embed-el"
-	
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	
-	runtimeOnly 'mysql:mysql-connector-java'
-	runtimeOnly 'com.h2database:h2'
-	
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	
-	annotationProcessor 'org.projectlombok:lombok'
-	
-	compileOnly 'org.projectlombok:lombok'
+
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'mysql:mysql-connector-java'
+
+	implementation group: 'org.passay', name: 'passay', version: '1.5.0'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'junit'
+	}
+	testImplementation 'org.junit.jupiter:junit-jupiter-api'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
 }
