@@ -16,7 +16,7 @@ public class SignUpRequestDto {
         this.password = password;
     }
 
-    public User toEntity() {
+    public User toUser() {
         return new User(name, email, password);
     }
 }

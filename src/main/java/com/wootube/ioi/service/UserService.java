@@ -18,6 +18,6 @@ public class UserService {
     }
 
     public User signUp(SignUpRequestDto signUpRequestDto) {
-        return userRepository.save(signUpRequestDto.toEntity());
+        return userRepository.save(signUpRequestDto.toUser());
     }
 }
