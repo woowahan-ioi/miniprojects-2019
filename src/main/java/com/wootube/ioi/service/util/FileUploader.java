@@ -1,4 +1,4 @@
-package com.wootube.ioi.util;
+package com.wootube.ioi.service.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
