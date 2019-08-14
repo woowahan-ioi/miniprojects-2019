@@ -1,6 +1,8 @@
 package com.wootube.ioi.web.controller;
 
+import com.wootube.ioi.domain.User;
 import com.wootube.ioi.repository.UserRepository;
+import com.wootube.ioi.web.dto.LogInRequestDto;
 import com.wootube.ioi.web.dto.SignUpRequestDto;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -66,11 +68,46 @@ public class UserControllerTest {
         assertThat(userRepository.findAll().size()).isEqualTo(1);
     }
 
+    @DisplayName("회원조회 (로그인 성공)")
+    @Test
+    void login() {
+        userRepository.save(new User("루피", "luffy@luffy.com", "1234567a"));
+
+        LogInRequestDto logInRequestDto = new LogInRequestDto("luffy@luffy.com", "1234567a");
+
+        webTestClient.post().uri("/user/login")
+                .body(BodyInserters.fromFormData(parser(logInRequestDto)))
+                .exchange()
+                .expectStatus()
+                .isFound();
+    }
+
+    @DisplayName("회원조회 (로그인 실패)")
+    @Test
+    void loginFailedNoUser() {
+        userRepository.save(new User("루피", "luffy@luffy.com", "1234567a"));
+
+        LogInRequestDto logInRequestDto = new LogInRequestDto("nono@luffy.com", "1234567a");
+
+        webTestClient.post().uri("/user/login")
+                .body(BodyInserters.fromFormData(parser(logInRequestDto)))
+                .exchange()
+                .expectStatus()
+                .is5xxServerError();
+    }
+
     private MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("name", signUpRequestDto.getName());
         multiValueMap.add("email", signUpRequestDto.getEmail());
         multiValueMap.add("password", signUpRequestDto.getPassword());
+        return multiValueMap;
+    }
+
+    private MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.add("email", logInRequestDto.getEmail());
+        multiValueMap.add("password", logInRequestDto.getPassword());
         return multiValueMap;
     }
 }
