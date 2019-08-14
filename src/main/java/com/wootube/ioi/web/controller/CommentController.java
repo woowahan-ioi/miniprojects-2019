@@ -42,6 +42,7 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(@PathVariable Long videoId, @PathVariable Long commentId) {
         // 로그인 상태인가?
         // 세션 유저와 댓글 유저와 같은지 확인한다.
+        commentService.delete(commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

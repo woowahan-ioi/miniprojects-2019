@@ -43,8 +43,8 @@ public class CommentService {
     public void delete(Long commentId) {
         // 같은 비디오인지 확인
         // 세션 유저와 comment의 유저가 같은지 확인
-//        Comment comment = commentRepository.findById(commentId)
-//                .orElseThrow(NotFoundCommentException::new);
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(NotFoundCommentException::new);
 //        if(comment.isSameWriteWith(sessionUser)){
             commentRepository.deleteById(commentId);
 //        }

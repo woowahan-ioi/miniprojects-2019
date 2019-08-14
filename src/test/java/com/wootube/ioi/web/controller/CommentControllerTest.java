@@ -79,6 +79,17 @@ public class CommentControllerTest {
                 .expectStatus().isNoContent();
     }
 
+    @Test
+    @DisplayName("존재하지 않는 댓글 삭제하는 경우 예외발생")
+    void deleteCommentFail() {
+        webTestClient.delete()
+                .uri("/watch/1/comments/" + NOT_EXIST_COMMENT_ID)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$").isEqualTo(NOT_FOUND_COMMENT_EXCEPTION_MESSAGE);
+    }
+
     private String login() {
         User user = new User("hyo", "hyo@naver.com", "password123!");
 
