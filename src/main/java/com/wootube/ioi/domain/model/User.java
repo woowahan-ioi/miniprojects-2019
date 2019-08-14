@@ -54,4 +54,9 @@ public class User {
         }
         return this;
     }
+
+    public User updateName(String name) {
+        this.name = name;
+        return this;
+    }
 }
