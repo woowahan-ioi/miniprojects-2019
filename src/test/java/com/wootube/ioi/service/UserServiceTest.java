@@ -1,11 +1,11 @@
 package com.wootube.ioi.service;
 
-import com.wootube.ioi.domain.User;
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
-import com.wootube.ioi.repository.UserRepository;
+import com.wootube.ioi.domain.model.User;
+import com.wootube.ioi.domain.repository.UserRepository;
+import com.wootube.ioi.service.dto.LogInRequestDto;
+import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.service.exception.NotFoundUserException;
-import com.wootube.ioi.web.dto.LogInRequestDto;
-import com.wootube.ioi.web.dto.SignUpRequestDto;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

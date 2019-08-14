@@ -1,6 +1,6 @@
-package com.wootube.ioi.web.dto;
+package com.wootube.ioi.service.dto;
 
-import com.wootube.ioi.domain.User;
+import com.wootube.ioi.domain.model.User;
 
 import lombok.Getter;
 

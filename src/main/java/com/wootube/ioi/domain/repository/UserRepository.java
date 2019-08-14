@@ -1,6 +1,6 @@
-package com.wootube.ioi.repository;
+package com.wootube.ioi.domain.repository;
 
-import com.wootube.ioi.domain.User;
+import com.wootube.ioi.domain.model.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,4 +1,4 @@
-package com.wootube.ioi.web.dto;
+package com.wootube.ioi.service.dto;
 
 import lombok.Getter;
 

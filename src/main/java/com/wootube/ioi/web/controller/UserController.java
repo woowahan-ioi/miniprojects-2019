@@ -1,9 +1,9 @@
 package com.wootube.ioi.web.controller;
 
-import com.wootube.ioi.domain.User;
+import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.service.UserService;
-import com.wootube.ioi.web.dto.LogInRequestDto;
-import com.wootube.ioi.web.dto.SignUpRequestDto;
+import com.wootube.ioi.service.dto.LogInRequestDto;
+import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.web.session.LoginUserSessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;

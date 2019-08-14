@@ -1,6 +1,7 @@
 package com.wootube.ioi.domain;
 
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
+import com.wootube.ioi.domain.model.User;
 
 import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.AssertionsForClassTypes;

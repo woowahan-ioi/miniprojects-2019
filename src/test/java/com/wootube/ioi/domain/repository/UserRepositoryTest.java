@@ -1,8 +1,8 @@
-package com.wootube.ioi.repository;
+package com.wootube.ioi.domain.repository;
 
-import com.wootube.ioi.domain.User;
+import com.wootube.ioi.domain.model.User;
+import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.service.exception.NotFoundUserException;
-import com.wootube.ioi.web.dto.SignUpRequestDto;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
