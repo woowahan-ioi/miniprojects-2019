@@ -26,7 +26,6 @@ repositories {
 }
 
 dependencies {
-<<<<<<< HEAD
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -35,6 +34,8 @@ dependencies {
 	implementation "org.apache.tomcat.embed:tomcat-embed-el"
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
 	
 	runtimeOnly 'mysql:mysql-connector-java'
 	runtimeOnly 'com.h2database:h2'
@@ -44,22 +45,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	
 	compileOnly 'org.projectlombok:lombok'
-=======
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation group: 'org.passay', name: 'passay', version: '1.5.0'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api'
-    testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
+    
     compile('org.springframework.cloud:spring-cloud-starter-aws')
     implementation 'org.modelmapper:modelmapper:0.7.8'
->>>>>>> FEAT-video
 }
 
 dependencyManagement {

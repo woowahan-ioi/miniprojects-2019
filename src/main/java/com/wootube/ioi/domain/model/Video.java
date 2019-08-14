@@ -15,7 +15,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @DynamicUpdate
 public class Video {
 	@Id
@@ -51,14 +50,10 @@ public class Video {
 	}
 
 	public void update(Video updateVideo) {
-		if (updateVideo.title != null) {
-			this.title = updateVideo.title;
-		}
-		if (updateVideo.description != null) {
-			this.description = updateVideo.description;
-		}
-		if (updateVideo.contentPath != null) {
+		if(updateVideo.contentPath != null) {
 			this.contentPath = updateVideo.contentPath;
 		}
+		this.title = updateVideo.title;
+		this.description = updateVideo.description;
 	}
 }

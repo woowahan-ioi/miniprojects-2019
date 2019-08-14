@@ -1,4 +1,4 @@
-package com.wootube.ioi.exception;
+package com.wootube.ioi.service.exception;
 
 public class FileUploadException extends RuntimeException {
 	public FileUploadException() {

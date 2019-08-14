@@ -1,4 +1,4 @@
-package com.wootube.ioi.request;
+package com.wootube.ioi.service.dto;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class VideoDto {
+public class VideoRequestDto {
 	private Long id;
 	private String title;
 	private String description;

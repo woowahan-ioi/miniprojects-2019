@@ -1,4 +1,4 @@
-package com.wootube.ioi.util;
+package com.wootube.ioi.service.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,17 +8,19 @@ import java.util.Optional;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.wootube.ioi.exception.FileUploadException;
-import lombok.RequiredArgsConstructor;
 
+import com.wootube.ioi.service.exception.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-@RequiredArgsConstructor
 @Component
 public class FileUploader {
 	private final AmazonS3Client amazonS3Client;
+
+	public FileUploader(AmazonS3Client amazonS3Client) {
+		this.amazonS3Client = amazonS3Client;
+	}
 
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;

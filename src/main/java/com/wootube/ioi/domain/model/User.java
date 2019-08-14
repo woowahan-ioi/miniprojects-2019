@@ -1,6 +1,6 @@
-package com.wootube.ioi.domain;
+package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.validator.Password;
+import com.wootube.ioi.domain.validator.Password;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
