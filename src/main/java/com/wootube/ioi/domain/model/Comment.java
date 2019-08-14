@@ -1,6 +1,7 @@
 package com.wootube.ioi.domain.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -11,12 +12,14 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Lob
+    @Column(nullable = false)
     private String contents;
 
     @CreationTimestamp
@@ -24,10 +27,6 @@ public class Comment {
 
     @UpdateTimestamp
     private LocalDateTime updateTime;
-
-    private Comment(){
-
-    }
 
     public Comment(String contents) {
         this.contents = contents;
