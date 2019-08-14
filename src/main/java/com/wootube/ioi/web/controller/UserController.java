@@ -48,4 +48,10 @@ public class UserController {
         loginUserSessionManager.setUser(loginUser);
         return new RedirectView("/");
     }
+
+    @GetMapping("/logout")
+    public RedirectView logout() {
+        loginUserSessionManager.removeUser();
+        return new RedirectView("/");
+    }
 }
