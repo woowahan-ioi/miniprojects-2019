@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -49,6 +50,9 @@ public class CommentServiceTest {
     @Mock
     private CommentRepository commentRepository;
 
+    @Mock
+    private Comment updateComment;
+
     @InjectMocks
     private CommentService commentService;
 
@@ -59,6 +63,15 @@ public class CommentServiceTest {
         commentService.save(COMMENT_REQUEST1);
 
         verify(commentRepository).save(COMMENT1);
+    }
+
+    @Test
+    void update() {
+        given(commentRepository.findById(1L)).willReturn(Optional.of(updateComment));
+
+        commentService.update(1L, COMMENT_REQUEST2);
+
+        verify(updateComment).update(COMMENT_REQUEST2.getContents());
     }
 
 }
