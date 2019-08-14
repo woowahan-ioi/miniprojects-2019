@@ -1,0 +1,64 @@
+package com.wootube.ioi.domain.model;
+
+import java.time.LocalDateTime;
+import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@DynamicUpdate
+public class Video {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(nullable = false,
+			length = 50)
+	private String title;
+
+	@Lob
+	@Column(nullable = false)
+	private String description;
+
+	@Lob
+	@Column(nullable = false)
+	private String contentPath;
+
+	@Lob
+	@Column(nullable = false)
+	private String originFileName;
+
+	@Column(updatable = false)
+	@CreationTimestamp
+	private LocalDateTime createTime;
+
+	@Column
+	@UpdateTimestamp
+	private LocalDateTime updateTime;
+
+	public void setContentPath(String contentPath) {
+		this.contentPath = contentPath;
+	}
+
+	public void update(Video updateVideo) {
+		if (updateVideo.title != null) {
+			this.title = updateVideo.title;
+		}
+		if (updateVideo.description != null) {
+			this.description = updateVideo.description;
+		}
+		if (updateVideo.contentPath != null) {
+			this.contentPath = updateVideo.contentPath;
+		}
+	}
+}
