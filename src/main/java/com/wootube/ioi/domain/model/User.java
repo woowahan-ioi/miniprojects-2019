@@ -1,6 +1,7 @@
-package com.wootube.ioi.domain;
+package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.validator.Password;
+import com.wootube.ioi.domain.exception.NotMatchPasswordException;
+import com.wootube.ioi.domain.validator.Password;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,5 +46,12 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public User matchPassword(String password) {
+        if (!password.equals(this.password)) {
+            throw new NotMatchPasswordException();
+        }
+        return this;
     }
 }

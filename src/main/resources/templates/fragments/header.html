@@ -29,9 +29,14 @@
                     <i class="material-icons">notifications</i>
                 </a>
             </li>
-            <li class="user-profile">
-                <a>
+            <li class="user-profile" th:if="${session.user}">
+                <a href="/user/logout">
                     <img class="profile-img img-fluid" src="/images/default/eastjun_profile.jpg" alt="">
+                </a>
+            </li>
+            <li class="user-profile" th:unless="${session.user}">
+                <a href="/user/login">
+                    <i class="material-icons">account_circle</i>
                 </a>
             </li>
         </ul>
