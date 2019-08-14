@@ -36,4 +36,11 @@ public class CommentController {
         //세션 유저와 댓글 유저와 같은지 확인한다.
         return new ResponseEntity<>(commentService.update(commentId, commentRequest), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/{videoId}/comments/{commentId}")
+    public ResponseEntity<Long> deleteComment(@PathVariable Long videoId, @PathVariable Long commentId) {
+        // 로그인 상태인가?
+        // 세션 유저와 댓글 유저와 같은지 확인한다.
+        return new ResponseEntity<>(commentService.delete(commentId), HttpStatus.OK);
+    }
 }

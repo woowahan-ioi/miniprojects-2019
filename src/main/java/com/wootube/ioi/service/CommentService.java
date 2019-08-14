@@ -33,4 +33,11 @@ public class CommentService {
                 comment.getContents(),
                 comment.getUpdateTime());
     }
+
+    public Long delete(Long commentId) {
+        commentRepository.findById(commentId)
+                .orElseThrow(IllegalArgumentException::new);
+        commentRepository.deleteById(commentId);
+        return commentId;
+    }
 }
