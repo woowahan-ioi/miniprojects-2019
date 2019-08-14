@@ -30,6 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.passay', name: 'passay', version: '1.5.0'
+    implementation 'org.modelmapper:modelmapper:0.7.8'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation "org.apache.tomcat.embed:tomcat-embed-el"
 	
@@ -41,15 +42,14 @@ dependencies {
 
     runtimeOnly 'mysql:mysql-connector-java'
 	runtimeOnly 'com.h2database:h2'
-	
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	
+    
 	annotationProcessor 'org.projectlombok:lombok'
 	
 	compileOnly 'org.projectlombok:lombok'
     
     compile('org.springframework.cloud:spring-cloud-starter-aws')
-    implementation 'org.modelmapper:modelmapper:0.7.8'
+    
+
 }
 
 dependencyManagement {

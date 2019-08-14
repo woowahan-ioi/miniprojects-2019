@@ -16,6 +16,7 @@
                    th:src="${video.contentPath}" allowfullscreen>
             <embed th:unless="${video}" class="width-100" height="550px" preload controls
                    src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen>
+
             <hr class="hr-style">
 
             <div class="width-100 row">
@@ -39,8 +40,10 @@
                     <span class="mrg-vertical-20 left-30" onclick="readMoreTag()" id="readMoreSpan">더보기</span>
                 </div>
                 <div class="col-sm-2">
+
                     <button class="subscribe-btn font-size-13" style="float: right">구독 <span
                             id="subscribe_number"> 00명</span>
+
                     </button>
                 </div>
             </div>
@@ -174,5 +177,6 @@
         }
     }
 </script>
+
 </body>
 </html>
