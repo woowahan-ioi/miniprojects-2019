@@ -23,4 +23,14 @@ public class CommentService {
                 updatedComment.getContents(),
                 updatedComment.getUpdateTime());
     }
+
+    @Transactional
+    public CommentResponse update(Long commentId, CommentRequest commentRequest) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(IllegalArgumentException::new);
+        comment.update(commentRequest.getContents());
+        return new CommentResponse(comment.getId(),
+                comment.getContents(),
+                comment.getUpdateTime());
+    }
 }

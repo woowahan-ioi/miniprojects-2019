@@ -26,4 +26,14 @@ public class CommentController {
         //로그인 상태인가?
         return new ResponseEntity<>(commentService.save(commentRequest), HttpStatus.CREATED);
     }
+
+    @ResponseBody
+    @PutMapping("/{videoId}/comments/{commentId}")
+    public ResponseEntity<CommentResponse> updateComment(@PathVariable Long videoId,
+                                                         @PathVariable Long commentId,
+                                                         @RequestBody CommentRequest commentRequest) {
+        //로그인 상태인가?
+        //세션 유저와 댓글 유저와 같은지 확인한다.
+        return new ResponseEntity<>(commentService.update(commentId, commentRequest), HttpStatus.CREATED);
+    }
 }
