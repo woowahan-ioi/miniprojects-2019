@@ -4,19 +4,19 @@ import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.repository.CommentRepository;
 import com.wootube.ioi.service.dto.CommentRequest;
 import com.wootube.ioi.service.dto.CommentResponse;
-import org.junit.jupiter.api.BeforeEach;
+import com.wootube.ioi.service.exception.NotFoundCommentException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
@@ -45,8 +45,7 @@ public class CommentServiceTest {
     private static final CommentResponse COMMENT_RESPONSE3 = new CommentResponse(EXIST_COMMENT_ID,
             "Comment Contents 3",
             LocalDateTime.now());
-
-
+    
     @Mock
     private CommentRepository commentRepository;
 
@@ -57,6 +56,7 @@ public class CommentServiceTest {
     private CommentService commentService;
 
     @Test
+    @DisplayName("댓글을 생성한다.")
     void save() {
         given(commentRepository.save(COMMENT1)).willReturn(COMMENT1);
 
@@ -66,12 +66,28 @@ public class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("댓글을 수정한다.")
     void update() {
-        given(commentRepository.findById(1L)).willReturn(Optional.of(updateComment));
+        given(commentRepository.findById(EXIST_COMMENT_ID)).willReturn(Optional.of(updateComment));
 
-        commentService.update(1L, COMMENT_REQUEST2);
+        commentService.update(EXIST_COMMENT_ID, COMMENT_REQUEST2);
 
         verify(updateComment).update(COMMENT_REQUEST2.getContents());
     }
 
+    @Test
+    @DisplayName("댓글을 삭제한다.")
+    void delete() {
+        given(commentRepository.findById(EXIST_COMMENT_ID)).willReturn(Optional.of(COMMENT1));
+
+        commentService.delete(EXIST_COMMENT_ID);
+
+        verify(commentRepository).deleteById(EXIST_COMMENT_ID);
+    }
+
+    @Test
+    @DisplayName("없는 댓글을 삭제하는 경우 예외를 던진다.")
+    void deleteFail() {
+        assertThrows(NotFoundCommentException.class, () -> commentService.delete(NOT_EXIST_COMMENT_ID));
+    }
 }
