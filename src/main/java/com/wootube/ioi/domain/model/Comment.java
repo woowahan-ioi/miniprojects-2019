@@ -28,6 +28,16 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updateTime;
 
+//    @ManyToOne
+//    @JoinColumn
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    private User writer;
+//
+//    @ManyToOne
+//    @JoinColumn
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    private Video video;
+
     public Comment(String contents) {
         this.contents = contents;
     }
