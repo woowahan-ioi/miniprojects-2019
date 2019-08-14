@@ -27,10 +27,7 @@ public class CommentControllerTest {
 
     @Test
     public void createComment() {
-//        로그인한다.
-//        String loginSessionId = login();
-
-        saveComment()
+        loginAndSaveComment()
                 .expectStatus().isCreated()
                 .expectBody()
                 .jsonPath("$.contents").isEqualTo(SAVE_COMMENT_RESPONSE.getContents())
@@ -41,12 +38,22 @@ public class CommentControllerTest {
 
     @Test
     void updateComment() {
-        saveComment();
+        loginAndSaveComment();
 
         webTestClient.put()
                 .uri("/watch/1/comments/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(new CommentRequest(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequest.class)
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
+    @Test
+    void deleteComment() {
+        loginAndSaveComment();
+
+        webTestClient.delete()
+                .uri("/watch/1/comments/1")
                 .exchange()
                 .expectStatus().isNoContent();
     }
@@ -64,7 +71,10 @@ public class CommentControllerTest {
                 .getValue();
     }
 
-    private WebTestClient.ResponseSpec saveComment() {
+    private WebTestClient.ResponseSpec loginAndSaveComment() {
+//        로그인한다.
+//        String loginSessionId = login();
+
         return webTestClient.post()
                 .uri("/watch/1/comments")
                 //.cookie("JSESSIONID", loginSessionId)
