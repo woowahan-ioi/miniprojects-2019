@@ -1,6 +1,7 @@
 package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.service.UserService;
+import com.wootube.ioi.web.dto.LogInRequestDto;
 import com.wootube.ioi.web.dto.SignUpRequestDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,11 @@ public class UserController {
     public RedirectView signUp(SignUpRequestDto signUpRequestDto) {
         userService.signUp(signUpRequestDto);
         return new RedirectView("/user/login");
+    }
+
+    @PostMapping("/login")
+    public RedirectView login(LogInRequestDto logInRequestDto) {
+        userService.login(logInRequestDto);
+        return new RedirectView("/");
     }
 }
