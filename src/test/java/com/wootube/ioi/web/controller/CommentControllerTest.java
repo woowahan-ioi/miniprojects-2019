@@ -15,10 +15,6 @@ import java.time.LocalDateTime;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommentControllerTest {
-    public static final String NOT_FOUND_COMMENT_EXCEPTION_MESSAGE = "존재하지 않는 댓글입니다.";
-    @Autowired
-    private WebTestClient webTestClient;
-
     private static final Long EXIST_COMMENT_ID = 1L;
     private static final Long NOT_EXIST_COMMENT_ID = 0L;
 
@@ -28,6 +24,11 @@ public class CommentControllerTest {
     private static final CommentResponse UPDATE_COMMENT_RESPONSE = new CommentResponse(EXIST_COMMENT_ID,
             "Update Contents",
             LocalDateTime.now());
+
+    public static final String NOT_FOUND_COMMENT_EXCEPTION_MESSAGE = "존재하지 않는 댓글입니다.";
+
+    @Autowired
+    private WebTestClient webTestClient;
 
     //로그인 안 했을 시 실패하는 테스트 추가
     //요청하는 Video id와 Comment의 video Id가 다른 경우 실패하는 테스트 추가
