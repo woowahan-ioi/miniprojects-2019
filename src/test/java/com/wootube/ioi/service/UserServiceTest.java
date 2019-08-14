@@ -1,7 +1,10 @@
 package com.wootube.ioi.service;
 
 import com.wootube.ioi.domain.User;
+import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.repository.UserRepository;
+import com.wootube.ioi.service.exception.NotFoundUserException;
+import com.wootube.ioi.web.dto.LogInRequestDto;
 import com.wootube.ioi.web.dto.SignUpRequestDto;
 
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
 
@@ -32,5 +40,34 @@ public class UserServiceTest {
         userService.signUp(signUpRequestDto);
 
         verify(userRepository, atLeast(1)).save(SAVED_USER);
+    }
+
+    @DisplayName("유저 조회 (로그인 성공)")
+    @Test
+    void login() {
+        given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
+
+        LogInRequestDto logInRequestDto = new LogInRequestDto("luffy@luffy.com", "1234567a");
+        User logInUser = userService.login(logInRequestDto);
+
+        assertEquals(logInUser, SAVED_USER);
+    }
+
+    @DisplayName("유저 조회 (로그인 실패, 없는 아이디)")
+    @Test
+    void loginFailedNotFoundUser() {
+        given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
+
+        LogInRequestDto logInRequestDto = new LogInRequestDto("notfound@luffy.com", "1234567a");
+        assertThrows(NotFoundUserException.class, () -> userService.login(logInRequestDto));
+    }
+
+    @DisplayName("유저 조회 (로그인 실패, 비밀번호 불일치)")
+    @Test
+    void loginFailedNotMatchPassword() {
+        given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
+
+        LogInRequestDto logInRequestDto = new LogInRequestDto("luffy@luffy.com", "aaaa1234");
+        assertThrows(NotMatchPasswordException.class, () -> userService.login(logInRequestDto));
     }
 }
