@@ -45,7 +45,7 @@ public class CommentServiceTest {
     private static final CommentResponse COMMENT_RESPONSE3 = new CommentResponse(EXIST_COMMENT_ID,
             "Comment Contents 3",
             LocalDateTime.now());
-    
+
     @Mock
     private CommentRepository commentRepository;
 
@@ -73,6 +73,12 @@ public class CommentServiceTest {
         commentService.update(EXIST_COMMENT_ID, COMMENT_REQUEST2);
 
         verify(updateComment).update(COMMENT_REQUEST2.getContents());
+    }
+
+    @Test
+    @DisplayName("없는 댓글을 수정하는 경우 예외를 던진다.")
+    void updateFail() {
+        assertThrows(NotFoundCommentException.class, () -> commentService.update(NOT_EXIST_COMMENT_ID, COMMENT_REQUEST1));
     }
 
     @Test
