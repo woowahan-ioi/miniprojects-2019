@@ -36,6 +36,11 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping("/mypage")
+    public String myPage() {
+        return "mypage";
+    }
+
     @PostMapping("/signup")
     public RedirectView signUp(SignUpRequestDto signUpRequestDto) {
         userService.signUp(signUpRequestDto);
