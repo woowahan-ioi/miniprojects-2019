@@ -46,17 +46,12 @@
             display: none;
         }
 
-
         .description-upload {
             width: 500px;
             height: 300px;
             border-radius: 10px;
             box-shadow: 0 0 0 #000;
             border: 5px solid transparent;
-        }
-
-        .description-upload:focus {
-            outline: none;
         }
     </style>
 </head>
@@ -117,11 +112,10 @@
                 </div>
                 <div id="video-title-and-description" style="margin-right: 250px; height: 400px; margin-top: 20px; margin-left: 200px;">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="title" name="title" th:placeholder="${#strings.isEmpty(video)? '' : video.title}" style="width: 500px;">
+                        <input type="text" class="form-control" id="title" name="title" th:placeholder="${#strings.isEmpty(video)? '' : video.title}" th:value="${#strings.isEmpty(video)? '' : video.title}" style="width: 500px;">
                     </div>
-                    <div id="video-description" style="margin-top: 30px; cols: 20; rows: 15;">
-                        <textarea name="description" class="description-upload" th:placeholder="${#strings.isEmpty(video)? '' : video.description}">
-                        </textarea>
+                    <div id="video-description">
+                        <textarea name="description" class="description-upload" th:placeholder="${#strings.isEmpty(video)? '' : video.description}" th:value="${#strings.isEmpty(video)? '' : video.description}"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary" style="margin-top: 20px; margin-left: 230px;">등록</button>
                 </div>

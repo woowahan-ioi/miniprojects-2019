@@ -1,4 +1,4 @@
-package com.wootube.ioi.domain.model;
+package com.wootube.ioi.domain.model.video;
 
 import java.time.LocalDateTime;
 import javax.persistence.*;
@@ -51,14 +51,10 @@ public class Video {
 	}
 
 	public void update(Video updateVideo) {
-		if (updateVideo.title != null) {
-			this.title = updateVideo.title;
-		}
-		if (updateVideo.description != null) {
-			this.description = updateVideo.description;
-		}
 		if (updateVideo.contentPath != null) {
 			this.contentPath = updateVideo.contentPath;
 		}
+		this.title = updateVideo.title;
+		this.description = updateVideo.description;
 	}
 }
