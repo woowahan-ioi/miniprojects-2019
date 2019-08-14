@@ -17,8 +17,12 @@ public class CommentControllerTest {
     @Autowired
     private WebTestClient webTestClient;
 
-    private static final CommentResponse COMMENT_RESPONSE = new CommentResponse(1L,
+    private static final CommentResponse SAVE_COMMENT_RESPONSE = new CommentResponse(1L,
             "Comment Contents",
+            LocalDateTime.now());
+
+    private static final CommentResponse UPDATE_COMMENT_RESPONSE = new CommentResponse(1L,
+            "Update Contents",
             LocalDateTime.now());
 
     @Test
@@ -26,18 +30,25 @@ public class CommentControllerTest {
 //        로그인한다.
 //        String loginSessionId = login();
 
-        webTestClient.post()
-                .uri("/watch/1/comments")
-                //.cookie("JSESSIONID", loginSessionId)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(new CommentRequest(COMMENT_RESPONSE.getContents())), CommentRequest.class)
-                .exchange()
+        saveComment()
                 .expectStatus().isCreated()
                 .expectBody()
-                .jsonPath("$.contents").isEqualTo(COMMENT_RESPONSE.getContents())
-                .jsonPath("$.id").isEqualTo(COMMENT_RESPONSE.getId())
+                .jsonPath("$.contents").isEqualTo(SAVE_COMMENT_RESPONSE.getContents())
+                .jsonPath("$.id").isEqualTo(SAVE_COMMENT_RESPONSE.getId())
                 .jsonPath("$.updateTime").isNotEmpty()
         ;
+    }
+
+    @Test
+    void updateComment() {
+        saveComment();
+
+        webTestClient.put()
+                .uri("/watch/1/comments/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(new CommentRequest(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequest.class)
+                .exchange()
+                .expectStatus().isNoContent();
     }
 
     private String login() {
@@ -51,5 +62,14 @@ public class CommentControllerTest {
                 .getResponseCookies()
                 .getFirst("JSESSIONID")
                 .getValue();
+    }
+
+    private WebTestClient.ResponseSpec saveComment() {
+        return webTestClient.post()
+                .uri("/watch/1/comments")
+                //.cookie("JSESSIONID", loginSessionId)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(new CommentRequest(SAVE_COMMENT_RESPONSE.getContents())), CommentRequest.class)
+                .exchange();
     }
 }
