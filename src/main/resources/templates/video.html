@@ -12,9 +12,10 @@
 
     <div class="row padding-80 pdd-top-75">
         <div class="col-lg-8 col-md-8 ">
-            <iframe class="width-100" height="550px" preload controls
-                    src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen>
-            </iframe>
+            <embed th:if="${video}" class="width-100" height="550px" preload controls
+                   th:src="${video.contentPath}" allowfullscreen>
+            <embed th:unless="${video}" class="width-100" height="550px" preload controls
+                   src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen>
             <hr class="hr-style">
 
             <div class="width-100 row">
@@ -38,7 +39,8 @@
                     <span class="mrg-vertical-20 left-30" onclick="readMoreTag()" id="readMoreSpan">더보기</span>
                 </div>
                 <div class="col-sm-2">
-                    <button class="subscribe-btn font-size-13" style="float: right">구독 <span id="subscribe_number"> 00명</span>
+                    <button class="subscribe-btn font-size-13" style="float: right">구독 <span
+                            id="subscribe_number"> 00명</span>
                     </button>
                 </div>
             </div>
@@ -153,23 +155,24 @@
 
         </div>
     </div>
+</div>
+<th:block th:replace="fragments/script :: scriptFragment"/>
+<script>
+    function readMoreTag() {
+        var dots = document.getElementById("dots");
+        var moreText = document.getElementById("more");
+        var btnText = document.getElementById("readMoreSpan");
 
-    <script>
-        function readMoreTag() {
-            var dots = document.getElementById("dots");
-            var moreText = document.getElementById("more");
-            var btnText = document.getElementById("readMoreSpan");
-
-            if (dots.style.display === "none") {
-                dots.style.display = "inline";
-                btnText.innerHTML = "더보기";
-                moreText.style.display = "none";
-            } else {
-                dots.style.display = "none";
-                btnText.innerHTML = "간략히";
-                moreText.style.display = "inline";
-            }
+        if (dots.style.display === "none") {
+            dots.style.display = "inline";
+            btnText.innerHTML = "더보기";
+            moreText.style.display = "none";
+        } else {
+            dots.style.display = "none";
+            btnText.innerHTML = "간략히";
+            moreText.style.display = "inline";
         }
-    </script>
+    }
+</script>
 </body>
 </html>
