@@ -20,10 +20,13 @@ public class CommentControllerTest {
     private static final CommentResponse SAVE_COMMENT_RESPONSE = new CommentResponse(1L,
             "Comment Contents",
             LocalDateTime.now());
-
     private static final CommentResponse UPDATE_COMMENT_RESPONSE = new CommentResponse(1L,
             "Update Contents",
             LocalDateTime.now());
+
+    //로그인 안 했을 시 실패하는 테스트 추가
+    //요청하는 Video id와 Comment의 video Id가 다른 경우 실패하는 테스트 추가
+    //요청하는 Writer id와 Comment의 Writer Id가 다른 경우 실패하는 테스트 추가
 
     @Test
     public void createComment() {
