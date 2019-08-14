@@ -24,8 +24,8 @@ public class VideoController {
 
 	@PostMapping("/new")
 	public String video(MultipartFile uploadFile, VideoDto videoDto) {
-		videoService.create(uploadFile, videoDto);
-		return "redirect:/";
+		videoDto = videoService.create(uploadFile, videoDto);
+		return "redirect:/videos/" + videoDto.getId();
 	}
 
 	@GetMapping("/{id}")
@@ -43,7 +43,7 @@ public class VideoController {
 	@PutMapping("/{id}")
 	public String updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoDto videoDto) {
 		videoService.update(id, uploadFile, videoDto);
-		return "redirect:/videos/"+id;
+		return "redirect:/videos/" + id;
 	}
 
 	@DeleteMapping("/{id}")

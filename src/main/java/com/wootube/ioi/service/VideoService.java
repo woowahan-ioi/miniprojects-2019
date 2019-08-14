@@ -3,12 +3,12 @@ package com.wootube.ioi.service;
 import java.io.IOException;
 import javax.transaction.Transactional;
 
-import com.wootube.ioi.domain.model.Video;
+import com.wootube.ioi.domain.model.video.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.exception.FileUploadException;
 import com.wootube.ioi.exception.NotFoundVideoException;
 import com.wootube.ioi.request.VideoDto;
-import com.wootube.ioi.util.FileUploader;
+import com.wootube.ioi.service.util.FileUploader;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.stereotype.Service;
@@ -28,13 +28,13 @@ public class VideoService {
 		this.videoRepository = videoRepository;
 	}
 
-	public void create(MultipartFile uploadFile, VideoDto videoDto) {
+	public VideoDto create(MultipartFile uploadFile, VideoDto videoDto) {
 		String videoUrl = uploadFile(uploadFile, directoryName);
 		String originFileName = uploadFile.getOriginalFilename();
 		Video video = modelMapper.map(videoDto, Video.class);
 		video.setContentPath(videoUrl);
 		video.setOriginFileName(originFileName);
-		videoRepository.save(video);
+		return modelMapper.map(videoRepository.save(video), VideoDto.class);
 	}
 
 	public VideoDto findById(Long id) {
