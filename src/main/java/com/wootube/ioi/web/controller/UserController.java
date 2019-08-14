@@ -2,14 +2,17 @@ package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.service.UserService;
+import com.wootube.ioi.service.dto.EditUserRequestDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.web.session.LoginUserSessionManager;
+import com.wootube.ioi.web.session.SessionUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -36,6 +39,11 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping("/mypage")
+    public String myPage() {
+        return "mypage";
+    }
+
     @PostMapping("/signup")
     public RedirectView signUp(SignUpRequestDto signUpRequestDto) {
         userService.signUp(signUpRequestDto);
@@ -53,5 +61,13 @@ public class UserController {
     public RedirectView logout() {
         loginUserSessionManager.removeUser();
         return new RedirectView("/");
+    }
+
+    @PutMapping("/")
+    public RedirectView edit(EditUserRequestDto editUserRequestDto) {
+        SessionUser user = loginUserSessionManager.getUser();
+        User updatedUser = userService.update(user, editUserRequestDto);
+        loginUserSessionManager.setUser(updatedUser);
+        return new RedirectView("/user/mypage");
     }
 }
