@@ -40,7 +40,17 @@
                             </div>
                         </v-row>
                         <v-row style="width: 10vw; align-content: center;">
-                            <v-btn @click="dialog = true" class="primary" depressed>정보 수정</v-btn>
+                            <v-col>
+                                <v-btn @click="dialog = true" class="primary" depressed>정보 수정
+                                </v-btn>
+                                <form action="/user/" id="delete-form" method="post"
+                                      style="padding-top: 8px;">
+                                    <input name="_method" type="hidden" value="delete"/>
+                                    <v-btn class="red" dark depressed
+                                           onclick="deleteSubmitBtnHandler()">회원 탈퇴
+                                    </v-btn>
+                                </form>
+                            </v-col>
                         </v-row>
                         <v-row justify="center">
                             <v-dialog max-width="600px" persistent v-model="dialog">
@@ -117,6 +127,10 @@
         if (fieldCheck()) {
             document.getElementById('edit-form').submit();
         }
+    }
+
+    const deleteSubmitBtnHandler = () => {
+        document.getElementById('delete-form').submit();
     }
 
     const vue = new Vue({
