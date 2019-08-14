@@ -10,6 +10,7 @@ import com.wootube.ioi.web.session.SessionUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -26,14 +27,22 @@ public class UserService {
     }
 
     public User login(LogInRequestDto logInRequestDto) {
-        return userRepository.findByEmail(logInRequestDto.getEmail())
-                .orElseThrow(NotFoundUserException::new)
-                .matchPassword(logInRequestDto.getPassword());
+        return findByEmail(logInRequestDto.getEmail()).matchPassword(logInRequestDto.getPassword());
     }
 
-    public User update(SessionUser user, EditUserRequestDto editUserRequestDto) {
-        return userRepository.findByEmail(user.getEmail())
-                .orElseThrow(NotFoundUserException::new)
-                .updateName(editUserRequestDto.getName());
+    private User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(NotFoundUserException::new);
+    }
+
+    @Transactional
+    public User update(SessionUser sessionUser, EditUserRequestDto editUserRequestDto) {
+        return findByEmail(sessionUser.getEmail()).updateName(editUserRequestDto.getName());
+    }
+
+    public User delete(SessionUser sessionUser) {
+        User deleteTargetUser = findByEmail(sessionUser.getEmail());
+        userRepository.delete(deleteTargetUser);
+        return deleteTargetUser;
     }
 }

@@ -10,6 +10,7 @@ import com.wootube.ioi.web.session.SessionUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -64,10 +65,18 @@ public class UserController {
     }
 
     @PutMapping("/")
-    public RedirectView edit(EditUserRequestDto editUserRequestDto) {
-        SessionUser user = loginUserSessionManager.getUser();
-        User updatedUser = userService.update(user, editUserRequestDto);
+    public RedirectView editUser(EditUserRequestDto editUserRequestDto) {
+        SessionUser sessionUser = loginUserSessionManager.getUser();
+        User updatedUser = userService.update(sessionUser, editUserRequestDto);
         loginUserSessionManager.setUser(updatedUser);
         return new RedirectView("/user/mypage");
+    }
+
+    @DeleteMapping("/")
+    public RedirectView deleteUser() {
+        SessionUser sessionUser = loginUserSessionManager.getUser();
+        userService.delete(sessionUser);
+        loginUserSessionManager.removeUser();
+        return new RedirectView("/");
     }
 }
