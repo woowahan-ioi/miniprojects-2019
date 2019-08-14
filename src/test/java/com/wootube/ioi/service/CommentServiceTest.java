@@ -55,6 +55,9 @@ public class CommentServiceTest {
     @InjectMocks
     private CommentService commentService;
 
+    //요청하는 Video id와 Comment의 video Id가 다른 경우 실패하는 테스트 추가
+    //요청하는 Writer id와 Comment의 Writer Id가 다른 경우 실패하는 테스트 추가
+
     @Test
     @DisplayName("댓글을 생성한다.")
     void save() {
