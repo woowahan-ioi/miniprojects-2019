@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-public class CommentResponse {
+public class CommentResponseDto {
     private Long id;
     private String contents;
     private LocalDateTime updateTime;

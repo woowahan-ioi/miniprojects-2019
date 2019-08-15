@@ -1,8 +1,8 @@
 package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.domain.model.User;
-import com.wootube.ioi.service.dto.CommentRequest;
-import com.wootube.ioi.service.dto.CommentResponse;
+import com.wootube.ioi.service.dto.CommentRequestDto;
+import com.wootube.ioi.service.dto.CommentResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ public class CommentControllerTest {
     private static final Long EXIST_COMMENT_ID = 1L;
     private static final Long NOT_EXIST_COMMENT_ID = 0L;
 
-    private static final CommentResponse SAVE_COMMENT_RESPONSE = new CommentResponse(EXIST_COMMENT_ID,
+    private static final CommentResponseDto SAVE_COMMENT_RESPONSE = new CommentResponseDto(EXIST_COMMENT_ID,
             "Comment Contents",
             LocalDateTime.now());
-    private static final CommentResponse UPDATE_COMMENT_RESPONSE = new CommentResponse(EXIST_COMMENT_ID,
+    private static final CommentResponseDto UPDATE_COMMENT_RESPONSE = new CommentResponseDto(EXIST_COMMENT_ID,
             "Update Contents",
             LocalDateTime.now());
 
@@ -52,7 +52,7 @@ public class CommentControllerTest {
         webTestClient.put()
                 .uri("/watch/1/comments/" + EXIST_COMMENT_ID)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(new CommentRequest(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequest.class)
+                .body(Mono.just(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
                 .exchange()
                 .expectStatus().isNoContent();
     }
@@ -63,7 +63,7 @@ public class CommentControllerTest {
         webTestClient.put()
                 .uri("/watch/1/comments/" + NOT_EXIST_COMMENT_ID)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(new CommentRequest(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequest.class)
+                .body(Mono.just(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
@@ -112,7 +112,7 @@ public class CommentControllerTest {
                 .uri("/watch/1/comments")
                 //.cookie("JSESSIONID", loginSessionId)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(new CommentRequest(SAVE_COMMENT_RESPONSE.getContents())), CommentRequest.class)
+                .body(Mono.just(new CommentRequestDto(SAVE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
                 .exchange();
     }
 }

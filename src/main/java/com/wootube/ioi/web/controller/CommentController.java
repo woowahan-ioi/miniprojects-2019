@@ -1,9 +1,8 @@
 package com.wootube.ioi.web.controller;
 
-import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.service.CommentService;
-import com.wootube.ioi.service.dto.CommentRequest;
-import com.wootube.ioi.service.dto.CommentResponse;
+import com.wootube.ioi.service.dto.CommentRequestDto;
+import com.wootube.ioi.service.dto.CommentResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,19 +21,19 @@ public class CommentController {
 
     @ResponseBody
     @PostMapping("/{videoId}/comments")
-    public ResponseEntity<CommentResponse> createComment(HttpSession session, @PathVariable Long videoId, @RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<CommentResponseDto> createComment(HttpSession session, @PathVariable Long videoId, @RequestBody CommentRequestDto commentRequestDto) {
         //로그인 상태인가?
-        return new ResponseEntity<>(commentService.save(commentRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(commentService.save(commentRequestDto), HttpStatus.CREATED);
     }
 
     @ResponseBody
     @PutMapping("/{videoId}/comments/{commentId}")
     public ResponseEntity<Void> updateComment(@PathVariable Long videoId,
                                                          @PathVariable Long commentId,
-                                                         @RequestBody CommentRequest commentRequest) {
+                                                         @RequestBody CommentRequestDto commentRequestDto) {
         //로그인 상태인가?
         //세션 유저와 댓글 유저와 같은지 확인한다.
-        commentService.update(commentId, commentRequest);
+        commentService.update(commentId, commentRequestDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
