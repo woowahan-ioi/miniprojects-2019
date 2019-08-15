@@ -1,4 +1,4 @@
-package com.wootube.ioi.validator;
+package com.wootube.ioi.domain.validator;
 
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;

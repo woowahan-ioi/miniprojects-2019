@@ -1,4 +1,4 @@
-package com.wootube.ioi.validator;
+package com.wootube.ioi.domain.validator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
