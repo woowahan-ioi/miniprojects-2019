@@ -21,10 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserTest {
-    public static final String VALID_NAME = "루피";
-    public static final String VALID_EMAIL = "luffy@luffy.com";
-    public static final String VALID_PASSWORD = "1234567a";
-
+    private static final String VALID_NAME = "루피";
+    private static final String VALID_EMAIL = "luffy@luffy.com";
+    private static final String VALID_PASSWORD = "1234567a";
 
     private Validator validator;
 
