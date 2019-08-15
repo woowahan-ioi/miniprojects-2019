@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Wootube</title>
@@ -54,6 +54,13 @@
             color: #3375E0;
             text-decoration: none;
         }
+
+        .error-box {
+            font-weight: 600;
+            letter-spacing: .1px;
+            line-height: 1.5;
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -102,6 +109,11 @@
                                          style="overflow-y: auto; text-align: start">
                                         내 컴퓨터가 아닌가요? 게스트 모드를 사용하여 비공개로 로그인하세요. <b
                                             style="color: #3375E0">자세히 알아보기</b>
+                                    </div>
+                                </v-row>
+                                <v-row class="px-2" th:if="${errors}">
+                                    <div class="error-box">
+                                        <span class="error-text" th:text="${errors}"></span>
                                     </div>
                                 </v-row>
                                 <v-row class="pt-5 px-2">
