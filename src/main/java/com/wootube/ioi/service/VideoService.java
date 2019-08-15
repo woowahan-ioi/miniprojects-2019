@@ -5,9 +5,9 @@ import javax.transaction.Transactional;
 
 import com.wootube.ioi.domain.model.video.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
-import com.wootube.ioi.exception.FileUploadException;
-import com.wootube.ioi.exception.NotFoundVideoException;
-import com.wootube.ioi.request.VideoDto;
+import com.wootube.ioi.service.dto.VideoRequestDto;
+import com.wootube.ioi.service.exception.FileUploadException;
+import com.wootube.ioi.service.exception.NotFoundVideoException;
 import com.wootube.ioi.service.util.FileUploader;
 import org.modelmapper.ModelMapper;
 
@@ -28,17 +28,19 @@ public class VideoService {
 		this.videoRepository = videoRepository;
 	}
 
-	public VideoDto create(MultipartFile uploadFile, VideoDto videoDto) {
+	public VideoRequestDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
 		String videoUrl = uploadFile(uploadFile, directoryName);
 		String originFileName = uploadFile.getOriginalFilename();
-		Video video = modelMapper.map(videoDto, Video.class);
+		Video video = modelMapper.map(videoRequestDto, Video.class);
+
 		video.setContentPath(videoUrl);
 		video.setOriginFileName(originFileName);
-		return modelMapper.map(videoRepository.save(video), VideoDto.class);
+
+		return modelMapper.map(videoRepository.save(video), VideoRequestDto.class);
 	}
 
-	public VideoDto findById(Long id) {
-		return modelMapper.map(findVideo(id), VideoDto.class);
+	public VideoRequestDto findById(Long id) {
+		return modelMapper.map(findVideo(id), VideoRequestDto.class);
 	}
 
 	private Video findVideo(Long id) {
@@ -47,22 +49,15 @@ public class VideoService {
 	}
 
 	@Transactional
-	public void update(Long id, MultipartFile uploadFile, VideoDto videoDto) {
+	public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
 		Video video = findVideo(id);
-		if(!uploadFile.isEmpty()) {
+		if (!uploadFile.isEmpty()) {
 			fileUploader.deleteFile(directoryName, video.getOriginFileName());
 			String videoUrl = uploadFile(uploadFile, directoryName);
 			video.setContentPath(videoUrl);
 		}
-		video.update(modelMapper.map(videoDto, Video.class));
+		video.update(modelMapper.map(videoRequestDto, Video.class));
 		videoRepository.save(video);
-	}
-
-	@Transactional
-	public void deleteById(Long id) {
-		Video video = findVideo(id);
-		fileUploader.deleteFile(directoryName, video.getOriginFileName());
-		videoRepository.delete(findVideo(id));
 	}
 
 	public String uploadFile(MultipartFile uploadFile, String directoryName) {

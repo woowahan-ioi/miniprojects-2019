@@ -1,4 +1,4 @@
-package com.wootube.ioi.exception;
+package com.wootube.ioi.service.exception;
 
 public class NotFoundVideoException extends RuntimeException {
 	public NotFoundVideoException() {

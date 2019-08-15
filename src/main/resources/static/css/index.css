@@ -53,7 +53,7 @@ header ul.nav-right li, header ul.nav-left li {
     top: 4px;
     left: 370px;
     background: none;
-    background-image: url('static/images/default/icons.png');
+    background-image: url('/static/images/default/icons.png');
     background-position: -26px -202px;
     border-style: none;
     border-left: 1px solid rgb(220, 220, 220);

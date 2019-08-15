@@ -1,143 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>wootube</title>
-    <meta name="robots" content="index, follow">
-
-    <meta name="keyword" content="우아한테크코스, 프로그래밍, 개발자, 백엔드, 프론트엔드, Backend, Frontend, IOS, Android">
-    <meta name="description" id="metaDesc" content="우아한테크코스 크루 ooo의 개발 블로그">
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="우아한테크코스">
-    <meta property="og:description" id="metaOgDesc" content="우튜브">
-    <meta property="og:image" content="images/logo/logo-thumnail-bg.jpg">
-    <meta property="og:url" content="https://woowacourse.github.io/">
-
-    <meta name="twitter:card" content="website">
-    <meta name="twitter:title" content="우아한테크코스">
-    <meta name="twitter:description" id="metaTwitterDesc" content="우튜브">
-    <meta name="twitter:image" content="images/logo/logo-thumnail-bg.jpg">
-    <meta name="twitter:domain" content="https://woowacourse.github.io/">
-
-    <link rel="shortcut icon" href="../static/images/logo/favicon.ico">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amiri:400,400i|Source+Sans+Pro:400,400i,600,700'">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-    <link rel="stylesheet" href="../static/css/app.css">
-    <link rel="stylesheet" href="../static/css/index.css">
-    <link rel="stylesheet" href="../static/css/side-nav.css">
+    <th:block th:replace="fragments/config :: configFragment"/>
+    <title>Wootube</title>
 </head>
+
 <body>
 <div class="app">
-    <header id="header" class="header navbar shadow-sm">
-        <div class="header-container">
-            <ul class="nav-left mrg-left-0 padding-8">
-                <li>
-                    <a class="side-nav-toggle" href="javascript:void(0);">
-                        <i class="material-icons">menu</i>
-                    </a>
-                </li>
-                <li>
-                    <img class="logo" src="../static/images/logo/youtube-logo.png">
-                </li>
-            </ul>
-            <ul class="nav-right padding-8">
-
-                <li class="">
-                    <a class="pointer">
-                        <i class="material-icons">video_call</i>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer">
-                        <i class="material-icons">apps</i>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer">
-                        <i class="material-icons">notifications</i>
-                    </a>
-                </li>
-                <li class="user-profile">
-                    <a>
-                        <img class="profile-img img-fluid" src="../static/images/default/eastjun_profile.jpg" alt="">
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </header>
-
-    <div class="side-nav mrg-top-60">
-        <div class="side-nav-inner">
-            <ul class="side-nav-menu overflow-y-auto">
-                <li class="nav-item">
-                    <a class="mrg-top-30" href="index.html">
-                        <span class="icon-holder">
-                            <i class="material-icons">home</i>
-                        </span>
-                        <span class="title relative bottom-5">홈</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="" href="index.html">
-                        <span class="icon-holder">
-                            <i class="material-icons">hearing</i>
-                        </span>
-                        <span class="title relative bottom-5">인기</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="" href="index.html">
-                        <span class="icon-holder">
-                            <i class="material-icons">subscriptions</i>
-                        </span>
-                        <span class="title relative bottom-5">구독</span>
-                    </a>
-                </li>
-                <hr>
-                <li class="nav-item">
-                    <a class="" href="index.html">
-                        <span class="icon-holder">
-                            <i class="material-icons">folder</i>
-                        </span>
-                        <span class="title relative bottom-5">라이브러리</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="" href="index.html">
-                        <span class="icon-holder">
-                            <i class="material-icons">restore</i>
-                        </span>
-                        <span class="title relative bottom-5">최근 본 동영상</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="" href="index.html">
-                        <span class="icon-holder">
-                            <i class="material-icons">access_time</i>
-                        </span>
-                        <span class="title relative bottom-5">나중에 볼 동영상</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="" href="index.html">
-                        <span class="icon-holder">
-                            <i class="material-icons">thumb_up</i>
-                        </span>
-                        <span class="title relative bottom-5">좋아요 표시한 동영상</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <th:block th:replace="fragments/header :: headerFragment"/>
+    <th:block th:replace="fragments/sidebar :: sidebarFragment"/>
 
     <div class="page-container">
         <div class="main-content">
@@ -150,9 +21,9 @@
                     </div>
                     <div class="col-lg-8 col-md-6">
                         <a class="main-banner-cover">
-                            <div class="cover-img bg" style="background-image: url('../static/images/default/main_banner_bg.png')"></div>
+                            <div class="cover-img bg" style="background-image: url('/images/default/main_banner_bg.png')"></div>
                             <div class="width-100 relative">
-                                <img class="banner-owner-img img-circle relative bottom-30" src="../static/images/default/eastjun_big.jpg" alt="">
+                                <img class="banner-owner-img img-circle relative bottom-30" src="/images/default/eastjun_big.jpg" alt="">
                                 <div class="banner-info d-inline-block relative">
                                     <span class="font-size-17 text-bold relative left-40 bottom-20">우아한테크코스 도서관리 시스템</span>
                                     <span class="absolute mrg-vertical-5 left-40">eastjun</span>
@@ -171,7 +42,7 @@
                     <div class="col-lg-2 padding-2">
                         <div class="card bg-transparent no-border">
                             <div class="card-media">
-                                <img class="img-responsive" src="../static/images/default/thumb_001.jpeg" alt="">
+                                <img class="img-responsive" src="/images/default/thumb_001.jpeg" alt="">
                             </div>
                             <div class="card-block padding-10">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
@@ -187,7 +58,7 @@
                     <div class="col-lg-2 padding-2">
                         <div class="card bg-transparent no-border">
                             <div class="card-media">
-                                <img class="img-responsive" src="../static/images/default/thumb_002.jpeg" alt="">
+                                <img class="img-responsive" src="/images/default/thumb_002.jpeg" alt="">
                             </div>
                             <div class="card-block padding-10">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분 테크토크] 👾베디의 OCP와 전략패턴</h5>
@@ -199,7 +70,7 @@
                     <div class="col-lg-2 padding-2">
                         <div class="card bg-transparent no-border">
                             <div class="card-media">
-                                <img class="img-responsive" src="../static/images/default/thumb_003.jpeg" alt="">
+                                <img class="img-responsive" src="/images/default/thumb_003.jpeg" alt="">
                             </div>
                             <div class="card-block padding-10">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분 테크토크] 🤠루피의 우아한테크코스 도서관리시스템</h5>
@@ -211,7 +82,7 @@
                     <div class="col-lg-2 padding-2">
                         <div class="card bg-transparent no-border">
                             <div class="card-media">
-                                <img class="img-responsive" src="../static/images/default/thumb_004.jpeg" alt="">
+                                <img class="img-responsive" src="/images/default/thumb_004.jpeg" alt="">
                             </div>
                             <div class="card-block padding-10">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분 테크토크] 👩🏻‍💻👨🏻‍💻해리&션의 MVC 패턴</h5>
@@ -223,7 +94,7 @@
                     <div class="col-lg-2 padding-2">
                         <div class="card bg-transparent no-border">
                             <div class="card-media">
-                                <img class="img-responsive" src="../static/images/default/thumb_005.jpeg" alt="">
+                                <img class="img-responsive" src="/images/default/thumb_005.jpeg" alt="">
                             </div>
                             <div class="card-block padding-10">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분 테크토크] 👨🏻‍💻👨🏻‍💻지노&비모의 DTO vs VO</h5>
@@ -235,7 +106,7 @@
                     <div class="col-lg-2 padding-2">
                         <div class="card bg-transparent no-border">
                             <div class="card-media">
-                                <img class="img-responsive" src="../static/images/default/thumb_006.jpeg" alt="">
+                                <img class="img-responsive" src="/images/default/thumb_006.jpeg" alt="">
                             </div>
                             <div class="card-block padding-10">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분 테크토크] 🤦‍♂️🤦‍♂️슬로스&이바의 우리는 왜 실패했는가</h5>
@@ -251,17 +122,14 @@
     </div>
 </div>
 
+<th:block th:replace="fragments/script :: scriptFragment"/>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
-<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl" crossorigin="anonymous"></script>
 <script>
-    document.querySelector(".side-nav-toggle").addEventListener("click", sideNavToggle)
+    document.querySelector(".side-nav-toggle").addEventListener("click", sideNavToggle);
 
     function sideNavToggle(event) {
-        event.preventDefault()
-        document.querySelector(".app").classList.toggle("is-collapsed")
+        event.preventDefault();
+        document.querySelector(".app").classList.toggle("is-collapsed");
     }
 </script>
 </body>

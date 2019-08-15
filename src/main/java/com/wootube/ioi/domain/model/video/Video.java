@@ -3,7 +3,6 @@ package com.wootube.ioi.domain.model.video;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +14,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @DynamicUpdate
 public class Video {
 	@Id

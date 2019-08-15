@@ -1,7 +1,7 @@
 package com.wootube.ioi.web.controller;
 
-import com.wootube.ioi.request.VideoDto;
 import com.wootube.ioi.service.VideoService;
+import com.wootube.ioi.service.dto.VideoRequestDto;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +23,9 @@ public class VideoController {
 	}
 
 	@PostMapping("/new")
-	public String video(MultipartFile uploadFile, VideoDto videoDto) {
-		videoDto = videoService.create(uploadFile, videoDto);
-		return "redirect:/videos/" + videoDto.getId();
+	public String video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+		videoRequestDto = videoService.create(uploadFile, videoRequestDto);
+		return "redirect:/videos/" + videoRequestDto.getId();
 	}
 
 	@GetMapping("/{id}")
@@ -41,14 +41,8 @@ public class VideoController {
 	}
 
 	@PutMapping("/{id}")
-	public String updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoDto videoDto) {
-		videoService.update(id, uploadFile, videoDto);
-		return "redirect:/videos/" + id;
-	}
-
-	@DeleteMapping("/{id}")
-	public String video(@PathVariable Long id) {
-		videoService.deleteById(id);
-		return "redirect:/";
+	public String updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+		videoService.update(id, uploadFile, videoRequestDto);
+		return "redirect:/videos/"+id;
 	}
 }

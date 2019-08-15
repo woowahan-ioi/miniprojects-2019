@@ -9,6 +9,7 @@ public class WootubeApplication {
 			+ "classpath:application.yml,"
 			+ "classpath:aws.yml,"
 			+ "classpath:application.properties";
+
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(WootubeApplication.class)
 				.properties(APPLICATION_LOCATIONS)
