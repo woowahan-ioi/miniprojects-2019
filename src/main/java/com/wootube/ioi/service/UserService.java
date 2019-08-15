@@ -1,11 +1,13 @@
 package com.wootube.ioi.service;
 
+import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.service.dto.EditUserRequestDto;
 import com.wootube.ioi.service.dto.EmailCheckResponseDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
+import com.wootube.ioi.service.exception.LoginFailedException;
 import com.wootube.ioi.service.exception.NotFoundUserException;
 import com.wootube.ioi.web.session.SessionUser;
 
@@ -28,7 +30,11 @@ public class UserService {
     }
 
     public User login(LogInRequestDto logInRequestDto) {
-        return findByEmail(logInRequestDto.getEmail()).matchPassword(logInRequestDto.getPassword());
+        try {
+            return findByEmail(logInRequestDto.getEmail()).matchPassword(logInRequestDto.getPassword());
+        } catch (NotFoundUserException | NotMatchPasswordException e) {
+            throw new LoginFailedException();
+        }
     }
 
     private User findByEmail(String email) {
