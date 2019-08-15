@@ -19,16 +19,29 @@
         </div>
     </div>
     <ul id="comment-area">
-        <li class="comment mrg-btm-30">
+        <li class="comment mrg-btm-30" data-commentid="1">
             <i class="user-logo"></i>
             <div class="font-size-13">
-                <span class="user-name">name</span>
-                <span class="update-date">date</span>
+                <span class="user-name">효오오오</span>
+                <span class="update-date">1년 전</span>
             </div>
-            <button class="more-button display-none">
-                <i class="ti-more-alt"></i>
-            </button>
-            <span class="comment-contents font-size-15">contents</span>
+            <div class="comment-more-box">
+                <button class="comment-more-buttons comment-edit-button">
+                    <i class="ti-pencil">  수정</i>
+                </button>
+                <button class="comment-more-buttons comment-delete-button">
+                    <i class="ti-trash">  삭제</i>
+                </button>
+            </div>
+            <div class="comment-update-area display-none">
+                <div class="mrg-btm-10">
+                    <i class="ti-truck"></i>
+                    <input class="comment-input" type="text" placeholder="공개 답글 추가...">
+                </div>
+                <button class="btn comment-btn comment-update-cancel-btn">취소</button>
+                <button class="btn comment-btn comment-update-btn">수정</button>
+            </div>
+            <span class="comment-contents font-size-15">댓글이에요.</span>
             <div class="mrg-top-5">
                 <button class="like-btn">
                     <i class="ti-thumb-up"></i>
@@ -45,7 +58,6 @@
                 </div>
             </div>
         </li>
-
     </ul>
 </div>
 </th:block>

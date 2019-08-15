@@ -1,3 +1,11 @@
+const MILLI = 1;
+const SECOND = 1000 * MILLI;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+const MONTH = 30 * DAY;
+const YEAR = 12 * MONTH;
+
 const commentButton = (function () {
     const CommentController = function () {
         const commentService = new CommentService();
@@ -7,16 +15,30 @@ const commentButton = (function () {
             commentAddButton.addEventListener('click', commentService.save);
         };
 
+        const updateComment = function () {
+            const commentArea = document.querySelector('#comment-area');
+            commentArea.addEventListener('click', commentService.update);
+        };
+
+        const deleteComment = function () {
+            const commentArea = document.querySelector('#comment-area');
+            commentArea.addEventListener('click', commentService.delete);
+        }
+
         const commentToggle = function () {
             document.querySelector("#comment-cancel-button").addEventListener("click", commentService.toggleCommentCancel);
             document.querySelector("#comment-input-text").addEventListener("click", commentService.toggleCommentWrite);
             document.querySelector("#comment-input-text").addEventListener("keyup", commentService.toggleCommentSaveButton);
             document.querySelector("#comment-area").addEventListener("mouseover", commentService.toggleCommentMoreButton);
+
+            document.querySelector("#comment-area").addEventListener("click", commentService.toggleCommentEditButton);
         }
 
         const init = function () {
             saveComment();
+            updateComment();
             commentToggle();
+            deleteComment();
         };
 
         return {
@@ -25,7 +47,7 @@ const commentButton = (function () {
     };
 
     const CommentService = function () {
-        const articleId = 1;
+        const videoId = 1;
         const commentCount = document.querySelector("#comment-count");
 
         function toggleCommentCancel(event) {
@@ -48,20 +70,39 @@ const commentButton = (function () {
             document.querySelector("#comment-save-button").classList.add("disabled")
         }
 
-        function toggleCommentMoreButton(event){
-            if(event.target.className === "comment") {
+        function toggleCommentMoreButton(event) {
+            if (event.target.className === "comment") {
                 event.target.querySelector(".more-button").classList.remove("display-none");
             }
         }
 
-        const save = (event) => {
-            fetch('/watch/' + articleId + '/comments', {
+        const toggleCommentEditButton = (event) => {
+            let target = event.target;
+            if (target.tagName === "I") {
+                target = target.parentElement;
+            }
+            if (target.classList.contains("comment-update-cancel-btn") || target.classList.contains("comment-update-btn")) {
+                const commentButtonDiv = target.parentElement;
+                commentButtonDiv.classList.toggle("display-none");
+                commentButtonDiv.nextElementSibling.classList.toggle("display-none");
+            }
+            if (target.classList.contains("comment-edit-button")) {
+                const commentButtonDiv = target.parentElement;
+                commentButtonDiv.nextElementSibling.classList.toggle("display-none");
+                commentButtonDiv.nextElementSibling.nextElementSibling.classList.toggle("display-none");
+            }
+        }
+
+        const saveComment = (event) => {
+            const inputComment = event.target.parentElement.parentElement.querySelector("INPUT");
+
+            fetch('/watch/' + videoId + '/comments', {
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8'
                 },
                 method: 'POST',
                 body: JSON.stringify({
-                    contents: event.target.parentElement.parentElement.querySelector("INPUT").value
+                    contents: inputComment.value
                 })
             }).then(response => {
                 if (response.status === 201) {
@@ -72,17 +113,124 @@ const commentButton = (function () {
                 appendComment(comment);
                 let currentCommentCount = parseInt(commentCount.innerText)
                 commentCount.innerText = String(currentCommentCount + 1);
+                inputComment.value = "";
             }).catch(error => {
                 error.text().then(json => alert(json))
             });
         };
 
+        const updateComment = (event) => {
+            let target = event.target;
+
+            if (target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if (!target.classList.contains("comment-update-btn")) {
+                return;
+            }
+
+            const commentId = target.closest("li").dataset.commentid;
+
+            const contents = target.parentElement.querySelector("INPUT").value;
+
+            fetch('/watch/' + videoId + '/comments/' + commentId, {
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                method: 'PUT',
+                body: JSON.stringify({
+                    contents: contents
+                })
+            }).then(response => {
+                if (response.status === 204) {
+                    toggleCommentMoreButton(event);
+                    target.parentElement.nextElementSibling.innerText = contents;
+                } else {
+                    throw response;
+                }
+            }).catch(error => {
+                error.text().then(json => alert(json))
+            });
+        }
+
+        const deleteComment = (event) => {
+            let target = event.target;
+
+            if (target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if (!target.classList.contains("comment-delete-button")) {
+                return;
+            }
+
+            const commentId = target.closest("li").dataset.commentid;
+
+            fetch('/watch/' + videoId + '/comments/' + commentId, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.status === 204) {
+                    toggleCommentMoreButton(event);
+                    target.parentElement.parentElement.remove();
+                } else {
+                    throw response;
+                }
+            }).catch(error => {
+                error.text().then(json => alert(json))
+            });
+        }
+
+        function calculateWrittenTime(updateTime) {
+            const writtenTime = new Date(Date.now() - new Date(updateTime)).getTime();
+
+            if (writtenTime > YEAR) {
+                return Math.floor(writtenTime / YEAR) + "년 전";
+            }
+
+            if (writtenTime > MONTH) {
+                return Math.floor(writtenTime / MONTH) + "개월 전";
+            }
+
+            if (writtenTime > DAY) {
+                return Math.floor(writtenTime / DAY) + "일 전";
+            }
+
+            if (writtenTime > HOUR) {
+                return Math.floor(writtenTime / HOUR) + "시간 전";
+            }
+
+            if (writtenTime > MINUTE) {
+                return Math.floor(writtenTime / MINUTE) + "분 전";
+            }
+
+            return Math.floor(writtenTime / SECOND) + "초 전";
+        }
+
         const appendComment = (comment) => {
-            const commentTemplate = `<li class="comment mrg-btm-30">
+            const writtenTime = calculateWrittenTime(comment.updateTime);
+
+            const commentTemplate = `<li class="comment mrg-btm-30" data-commentid="${comment.id}">
                             <i class="user-logo"></i>
                             <div class="font-size-13">
                                 <span class="user-name">${comment.authorName}</span>
-                                <span class="update-date">${comment.updateDate}</span>
+                                <span class="update-date">${writtenTime}</span>
+                            </div>
+                            <div class="comment-more-box">
+                                <button class="comment-more-buttons comment-edit-button">
+                                    <i class="ti-pencil">  수정</i>
+                                </button>
+                                <button class="comment-more-buttons comment-delete-button">
+                                    <i class="ti-trash">  삭제</i>
+                                </button>
+                            </div>
+                            <div class="comment-update-area display-none">
+                                <div class="mrg-btm-10">
+                                    <i class="ti-truck"></i>
+                                    <input class="comment-input" type="text" placeholder="공개 답글 추가..." input="${comment.contents}">
+                                </div>
+                                <button class="btn comment-btn comment-update-cancel-btn">취소</button>
+                                <button class="btn comment-btn comment-update-btn">저장</button>
                             </div>
                             <span class="comment-contents font-size-15">${comment.contents}</span>
                             <div class="mrg-top-5">
@@ -96,8 +244,8 @@ const commentButton = (function () {
                                         <i class="ti-truck"></i>
                                         <input class="comment-input" type="text" placeholder="공개 답글 추가...">
                                     </div>
-                                    <button class="btn comment-btn comment-save-btn disabled" value="${comment.id}">답글</button>
                                     <button class="btn comment-btn comment-cancel-btn">취소</button>
+                                    <button class="btn comment-btn comment-save-btn disabled">답글</button>
                                 </div>
                             </div>
                         </li>`;
@@ -106,11 +254,14 @@ const commentButton = (function () {
         };
 
         return {
-            save: save,
+            save: saveComment,
+            update: updateComment,
+            delete: deleteComment,
             toggleCommentCancel: toggleCommentCancel,
             toggleCommentWrite: toggleCommentWrite,
             toggleCommentSaveButton: toggleCommentSaveButton,
-            toggleCommentMoreButton: toggleCommentMoreButton
+            toggleCommentMoreButton: toggleCommentMoreButton,
+            toggleCommentEditButton: toggleCommentEditButton
         }
     };
 

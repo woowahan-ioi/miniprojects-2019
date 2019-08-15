@@ -126,7 +126,7 @@ ul {
 .more-button {
     transform: rotate(90deg);
     font-size: 1.2em;
-    color:#999;
+    color: #999;
     float: right;
     background: none;
     border: none;
@@ -187,4 +187,17 @@ ul {
     border-radius: 5%;
     background: #065fd4;
     color: white;
+}
+
+.comment-more-box {
+    background: none;
+    border-radius: 1px;
+    color: #777777;
+    float: right;
+}
+
+.comment-more-buttons {
+    background: none;
+    border: none;
+    color: gray;
 }
