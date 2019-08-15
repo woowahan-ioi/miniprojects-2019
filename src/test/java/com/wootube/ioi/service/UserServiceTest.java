@@ -1,12 +1,11 @@
 package com.wootube.ioi.service;
 
-import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.service.dto.EmailCheckResponseDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
-import com.wootube.ioi.service.exception.NotFoundUserException;
+import com.wootube.ioi.service.exception.LoginFailedException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,7 +59,7 @@ public class UserServiceTest {
         given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
 
         LogInRequestDto logInRequestDto = new LogInRequestDto("notfound@luffy.com", "1234567a");
-        assertThrows(NotFoundUserException.class, () -> userService.login(logInRequestDto));
+        assertThrows(LoginFailedException.class, () -> userService.login(logInRequestDto));
     }
 
     @DisplayName("유저 조회 (로그인 실패, 비밀번호 불일치)")
@@ -69,7 +68,7 @@ public class UserServiceTest {
         given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
 
         LogInRequestDto logInRequestDto = new LogInRequestDto("luffy@luffy.com", "aaaa1234");
-        assertThrows(NotMatchPasswordException.class, () -> userService.login(logInRequestDto));
+        assertThrows(LoginFailedException.class, () -> userService.login(logInRequestDto));
     }
 
     @DisplayName("이메일 중복 체크 (중복되지 않은 이메일)")
