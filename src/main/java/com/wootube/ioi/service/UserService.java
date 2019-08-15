@@ -3,6 +3,7 @@ package com.wootube.ioi.service;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.service.dto.EditUserRequestDto;
+import com.wootube.ioi.service.dto.EmailCheckResponseDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.service.exception.NotFoundUserException;
@@ -44,5 +45,14 @@ public class UserService {
         User deleteTargetUser = findByEmail(sessionUser.getEmail());
         userRepository.delete(deleteTargetUser);
         return deleteTargetUser;
+    }
+
+    public EmailCheckResponseDto checkDuplicate(String email) {
+        try {
+            findByEmail(email);
+            return new EmailCheckResponseDto("impossible");
+        } catch (NotFoundUserException e) {
+            return new EmailCheckResponseDto("possible");
+        }
     }
 }

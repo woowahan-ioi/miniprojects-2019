@@ -43,4 +43,8 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
+	testImplementation 'io.rest-assured:rest-assured:4.0.0'
+	testImplementation 'io.rest-assured:json-schema-validator:4.0.0'
+	implementation 'io.rest-assured:json-path:4.0.0'
+	implementation 'io.rest-assured:xml-path:4.0.0'
 }
