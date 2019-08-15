@@ -8,6 +8,9 @@ import com.wootube.ioi.service.exception.NotFoundCommentException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.List;
+
 @Service
 public class CommentService {
     private CommentRepository commentRepository;
@@ -23,6 +26,10 @@ public class CommentService {
                 updatedComment.getContents(),
                 updatedComment.getUpdateTime());
     }
+
+//    public List<CommentResponseDto> findByVideoId(Long videoId) {
+//        return Collections.unmodifiableList(commentRepository.findAllByVideoId(videoId));
+//    }
 
     @Transactional
     //public CommentResponse update(Long videoId, Long commentId, User sessionUser. CommentRequest commentRequest)
@@ -46,7 +53,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(NotFoundCommentException::new);
 //        if(comment.isSameWriteWith(sessionUser)){
-            commentRepository.deleteById(commentId);
+        commentRepository.deleteById(commentId);
 //        }
 //        throw new NotMatchCommentWriterException();
     }
