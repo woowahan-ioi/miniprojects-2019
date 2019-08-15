@@ -3,6 +3,7 @@ package com.wootube.ioi.service;
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
+import com.wootube.ioi.service.dto.EmailCheckResponseDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.service.exception.NotFoundUserException;
@@ -69,5 +70,23 @@ public class UserServiceTest {
 
         LogInRequestDto logInRequestDto = new LogInRequestDto("luffy@luffy.com", "aaaa1234");
         assertThrows(NotMatchPasswordException.class, () -> userService.login(logInRequestDto));
+    }
+
+    @DisplayName("이메일 중복 체크 (중복되지 않은 이메일)")
+    @Test
+    void checkDuplicatedNotDuplicated() {
+        given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
+
+        EmailCheckResponseDto responseDto = userService.checkDuplicate("notfound@luffy.com");
+        assertEquals(new EmailCheckResponseDto("possible"), responseDto);
+    }
+
+    @DisplayName("이메일 중복 체크 (중복된 이메일)")
+    @Test
+    void checkDuplicatedDuplicated() {
+        given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
+
+        EmailCheckResponseDto responseDto = userService.checkDuplicate(SAVED_USER.getEmail());
+        assertEquals(new EmailCheckResponseDto("impossible"), responseDto);
     }
 }
