@@ -44,7 +44,7 @@ public class VideoController {
 	@PutMapping("/{id}")
 	public String updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
 		videoService.update(id, uploadFile, videoRequestDto);
-		return "redirect:/videos/"+id;
+		return "redirect:/videos/" + id;
 	}
 
 	@DeleteMapping("/{id}")
