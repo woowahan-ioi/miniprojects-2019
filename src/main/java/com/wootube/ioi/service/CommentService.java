@@ -8,9 +8,6 @@ import com.wootube.ioi.service.exception.NotFoundCommentException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-
 @Service
 public class CommentService {
     private CommentRepository commentRepository;
@@ -20,11 +17,10 @@ public class CommentService {
     }
 
     public CommentResponseDto save(CommentRequestDto commentRequestDto) {
-        Comment comment = new Comment(commentRequestDto.getContents());
-        Comment updatedComment = commentRepository.save(comment);
-        return new CommentResponseDto(updatedComment.getId(),
-                updatedComment.getContents(),
-                updatedComment.getUpdateTime());
+        Comment comment = commentRepository.save(new Comment(commentRequestDto.getContents()));
+        return new CommentResponseDto(comment.getId(),
+                comment.getContents(),
+                comment.getUpdateTime());
     }
 
 //    public List<CommentResponseDto> findByVideoId(Long videoId) {
@@ -36,8 +32,7 @@ public class CommentService {
     public CommentResponseDto update(Long commentId, CommentRequestDto commentRequestDto) {
         // 같은 비디오인지 확인
         // Video video = videoService.findById(videoId);
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(NotFoundCommentException::new);
+        Comment comment = findById(commentId);
 
         //comment.update(video, sessionUser, contents);
         comment.update(commentRequestDto.getContents());
@@ -50,11 +45,15 @@ public class CommentService {
     public void delete(Long commentId) {
         // 같은 비디오인지 확인
         // 세션 유저와 comment의 유저가 같은지 확인
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(NotFoundCommentException::new);
+        Comment comment = findById(commentId);
 //        if(comment.isSameWriteWith(sessionUser)){
         commentRepository.deleteById(commentId);
 //        }
 //        throw new NotMatchCommentWriterException();
+    }
+
+    public Comment findById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(NotFoundCommentException::new);
     }
 }
