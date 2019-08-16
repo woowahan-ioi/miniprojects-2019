@@ -6,7 +6,7 @@ import lombok.Getter;
 public class EmailCheckRequestDto {
     private String email;
 
-    public EmailCheckRequestDto() {
+    private EmailCheckRequestDto() {
 
     }
 
