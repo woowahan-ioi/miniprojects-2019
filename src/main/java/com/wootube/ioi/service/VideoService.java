@@ -31,9 +31,9 @@ public class VideoService {
 	public VideoRequestDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
 		String videoUrl = uploadFile(uploadFile, directoryName);
 		String originFileName = uploadFile.getOriginalFilename();
-		Video video = modelMapper.map(videoRequestDto, Video.class);
+		videoRequestDto.setContentPath(videoUrl);
 
-		video.setContentPath(videoUrl);
+		Video video = modelMapper.map(videoRequestDto, Video.class);
 		video.setOriginFileName(originFileName);
 
 		return modelMapper.map(videoRepository.save(video), VideoRequestDto.class);
