@@ -7,18 +7,18 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class LoginUserSessionManager extends SessionManagerGenerator {
+public class UserSessionManager extends SessionManagerGenerator {
 
-    public LoginUserSessionManager(HttpServletRequest request) {
+    public UserSessionManager(HttpServletRequest request) {
         super(request);
     }
 
-    public SessionUser getUser() {
-        return (SessionUser) super.get("user");
+    public UserSession getUser() {
+        return (UserSession) super.get("user");
     }
 
     public void setUser(User user) {
-        super.set("user", SessionUser.of(user));
+        super.set("user", UserSession.of(user));
     }
 
     public void removeUser() {

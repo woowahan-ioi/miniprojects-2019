@@ -5,8 +5,7 @@ import com.wootube.ioi.service.UserService;
 import com.wootube.ioi.service.dto.EditUserRequestDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
-import com.wootube.ioi.web.session.LoginUserSessionManager;
-import com.wootube.ioi.web.session.SessionUser;
+import com.wootube.ioi.web.session.UserSessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,12 +21,12 @@ import org.springframework.web.servlet.view.RedirectView;
 public class UserController {
 
     private UserService userService;
-    private LoginUserSessionManager loginUserSessionManager;
+    private UserSessionManager userSessionManager;
 
     @Autowired
-    public UserController(UserService userService, LoginUserSessionManager loginUserSessionManager) {
+    public UserController(UserService userService, UserSessionManager userSessionManager) {
         this.userService = userService;
-        this.loginUserSessionManager = loginUserSessionManager;
+        this.userSessionManager = userSessionManager;
     }
 
     @GetMapping("/signup")
@@ -47,36 +46,34 @@ public class UserController {
 
     @PostMapping("/signup")
     public RedirectView signUp(SignUpRequestDto signUpRequestDto) {
-        userService.signUp(signUpRequestDto);
+        userService.createUser(signUpRequestDto);
         return new RedirectView("/user/login");
     }
 
     @PostMapping("/login")
     public RedirectView login(LogInRequestDto logInRequestDto) {
-        User loginUser = userService.login(logInRequestDto);
-        loginUserSessionManager.setUser(loginUser);
+        User loginUser = userService.readUser(logInRequestDto);
+        userSessionManager.setUser(loginUser);
         return new RedirectView("/");
     }
 
     @GetMapping("/logout")
     public RedirectView logout() {
-        loginUserSessionManager.removeUser();
+        userSessionManager.removeUser();
         return new RedirectView("/");
     }
 
     @PutMapping("/")
     public RedirectView editUser(EditUserRequestDto editUserRequestDto) {
-        SessionUser sessionUser = loginUserSessionManager.getUser();
-        User updatedUser = userService.update(sessionUser, editUserRequestDto);
-        loginUserSessionManager.setUser(updatedUser);
+        User updatedUser = userService.updateUser(userSessionManager.getUser(), editUserRequestDto);
+        userSessionManager.setUser(updatedUser);
         return new RedirectView("/user/mypage");
     }
 
     @DeleteMapping("/")
     public RedirectView deleteUser() {
-        SessionUser sessionUser = loginUserSessionManager.getUser();
-        userService.delete(sessionUser);
-        loginUserSessionManager.removeUser();
+        userService.deleteUser(userSessionManager.getUser());
+        userSessionManager.removeUser();
         return new RedirectView("/");
     }
 }

@@ -1,0 +1,20 @@
+
+.input {
+    padding: 0px;
+}
+
+.login-title {
+    text-align: start;
+    width: 100%;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.3333;
+}
+
+.login-desc {
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: .1px;
+    line-height: 1.5;
+}
