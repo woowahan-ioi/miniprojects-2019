@@ -60,6 +60,13 @@ public class VideoService {
 		videoRepository.save(video);
 	}
 
+	@Transactional
+	public void deleteById(Long id) {
+		Video video = findVideo(id);
+		fileUploader.deleteFile(directoryName, video.getOriginFileName());
+		videoRepository.delete(findVideo(id));
+	}
+
 	public String uploadFile(MultipartFile uploadFile, String directoryName) {
 		try {
 			return fileUploader.uploadFile(uploadFile, directoryName);
