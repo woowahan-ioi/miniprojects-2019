@@ -3,7 +3,7 @@
 <head>
     <th:block th:replace="fragments/config :: configFragment"/>
     <title>Wootube</title>
-    <link rel="stylesheet" href="/css/video.css">
+    <link href="/css/video.css" rel="stylesheet">
 </head>
 
 <body>
@@ -12,24 +12,24 @@
 
     <div class="row padding-80 pdd-top-75">
         <div class="col-lg-8 col-md-8 ">
-            <embed th:if="${video}" class="width-100" height="550px" preload controls
-                   th:src="${video.contentPath}" allowfullscreen>
-            <embed th:unless="${video}" class="width-100" height="550px" preload controls
-                   src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen>
+            <embed allowfullscreen class="width-100" controls height="550px" preload
+                   th:if="${video}" th:src="${video.contentPath}">
+            <embed allowfullscreen class="width-100" controls height="550px" preload
+                   src="https://www.youtube.com/embed/tgbNymZ7vqY" th:unless="${video}">
 
             <hr class="hr-style">
 
             <div class="width-100 row">
                 <div class="col-sm-2">
-                    <img class="video-owner-img img-circle" src="/images/default/eastjun_big.jpg"
-                         alt="">
+                    <img alt="" class="video-owner-img img-circle"
+                         src="/images/default/eastjun_big.jpg">
                 </div>
                 <div class="relative banner-info d-inline-block col-sm-8">
                     <span class="left-30 bottom-35 font-size-17 text-bold">UserName</span><br>
                     <span class="left-30 bottom-35 font-size-13">DateTime: 19.08.13</span>
                     <div class="left-30 mrg-vertical-10">
                     <span>description<span id="dots">...</span>
-                        <span style="display:none" id="more"> erisque enim ligula venenatis dolor.
+                        <span id="more" style="display:none"> erisque enim ligula venenatis dolor.
                             Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.
                             Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac.
                             In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis.
@@ -37,7 +37,7 @@
                         </span>
                     </span>
                     </div>
-                    <span class="mrg-vertical-20 left-30" onclick="readMoreTag()" id="readMoreSpan">더보기</span>
+                    <span class="mrg-vertical-20 left-30" id="readMoreSpan" onclick="readMoreTag()">더보기</span>
                 </div>
                 <div class="col-sm-2">
 
@@ -57,7 +57,7 @@
                 </div>
                 <div class="col-sm-4 auto-play-div">
                     <label class="switch" style="float: right;">
-                        <input type="checkbox" checked>
+                        <input checked type="checkbox">
                         <span class="slider round"></span>
                     </label>
                     <span></span>
@@ -72,7 +72,7 @@
                     <div class="card bg-transparent no-border">
                         <div class="card-media row">
                             <div class="col-md-6">
-                                <img class="img-responsive" src="/images/default/thumb_001.jpeg" alt="">
+                                <img alt="" class="img-responsive" src="/images/default/thumb_001.jpeg">
                             </div>
                             <div class="col-md-6">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
@@ -89,7 +89,7 @@
                     <div class="card bg-transparent no-border">
                         <div class="card-media row">
                             <div class="col-md-6">
-                                <img class="img-responsive" src="/images/default/thumb_002.jpeg" alt="">
+                                <img alt="" class="img-responsive" src="/images/default/thumb_002.jpeg">
                             </div>
                             <div class="col-md-6">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
@@ -106,7 +106,7 @@
                     <div class="card bg-transparent no-border">
                         <div class="card-media row">
                             <div class="col-md-6">
-                                <img class="img-responsive" src="/images/default/thumb_003.jpeg" alt="">
+                                <img alt="" class="img-responsive" src="/images/default/thumb_003.jpeg">
                             </div>
                             <div class="col-md-6">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
@@ -123,7 +123,7 @@
                     <div class="card bg-transparent no-border">
                         <div class="card-media row">
                             <div class="col-md-6">
-                                <img class="img-responsive" src="/images/default/thumb_004.jpeg" alt="">
+                                <img alt="" class="img-responsive" src="/images/default/thumb_004.jpeg">
                             </div>
                             <div class="col-md-6">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
@@ -140,7 +140,7 @@
                     <div class="card bg-transparent no-border">
                         <div class="card-media row">
                             <div class="col-md-6">
-                                <img class="img-responsive" src="/images/default/thumb_005.jpeg" alt="">
+                                <img alt="" class="img-responsive" src="/images/default/thumb_005.jpeg">
                             </div>
                             <div class="col-md-6">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
