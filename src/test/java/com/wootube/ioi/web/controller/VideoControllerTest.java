@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -30,20 +31,16 @@ class VideoControllerTest {
 	@Test
 	@DisplayName("비디오 등록 페이지로 이동한다.")
 	void moveCreateVideoPage() {
-		webTestClient.get().uri("/videos/new")
-				.exchange()
+		request(HttpMethod.GET, "/videos/new")
 				.expectStatus().isOk();
 	}
 
 	@Test
 	@DisplayName("비디오를 저장한다.")
 	void save() {
-		webTestClient.post().uri("/videos/new")
-				.body(BodyInserters.fromObject(createMultipartBodyBuilder().build()))
-				.exchange()
+		requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/videos/new")
 				.expectStatus().is3xxRedirection()
-				.expectBody()
-				.returnResult();
+				.expectHeader().valueMatches("Location", ".*/videos/[1-9][0-9]*");
 
 		stopS3Mock();
 	}
@@ -53,8 +50,7 @@ class VideoControllerTest {
 	void get() {
 		String videoId = getVideoId(createMultipartBodyBuilder());
 
-		webTestClient.get().uri("/videos/" + videoId)
-				.exchange()
+		request(HttpMethod.GET, "/videos/" + videoId)
 				.expectStatus().isOk();
 
 		stopS3Mock();
@@ -65,8 +61,7 @@ class VideoControllerTest {
 	void moveEditPage() {
 		String videoId = getVideoId(createMultipartBodyBuilder());
 
-		webTestClient.get().uri("/videos/" + videoId + "/edit")
-				.exchange()
+		request(HttpMethod.GET, "/videos/" + videoId + "/edit")
 				.expectStatus().isOk();
 
 		stopS3Mock();
@@ -88,9 +83,7 @@ class VideoControllerTest {
 		bodyBuilder.part("title", "update_video_title");
 		bodyBuilder.part("description", "update_video_description");
 
-		webTestClient.put().uri("videos/" + videoId)
-				.body(BodyInserters.fromObject(bodyBuilder.build()))
-				.exchange()
+		requestWithBodyBuilder(bodyBuilder, HttpMethod.PUT, "videos/" + videoId)
 				.expectStatus().is3xxRedirection()
 				.expectHeader().valueMatches("Location", ".*/videos/" + videoId);
 
@@ -102,10 +95,8 @@ class VideoControllerTest {
 	void delete() {
 		String videoId = getVideoId(createMultipartBodyBuilder());
 
-		webTestClient.delete().uri("/videos/" + videoId)
-				.exchange()
-				.expectHeader()
-				.valueMatches("Location", ".*/");
+		request(HttpMethod.DELETE, "/videos/" + videoId)
+				.expectHeader().valueMatches("Location", ".*/");
 
 		stopS3Mock();
 	}
@@ -132,10 +123,21 @@ class VideoControllerTest {
 		return uri.substring(uri.lastIndexOf("/") + 1);
 	}
 
-	private URI saveVideo(MultipartBodyBuilder bodyBuilder) {
-		return webTestClient.post().uri("/videos/new")
+	private WebTestClient.ResponseSpec request(HttpMethod requestMethod, String requestUri) {
+		return webTestClient.method(requestMethod)
+				.uri(requestUri)
+				.exchange();
+	}
+
+	private WebTestClient.ResponseSpec requestWithBodyBuilder(MultipartBodyBuilder bodyBuilder, HttpMethod requestMethod, String requestUri) {
+		return webTestClient.method(requestMethod)
+				.uri(requestUri)
 				.body(BodyInserters.fromObject(bodyBuilder.build()))
-				.exchange()
+				.exchange();
+	}
+
+	private URI saveVideo(MultipartBodyBuilder bodyBuilder) {
+		return requestWithBodyBuilder(bodyBuilder, HttpMethod.POST, "/videos/new")
 				.returnResult(String.class)
 				.getResponseHeaders()
 				.getLocation();
