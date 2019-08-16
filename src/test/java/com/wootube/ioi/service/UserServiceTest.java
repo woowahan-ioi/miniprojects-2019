@@ -37,7 +37,7 @@ public class UserServiceTest {
     @Test
     void signUp() {
         SignUpRequestDto signUpRequestDto = new SignUpRequestDto("루피", "luffy@luffy.com", "1234567a");
-        userService.signUp(signUpRequestDto);
+        userService.createUser(signUpRequestDto);
 
         verify(userRepository, atLeast(1)).save(SAVED_USER);
     }
@@ -48,7 +48,7 @@ public class UserServiceTest {
         given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
 
         LogInRequestDto logInRequestDto = new LogInRequestDto("luffy@luffy.com", "1234567a");
-        User logInUser = userService.login(logInRequestDto);
+        User logInUser = userService.readUser(logInRequestDto);
 
         assertEquals(logInUser, SAVED_USER);
     }
@@ -59,7 +59,7 @@ public class UserServiceTest {
         given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
 
         LogInRequestDto logInRequestDto = new LogInRequestDto("notfound@luffy.com", "1234567a");
-        assertThrows(LoginFailedException.class, () -> userService.login(logInRequestDto));
+        assertThrows(LoginFailedException.class, () -> userService.readUser(logInRequestDto));
     }
 
     @DisplayName("유저 조회 (로그인 실패, 비밀번호 불일치)")
@@ -68,7 +68,7 @@ public class UserServiceTest {
         given(userRepository.findByEmail(SAVED_USER.getEmail())).willReturn(Optional.of(SAVED_USER));
 
         LogInRequestDto logInRequestDto = new LogInRequestDto("luffy@luffy.com", "aaaa1234");
-        assertThrows(LoginFailedException.class, () -> userService.login(logInRequestDto));
+        assertThrows(LoginFailedException.class, () -> userService.readUser(logInRequestDto));
     }
 
     @DisplayName("이메일 중복 체크 (중복되지 않은 이메일)")

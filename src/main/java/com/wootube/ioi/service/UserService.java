@@ -25,11 +25,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User signUp(SignUpRequestDto signUpRequestDto) {
+    public User createUser(SignUpRequestDto signUpRequestDto) {
         return userRepository.save(signUpRequestDto.toUser());
     }
 
-    public User login(LogInRequestDto logInRequestDto) {
+    public User readUser(LogInRequestDto logInRequestDto) {
         try {
             return findByEmail(logInRequestDto.getEmail()).matchPassword(logInRequestDto.getPassword());
         } catch (NotFoundUserException | NotMatchPasswordException e) {
@@ -43,11 +43,11 @@ public class UserService {
     }
 
     @Transactional
-    public User update(SessionUser sessionUser, EditUserRequestDto editUserRequestDto) {
+    public User updateUser(SessionUser sessionUser, EditUserRequestDto editUserRequestDto) {
         return findByEmail(sessionUser.getEmail()).updateName(editUserRequestDto.getName());
     }
 
-    public User delete(SessionUser sessionUser) {
+    public User deleteUser(SessionUser sessionUser) {
         User deleteTargetUser = findByEmail(sessionUser.getEmail());
         userRepository.delete(deleteTargetUser);
         return deleteTargetUser;

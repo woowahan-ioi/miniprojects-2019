@@ -47,13 +47,13 @@ public class UserController {
 
     @PostMapping("/signup")
     public RedirectView signUp(SignUpRequestDto signUpRequestDto) {
-        userService.signUp(signUpRequestDto);
+        userService.createUser(signUpRequestDto);
         return new RedirectView("/user/login");
     }
 
     @PostMapping("/login")
     public RedirectView login(LogInRequestDto logInRequestDto) {
-        User loginUser = userService.login(logInRequestDto);
+        User loginUser = userService.readUser(logInRequestDto);
         loginUserSessionManager.setUser(loginUser);
         return new RedirectView("/");
     }
@@ -67,7 +67,7 @@ public class UserController {
     @PutMapping("/")
     public RedirectView editUser(EditUserRequestDto editUserRequestDto) {
         SessionUser sessionUser = loginUserSessionManager.getUser();
-        User updatedUser = userService.update(sessionUser, editUserRequestDto);
+        User updatedUser = userService.updateUser(sessionUser, editUserRequestDto);
         loginUserSessionManager.setUser(updatedUser);
         return new RedirectView("/user/mypage");
     }
@@ -75,7 +75,7 @@ public class UserController {
     @DeleteMapping("/")
     public RedirectView deleteUser() {
         SessionUser sessionUser = loginUserSessionManager.getUser();
-        userService.delete(sessionUser);
+        userService.deleteUser(sessionUser);
         loginUserSessionManager.removeUser();
         return new RedirectView("/");
     }
