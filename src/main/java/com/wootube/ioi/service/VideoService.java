@@ -3,7 +3,7 @@ package com.wootube.ioi.service;
 import java.io.IOException;
 import javax.transaction.Transactional;
 
-import com.wootube.ioi.domain.model.video.Video;
+import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;

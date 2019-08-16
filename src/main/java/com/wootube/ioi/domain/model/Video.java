@@ -1,4 +1,4 @@
-package com.wootube.ioi.domain.model.video;
+package com.wootube.ioi.domain.model;
 
 import java.time.LocalDateTime;
 import javax.persistence.*;
