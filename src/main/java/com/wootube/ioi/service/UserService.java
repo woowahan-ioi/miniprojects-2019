@@ -8,7 +8,7 @@ import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.service.exception.LoginFailedException;
 import com.wootube.ioi.service.exception.NotFoundUserException;
-import com.wootube.ioi.web.session.SessionUser;
+import com.wootube.ioi.web.session.UserSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,12 +42,12 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(SessionUser sessionUser, EditUserRequestDto editUserRequestDto) {
-        return findByEmail(sessionUser.getEmail()).updateName(editUserRequestDto.getName());
+    public User updateUser(UserSession userSession, EditUserRequestDto editUserRequestDto) {
+        return findByEmail(userSession.getEmail()).updateName(editUserRequestDto.getName());
     }
 
-    public User deleteUser(SessionUser sessionUser) {
-        User deleteTargetUser = findByEmail(sessionUser.getEmail());
+    public User deleteUser(UserSession userSession) {
+        User deleteTargetUser = findByEmail(userSession.getEmail());
         userRepository.delete(deleteTargetUser);
         return deleteTargetUser;
     }
