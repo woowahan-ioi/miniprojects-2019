@@ -1,11 +1,3 @@
-const MILLI = 1;
-const SECOND = 1000 * MILLI;
-const MINUTE = 60 * SECOND;
-const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
-const MONTH = 30 * DAY;
-const YEAR = 12 * MONTH;
-
 const commentButton = (function () {
     const CommentController = function () {
         const commentService = new CommentService();
@@ -81,15 +73,17 @@ const commentButton = (function () {
             if (target.tagName === "I") {
                 target = target.parentElement;
             }
-            if (target.classList.contains("comment-update-cancel-btn") || target.classList.contains("comment-update-btn")) {
+            if (target.classList.contains("comment-update-cancel-btn")) {
                 const commentButtonDiv = target.parentElement;
                 commentButtonDiv.classList.toggle("display-none");
-                commentButtonDiv.nextElementSibling.classList.toggle("display-none");
+                commentButtonDiv.previousElementSibling.classList.toggle("display-none");
+                commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
             }
             if (target.classList.contains("comment-edit-button")) {
                 const commentButtonDiv = target.parentElement;
-                commentButtonDiv.nextElementSibling.classList.toggle("display-none");
-                commentButtonDiv.nextElementSibling.nextElementSibling.classList.toggle("display-none");
+                commentButtonDiv.parentElement.classList.toggle("display-none");
+                commentButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
+                commentButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");
             }
         }
 
@@ -145,7 +139,12 @@ const commentButton = (function () {
             }).then(response => {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
-                    target.parentElement.nextElementSibling.innerText = contents;
+                    target.parentElement.previousElementSibling.querySelector(".comment-contents").innerText = contents;
+
+                    const commentButtonDiv = event.target.parentElement;
+                    commentButtonDiv.classList.toggle("display-none");
+                    commentButtonDiv.previousElementSibling.classList.toggle("display-none");
+                    commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
                 } else {
                     throw response;
                 }
@@ -172,7 +171,7 @@ const commentButton = (function () {
             }).then(response => {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
-                    target.parentElement.parentElement.remove();
+                    target.closest("li").remove();
                 } else {
                     throw response;
                 }
@@ -181,74 +180,58 @@ const commentButton = (function () {
             });
         }
 
-        function calculateWrittenTime(updateTime) {
-            const writtenTime = new Date(Date.now() - new Date(updateTime)).getTime();
-
-            if (writtenTime > YEAR) {
-                return Math.floor(writtenTime / YEAR) + "년 전";
-            }
-
-            if (writtenTime > MONTH) {
-                return Math.floor(writtenTime / MONTH) + "개월 전";
-            }
-
-            if (writtenTime > DAY) {
-                return Math.floor(writtenTime / DAY) + "일 전";
-            }
-
-            if (writtenTime > HOUR) {
-                return Math.floor(writtenTime / HOUR) + "시간 전";
-            }
-
-            if (writtenTime > MINUTE) {
-                return Math.floor(writtenTime / MINUTE) + "분 전";
-            }
-
-            return Math.floor(writtenTime / SECOND) + "초 전";
-        }
-
         const appendComment = (comment) => {
             const writtenTime = calculateWrittenTime(comment.updateTime);
 
             const commentTemplate = `<li class="comment mrg-btm-30" data-commentid="${comment.id}">
-                            <i class="user-logo"></i>
-                            <div class="font-size-13">
-                                <span class="user-name">${comment.authorName}</span>
-                                <span class="update-date">${writtenTime}</span>
-                            </div>
-                            <div class="comment-more-box">
-                                <button class="comment-more-buttons comment-edit-button">
-                                    <i class="ti-pencil">  수정</i>
-                                </button>
-                                <button class="comment-more-buttons comment-delete-button">
-                                    <i class="ti-trash">  삭제</i>
-                                </button>
-                            </div>
-                            <div class="comment-update-area display-none">
-                                <div class="mrg-btm-10">
-                                    <i class="ti-truck"></i>
-                                    <input class="comment-input" type="text" placeholder="공개 답글 추가..." input="${comment.contents}">
-                                </div>
-                                <button class="btn comment-btn comment-update-cancel-btn">취소</button>
-                                <button class="btn comment-btn comment-update-btn">저장</button>
-                            </div>
-                            <span class="comment-contents font-size-15">${comment.contents}</span>
-                            <div class="mrg-top-5">
-                                <button class="like-btn">
-                                    <i class="ti-thumb-up"></i>
-                                </button>
-                                <span>3.5천</span>
-                                <button class="reply-toggle-btn">답글</button>
-                                <div class="reply-area display-none">
-                                    <div class="mrg-btm-10">
-                                        <i class="ti-truck"></i>
-                                        <input class="comment-input" type="text" placeholder="공개 답글 추가...">
-                                    </div>
-                                    <button class="btn comment-btn comment-cancel-btn">취소</button>
-                                    <button class="btn comment-btn comment-save-btn disabled">답글</button>
-                                </div>
-                            </div>
-                        </li>`;
+                <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
+                <div class="comment-block">
+                    <div class="font-size-13">
+                        <span class="user-name">${comment.authorName}</span>
+                        <span class="update-date">${writtenTime}</span>
+                    </div>
+                    <div class="comment-more-box">
+                        <button class="comment-more-buttons comment-edit-button">
+                            <i class="ti-pencil"> 수정</i>
+                        </button>
+                        <button class="comment-more-buttons comment-delete-button">
+                            <i class="ti-trash"> 삭제</i>
+                        </button>
+                    </div>
+                    <span class="comment-contents font-size-15">${comment.contents}</span>
+                    <div>
+                        <button class="like-btn">
+                            <i class="ti-thumb-up"></i>
+                        </button>
+                        <span>3.5천</span>
+                        <button class="reply-toggle-btn">답글</button>
+                    </div>
+                </div>
+                <div class="comment-update-area display-none mrg-btm-50">
+                    <div>
+                        <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
+                             alt="">
+                        <input class="comment-input" type="text" value="${comment.contents}">
+                    </div>
+                    <button class="btn comment-btn comment-update-cancel-btn">취소</button>
+                    <button class="btn comment-btn edit comment-update-btn">수정</button>
+                </div>
+                <div class="mrg-top-5">
+                    <div class="display-none">
+                        <div class="mrg-btm-10">
+                            <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
+                                 alt="">
+                            <input class="comment-input" type="text" placeholder="공개 답글 추가...">
+                        </div>
+                        <button class="btn comment-btn edit comment-save-btn disabled">답글</button>
+                        <button class="btn comment-btn comment-cancel-btn">취소</button>
+                    </div>
+                    <ul class="reply-area">
+                        
+                    </ul>
+                </div>
+            </li>`;
+
             const commentList = document.querySelector("#comment-area");
             commentList.insertAdjacentHTML("beforeend", commentTemplate);
         };

@@ -11,6 +11,15 @@
     text-transform: uppercase;
 }
 
+body {
+    width: 80%;
+    margin: auto;
+}
+
+header {
+    left: 0;
+}
+
 .video-height {
     width: 100%;
     max-width: 640px;
@@ -32,6 +41,16 @@
     display: inline-block;
     width: 30px;
     height: 17px;
+}
+
+.comment-writer-img {
+    width: 5%;
+    float: left;
+}
+
+.comment-block {
+    width: 94%;
+    display: inline-block;
 }
 
 .switch input {
@@ -201,3 +220,4 @@ ul {
     border: none;
     color: gray;
 }
+
