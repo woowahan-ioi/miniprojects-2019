@@ -23,8 +23,18 @@ import static org.mockito.BDDMockito.*;
 
 @ExtendWith(SpringExtension.class)
 class VideoServiceTest {
+    private static final String TITLE = "title";
+    private static final String DESCRIPTION = "description";
+    private static final String CONTENTS = "<<testVideo data>>";
+    private static final String UPDATE_TITLE = "title";
+    private static final String UPDATE_DESCRIPTION = "description";
+    private static final String UPDATE_CONTENTS = "<<update testVideo data>>";
+
     private static final Long ID = 1L;
     private static final String DIRECTORY = "wootube";
+    private static final String FILE_NAME = "testVideo.mp4";
+    private static final String UPDATE_FILE_NAME = "changeTestVideo.mp4";
+
     @Mock
     private VideoRepository videoRepository;
 
@@ -44,14 +54,13 @@ class VideoServiceTest {
 
     @BeforeEach
     void setUp() {
-        String fileName = "testVideo.mp4";
-        fileFullPath = String.format("%s/%s", DIRECTORY, fileName);
+        fileFullPath = String.format("%s/%s", DIRECTORY, FILE_NAME);
 
-        testUploadFile = new MockMultipartFile(fileFullPath, fileName, null, "<<testVideo data>>".getBytes(StandardCharsets.UTF_8));
+        testUploadFile = new MockMultipartFile(fileFullPath, FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
 
         testVideoRequestDto = new VideoRequestDto();
-        testVideoRequestDto.setTitle("title");
-        testVideoRequestDto.setDescription("description");
+        testVideoRequestDto.setTitle(TITLE);
+        testVideoRequestDto.setDescription(DESCRIPTION);
 
         testVideo = new Video();
         testVideo.setTitle(testVideoRequestDto.getTitle());
@@ -74,30 +83,22 @@ class VideoServiceTest {
     @DisplayName("서비스에서 비디오 id를 통해 비디오를 찾는다.")
     void findById() {
         given(modelMapper.map(videoRepository.findById(ID), Video.class)).willReturn(testVideo);
-
         verify(videoRepository, atLeast(1)).findById(ID);
     }
 
     @Test
     @DisplayName("서비스에서 비디오를 업데이트 한다.")
     void update() throws IOException {
-        String fileName = "changeTestVideo.mp4";
-        String updateFileFullPath = String.format("%s/%s", DIRECTORY, fileName);
-
-        MultipartFile testUpdateChangeUploadFile = new MockMultipartFile(fileFullPath, fileName, null, "<<testVideo data>>".getBytes(StandardCharsets.UTF_8));
-
-        testVideoRequestDto.setTitle("update_title");
-        testVideoRequestDto.setDescription("update_description");
-        testVideo.setTitle(testVideoRequestDto.getTitle());
-        testVideo.setDescription(testVideoRequestDto.getDescription());
-
         given(fileUploader.uploadFile(testUploadFile, DIRECTORY)).willReturn(fileFullPath);
         given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
 
+        videoService.create(testUploadFile, testVideoRequestDto);
+
+        String updateFileFullPath = String.format("%s/%s", DIRECTORY, UPDATE_FILE_NAME);
+        MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
+
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
         given(fileUploader.uploadFile(testUpdateChangeUploadFile, DIRECTORY)).willReturn(updateFileFullPath);
-
-        videoService.create(testUploadFile, testVideoRequestDto);
 
         videoService.update(ID, testUpdateChangeUploadFile, testVideoRequestDto);
 
@@ -105,13 +106,18 @@ class VideoServiceTest {
         verify(videoRepository, atLeast(1)).save(testVideo);
     }
 
+    private MultipartFile getUpdateChangeUploadFile(String updateFileFullPath) {
+        testVideoRequestDto.setTitle(UPDATE_TITLE);
+        testVideoRequestDto.setDescription(UPDATE_DESCRIPTION);
+        testVideo.setTitle(testVideoRequestDto.getTitle());
+        testVideo.setDescription(testVideoRequestDto.getDescription());
+
+        return new MockMultipartFile(updateFileFullPath, UPDATE_FILE_NAME, null, UPDATE_CONTENTS.getBytes(StandardCharsets.UTF_8));
+    }
+
     @Test
     @DisplayName("서비스에서 비디오 아이디로 비디오를 삭제한다.")
-    void deleteById() throws IOException {
-        given(fileUploader.uploadFile(testUploadFile, DIRECTORY)).willReturn(fileFullPath);
-        given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
-        videoService.create(testUploadFile, testVideoRequestDto);
-
+    void deleteById() {
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
         videoService.deleteById(ID);
 
