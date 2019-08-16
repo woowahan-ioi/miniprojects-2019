@@ -66,6 +66,47 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
         ;
     }
 
+    @Test
+    @DisplayName("답글을 삭제한다.")
+    void deleteReply() {
+        saveCommentAndSaveReply();
+
+        webTestClient.delete()
+                .uri("/watch/1/comments/1/replies/" + EXIST_REPLY_ID)
+                .exchange()
+                .expectStatus().isNoContent()
+        ;
+    }
+
+    @Test
+    @DisplayName("없는 댓글에 답글을 삭제하는 경우 예외가 발생한다.")
+    void deleteReplyFail() {
+        loginAndSaveComment();
+        saveCommentAndSaveReply();
+
+        webTestClient.delete()
+                .uri("/watch/1/comments/2/replies/" + EXIST_REPLY_ID)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$").isEqualTo("댓글에 일치하지 않은 답글 입니다.")
+        ;
+    }
+
+    @Test
+    @DisplayName("없는 답글을 삭제하는 경우 예외가 발생한다.")
+    void deleteReplyFail2() {
+        saveCommentAndSaveReply();
+
+        webTestClient.delete()
+                .uri("/watch/1/comments/1/replies/" + NOT_EXIST_REPLY_ID)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$").isEqualTo("존재하지 않는 답글 입니다.")
+        ;
+    }
+
     private WebTestClient.ResponseSpec saveCommentAndSaveReply() {
         loginAndSaveComment();
 
