@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserRestService {
 
+    private static final EmailCheckResponseDto NOT_DUPLICATED_EMAIL_RESPONSE_DTO = new EmailCheckResponseDto("possible");
+    private static final EmailCheckResponseDto DUPLICATED_EMAIL_RESPONSE_DTO = new EmailCheckResponseDto("impossible");
+
     private UserService userService;
 
     @Autowired
@@ -19,9 +22,9 @@ public class UserRestService {
     public EmailCheckResponseDto checkDuplicate(String email) {
         try {
             userService.findByEmail(email);
-            return new EmailCheckResponseDto("impossible");
+            return DUPLICATED_EMAIL_RESPONSE_DTO;
         } catch (NotFoundUserException e) {
-            return new EmailCheckResponseDto("possible");
+            return NOT_DUPLICATED_EMAIL_RESPONSE_DTO;
         }
     }
 }
