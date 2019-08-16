@@ -38,9 +38,13 @@ public class Reply {
     }
 
     public void update(Comment comment, String contents) {
+        checkMatchComment(comment);
+        this.contents = contents;
+    }
+
+    public void checkMatchComment(Comment comment) {
         if (!this.comment.equals(comment)) {
             throw new NotMatchCommentException();
         }
-        this.contents = contents;
     }
 }
