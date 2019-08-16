@@ -54,6 +54,15 @@ public class UserControllerTest {
                 .isOk();
     }
 
+    @DisplayName("로그인 하지 않고 마이 페이지로 이동")
+    @Test
+    void mypage() {
+        webTestClient.get().uri("/user/mypage")
+                .exchange()
+                .expectStatus()
+                .isFound();
+    }
+
     @DisplayName("회원등록")
     @Test
     void signUp() {
