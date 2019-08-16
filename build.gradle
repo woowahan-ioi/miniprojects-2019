@@ -46,4 +46,9 @@ dependencies {
 	}
 	testImplementation 'org.junit.jupiter:junit-jupiter-api'
 	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
+
+	testCompile 'io.rest-assured:json-schema-validator:4.0.0'
+	testCompile 'io.rest-assured:rest-assured:4.0.0'
+	compile 'io.rest-assured:json-path:4.0.0'
+	compile 'io.rest-assured:xml-path:4.0.0'
 }

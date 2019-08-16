@@ -4,116 +4,157 @@ import com.wootube.ioi.service.dto.ReplyRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Mono;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 public class ReplyControllerTest extends CommentCommonControllerTest {
     @Test
     @DisplayName("답글을 생성한다.")
     void createReply() {
-        saveCommentAndSaveReply()
-                .expectStatus().isCreated()
-                .expectBody()
-                .jsonPath("$.id").isNotEmpty()
-                .jsonPath("$.contents").isEqualTo(SAVE_REPLY_RESPONSE.getContents())
-                .jsonPath("$.updateTime").isNotEmpty()
-        ;
+        int commentId = getCommentId();
+
+        given().
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                body(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())).
+        when().
+                post(basicPath() + "/watch/1/comments/" + commentId + "/replies").
+        then().
+                statusCode(201).
+                body("id", is(not(empty()))).
+                body("contents", equalTo(SAVE_REPLY_RESPONSE.getContents())).
+                body("updateTime", is(not(empty())));
     }
 
     @Test
     @DisplayName("답글을 수정한다.")
     void updateReply() {
-        saveCommentAndSaveReply();
+        int commentId = getCommentId();
+        int replyId = getReplyId(commentId);
 
-        webTestClient.put()
-                .uri("/watch/1/comments/1/replies/" + EXIST_REPLY_ID)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
-                .exchange()
-                .expectStatus().isNoContent()
-        ;
+        given().
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                body(new ReplyRequestDto("Update Contents")).
+        when().
+                put(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + replyId).
+        then().
+                statusCode(204);
+
+//        webTestClient.put()
+//                .uri("/watch/1/comments/" + commentId + "/replies/" + replyId)
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
+//                .exchange()
+//                .expectStatus().isNoContent()
+//        ;
     }
 
     @Test
     @DisplayName("답글이 존재하지 않는 경우 예외가 발생한다.")
     void notExistReplyUpdate() {
-        saveCommentAndSaveReply();
+        //에러 메시지 확인하기
+        int commentId = getCommentId();
 
-        webTestClient.put()
-                .uri("/watch/1/comments/1/replies/" + NOT_EXIST_REPLY_ID)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
-                .exchange()
-                .expectStatus().isBadRequest()
-                .expectBody()
-                .jsonPath("$").isEqualTo(NOT_FOUND_REPLY_EXCEPTION_MESSAGE)
-        ;
+        given().
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                body(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())).
+        when().
+                put(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
+        then().
+                statusCode(400);
+
+//        webTestClient.put()
+//                .uri("/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID)
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
+//                .exchange()
+//                .expectStatus().isBadRequest()
+//                .expectBody()
+//                .jsonPath("$").isEqualTo(NOT_FOUND_REPLY_EXCEPTION_MESSAGE)
+//        ;
     }
 
     @Test
     @DisplayName("댓글이 존재하지 않는 경우, 답글을 수정할 때 예외가 발생한다.")
     void notExistCommentUpdate() {
-        saveCommentAndSaveReply();
+        int replyId = getReplyId();
 
-        webTestClient.put()
-                .uri("/watch/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + EXIST_REPLY_ID)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
-                .exchange()
-                .expectStatus().isBadRequest()
-                .expectBody()
-                .jsonPath("$").isEqualTo(NOT_FOUND_COMMENT_EXCEPTION_MESSAGE)
-        ;
+        given().
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                body(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())).
+        when().
+                put(basicPath() + "/watch/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId).
+        then().
+                statusCode(400);
+
+//        webTestClient.put()
+//                .uri("/watch/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId)
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
+//                .exchange()
+//                .expectStatus().isBadRequest()
+//                .expectBody()
+//                .jsonPath("$").isEqualTo(NOT_FOUND_COMMENT_EXCEPTION_MESSAGE)
+//        ;
     }
 
     @Test
     @DisplayName("답글을 삭제한다.")
     void deleteReply() {
-        saveCommentAndSaveReply();
+        int commentId = getCommentId();
+        int replyId = getReplyId(commentId);
 
-        webTestClient.delete()
-                .uri("/watch/1/comments/1/replies/" + EXIST_REPLY_ID)
-                .exchange()
-                .expectStatus().isNoContent()
-        ;
+        given().
+        when().
+                delete(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + replyId).
+        then().
+                statusCode(204);
+
+//        webTestClient.delete()
+//                .uri("/watch/1/comments/" + commentId + "/replies/" + replyId)
+//                .exchange()
+//                .expectStatus().isNoContent()
+//        ;
     }
 
     @Test
-    @DisplayName("없는 댓글에 답글을 삭제하는 경우 예외가 발생한다.")
+    @DisplayName("댓글에 해당하지 않은 답글을 삭제하는 경우 예외가 발생한다.")
     void deleteReplyFail() {
-        loginAndSaveComment();
-        saveCommentAndSaveReply();
+        int differentCommentId = getCommentId();
+        int replyId = getReplyId();
 
-        webTestClient.delete()
-                .uri("/watch/1/comments/2/replies/" + EXIST_REPLY_ID)
-                .exchange()
-                .expectStatus().isBadRequest()
-                .expectBody()
-                .jsonPath("$").isEqualTo("댓글에 일치하지 않은 답글 입니다.")
-        ;
+        given().
+        when().
+                delete(basicPath() + "/watch/1/comments/" + differentCommentId + "/replies/" + replyId).
+        then().
+                statusCode(400);
+
+//        webTestClient.delete()
+//                .uri("/watch/1/comments/" + differentCommentId + "/replies/" + replyId)
+//                .exchange()
+//                .expectStatus().isBadRequest()
+//                .expectBody()
+//                .jsonPath("$").isEqualTo("댓글에 일치하지 않은 답글 입니다.")
+//        ;
     }
 
     @Test
-    @DisplayName("없는 답글을 삭제하는 경우 예외가 발생한다.")
+    @DisplayName("존재하지 않는 답글을 삭제하는 경우 예외가 발생한다.")
     void deleteReplyFail2() {
-        saveCommentAndSaveReply();
+        int commentId = getCommentId();
 
-        webTestClient.delete()
-                .uri("/watch/1/comments/1/replies/" + NOT_EXIST_REPLY_ID)
-                .exchange()
-                .expectStatus().isBadRequest()
-                .expectBody()
-                .jsonPath("$").isEqualTo("존재하지 않는 답글 입니다.")
-        ;
-    }
+        given().
+        when().
+                delete(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
+        then().
+                statusCode(400);
 
-    private WebTestClient.ResponseSpec saveCommentAndSaveReply() {
-        loginAndSaveComment();
-
-        return webTestClient.post()
-                .uri("/watch/1/comments/1/replies")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
-                .exchange();
+//        webTestClient.delete()
+//                .uri("/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID)
+//                .exchange()
+//                .expectStatus().isBadRequest()
+//                .expectBody()
+//                .jsonPath("$").isEqualTo("존재하지 않는 답글 입니다.")
+//        ;
     }
 }
