@@ -17,7 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class VideoService {
-	private final String directoryName = "wootube";
+	private static final String directoryName = "wootube";
+
 	private final FileUploader fileUploader;
 	private final ModelMapper modelMapper;
 
@@ -30,7 +31,7 @@ public class VideoService {
 	}
 
 	public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
-		String videoUrl = uploadFile(uploadFile, directoryName);
+		String videoUrl = uploadFile(uploadFile);
 		String originFileName = uploadFile.getOriginalFilename();
 		videoRequestDto.setContentPath(videoUrl);
 
@@ -54,7 +55,7 @@ public class VideoService {
 		Video video = findVideo(id);
 		if (!uploadFile.isEmpty()) {
 			fileUploader.deleteFile(directoryName, video.getOriginFileName());
-			String videoUrl = uploadFile(uploadFile, directoryName);
+			String videoUrl = uploadFile(uploadFile);
 			video.setContentPath(videoUrl);
 		}
 		video.update(modelMapper.map(videoRequestDto, Video.class));
@@ -68,7 +69,7 @@ public class VideoService {
 		videoRepository.delete(findVideo(id));
 	}
 
-	public String uploadFile(MultipartFile uploadFile, String directoryName) {
+	private String uploadFile(MultipartFile uploadFile) {
 		try {
 			return fileUploader.uploadFile(uploadFile, directoryName);
 		} catch (IOException e) {
