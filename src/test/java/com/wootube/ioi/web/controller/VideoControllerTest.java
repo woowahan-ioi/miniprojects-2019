@@ -1,56 +1,143 @@
 package com.wootube.ioi.web.controller;
 
-import com.wootube.ioi.web.TestConfig;
+import java.net.URI;
+
 import io.findify.s3mock.S3Mock;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 
-@AutoConfigureWebTestClient
 @Import(TestConfig.class)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class VideoControllerTest {
+	@Autowired
+	private WebTestClient webTestClient;
 
-    @Autowired
-    WebTestClient webTestClient;
+	@Autowired
+	private S3Mock s3Mock;
 
-    @Autowired
-    S3Mock s3Mock;
+	@Test
+	@DisplayName("비디오 등록 페이지로 이동한다.")
+	void moveCreateVideoPage() {
+		webTestClient.get().uri("/videos/new")
+				.exchange()
+				.expectStatus().isOk();
+	}
 
-    @Test
-    @DisplayName("비디오를 저장한다.")
-    void save() {
-        String expected = "mock1.png";
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", expected, "image/png", "mock date".getBytes());
+	@Test
+	@DisplayName("비디오를 저장한다.")
+	void save() {
+		webTestClient.post().uri("/videos/new")
+				.body(BodyInserters.fromObject(createMultipartBodyBuilder().build()))
+				.exchange()
+				.expectStatus().is3xxRedirection()
+				.expectBody()
+				.returnResult();
 
-        webTestClient.post().uri("/videos/new")
-                .contentType(MediaType.valueOf(MediaType.MULTIPART_FORM_DATA_VALUE))
-                .syncBody(mockMultipartFile)
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection();
-//        Map<String, String> metadata = new HashMap<>();
-//        metadata.put("version", "1.0");
-//        RestAssured.given(this.spec).accept("application/json")
-//                .filter(document("image-upload", requestPartBody("metadata")))
-//                .when().multiPart("image", new File("image.png"), "image/png")
-//                .multiPart("metadata", metadata).post("images")
-//                .then().assertThat().statusCode(200);
-    }
+		stopS3Mock();
+	}
 
-    @AfterEach
-    void tearDown() {
-        s3Mock.stop();
-    }
+	@Test
+	@DisplayName("비디오를 조회한다.")
+	void get() {
+		String videoId = getVideoId(createMultipartBodyBuilder());
+
+		webTestClient.get().uri("/videos/" + videoId)
+				.exchange()
+				.expectStatus().isOk();
+
+		stopS3Mock();
+	}
+
+	@Test
+	@DisplayName("비디오 수정 페이지로 이동한다.")
+	void moveEditPage() {
+		String videoId = getVideoId(createMultipartBodyBuilder());
+
+		webTestClient.get().uri("/videos/" + videoId + "/edit")
+				.exchange()
+				.expectStatus().isOk();
+
+		stopS3Mock();
+	}
+
+	@Test
+	@DisplayName("등록 된 비디오를 수정한다.")
+	void update() {
+		MultipartBodyBuilder bodyBuilder = createMultipartBodyBuilder();
+		String videoId = getVideoId(bodyBuilder);
+
+		bodyBuilder.part("uploadFile", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
+			@Override
+			public String getFilename() {
+				return "update_test_file.mp4";
+			}
+
+		}, MediaType.parseMediaType("video/mp4"));
+		bodyBuilder.part("title", "update_video_title");
+		bodyBuilder.part("description", "update_video_description");
+
+		webTestClient.put().uri("videos/" + videoId)
+				.body(BodyInserters.fromObject(bodyBuilder.build()))
+				.exchange()
+				.expectStatus().is3xxRedirection()
+				.expectHeader().valueMatches("Location", ".*/videos/" + videoId);
+
+		stopS3Mock();
+	}
+
+	@Test
+	@DisplayName("등록 된 비디오를 삭제한다.")
+	void delete() {
+		String videoId = getVideoId(createMultipartBodyBuilder());
+
+		webTestClient.delete().uri("/videos/" + videoId)
+				.exchange()
+				.expectHeader()
+				.valueMatches("Location", ".*/");
+
+		stopS3Mock();
+	}
+
+	private MultipartBodyBuilder createMultipartBodyBuilder() {
+		MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+		bodyBuilder.part("uploadFile", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
+			@Override
+			public String getFilename() {
+				return "test_file.mp4";
+			}
+		}, MediaType.parseMediaType("video/mp4"));
+		bodyBuilder.part("title", "video_title");
+		bodyBuilder.part("description", "video_description");
+		return bodyBuilder;
+	}
+
+	private void stopS3Mock() {
+		s3Mock.stop();
+	}
+
+	private String getVideoId(MultipartBodyBuilder bodyBuilder) {
+		String uri = saveVideo(bodyBuilder).toString();
+		return uri.substring(uri.lastIndexOf("/") + 1);
+	}
+
+	private URI saveVideo(MultipartBodyBuilder bodyBuilder) {
+		return webTestClient.post().uri("/videos/new")
+				.body(BodyInserters.fromObject(bodyBuilder.build()))
+				.exchange()
+				.returnResult(String.class)
+				.getResponseHeaders()
+				.getLocation();
+	}
 }
