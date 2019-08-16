@@ -30,7 +30,7 @@ public class ReplyService {
     @Transactional
     public ReplyResponseDto update(ReplyRequestDto replyRequestDto, Long commentId, Long replyId) {
         //비디오 번호 확인하기
-        //대댓글 주인 확인하기
+        //답글 작성자 확인하기
         Comment comment = commentService.findById(commentId);
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(NotFoundReplyException::new);
@@ -38,5 +38,17 @@ public class ReplyService {
         return new ReplyResponseDto(reply.getId(),
                 reply.getContents(),
                 reply.getUpdateTime());
+    }
+
+    public void delete(Long commentId, Long replyId) {
+        //비디오 번호 확인하기
+        //답글 작성자 확인하기
+        Comment comment = commentService.findById(commentId);
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(NotFoundReplyException::new);
+
+        reply.checkMatchComment(comment);
+
+        replyRepository.delete(reply);
     }
 }
