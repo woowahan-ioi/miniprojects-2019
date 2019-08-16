@@ -66,7 +66,7 @@ public class VideoService {
 	public void deleteById(Long id) {
 		Video video = findVideo(id);
 		fileUploader.deleteFile(directoryName, video.getOriginFileName());
-		videoRepository.delete(findVideo(id));
+		videoRepository.deleteById(id);
 	}
 
 	private String uploadFile(MultipartFile uploadFile) {
