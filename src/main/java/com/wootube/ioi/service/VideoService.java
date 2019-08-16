@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 import com.wootube.ioi.domain.model.video.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.VideoRequestDto;
+import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.service.exception.FileUploadException;
 import com.wootube.ioi.service.exception.NotFoundVideoException;
 import com.wootube.ioi.service.util.FileUploader;
@@ -28,7 +29,7 @@ public class VideoService {
 		this.videoRepository = videoRepository;
 	}
 
-	public VideoRequestDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+	public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
 		String videoUrl = uploadFile(uploadFile, directoryName);
 		String originFileName = uploadFile.getOriginalFilename();
 		videoRequestDto.setContentPath(videoUrl);
@@ -36,11 +37,11 @@ public class VideoService {
 		Video video = modelMapper.map(videoRequestDto, Video.class);
 		video.setOriginFileName(originFileName);
 
-		return modelMapper.map(videoRepository.save(video), VideoRequestDto.class);
+		return modelMapper.map(videoRepository.save(video), VideoResponseDto.class);
 	}
 
-	public VideoRequestDto findById(Long id) {
-		return modelMapper.map(findVideo(id), VideoRequestDto.class);
+	public VideoResponseDto findById(Long id) {
+		return modelMapper.map(findVideo(id), VideoResponseDto.class);
 	}
 
 	private Video findVideo(Long id) {
