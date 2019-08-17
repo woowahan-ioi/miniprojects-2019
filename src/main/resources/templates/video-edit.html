@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/config :: configFragment"/>
+    <title>Wootube</title>
+
+    <link href="/css/video-edit.css" rel="stylesheet">
+
+    <style>
+        .image-upload > input {
+            display: none;
+        }
+
+        .description-upload {
+            width: 500px;
+            height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 0 0 #000;
+            border: 5px solid transparent;
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <th:block th:replace="fragments/header :: headerFragment"/>
+
+    <div class="page-container">
+        <form enctype="multipart/form-data"
+              method="post"
+              th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
+            <input name="_method" th:if="not ${#strings.isEmpty(video)}" type="hidden" value="PUT">
+            <div class="main-content" style="background: #f1f1f1; width: 900px;">
+                <div id="video-contents" style="background: white; height: 250px;">
+                    <div class="image-upload"
+                         style="margin-right: 450px; margin-left: 330px; margin-top: -70px;">
+                        <label for="file-input">
+                            <img src="/images/logo/youtube-upload-logo.jpg"
+                                 style="height: 200px; width: 250px;"/>
+                        </label>
+                        <input id="file-input" name="uploadFile" type="file"/>
+                    </div>
+                    <div style="margin-left: 310px;">
+                        <p style="font-size: 15pt"> 버튼을 눌러 동영상을 선택해주세요. </p>
+                    </div>
+                </div>
+                <div id="video-title-and-description"
+                     style="margin-right: 250px; height: 400px; margin-top: 20px; margin-left: 200px;">
+                    <div class="form-group">
+                        <input class="form-control" id="title" name="title" style="width: 500px;"
+                               th:placeholder="${#strings.isEmpty(video)? '' : video.title}"
+                               type="text">
+                    </div>
+                    <div id="video-description" style="margin-top: 30px; cols: 20; rows: 15;">
+                        <textarea class="description-upload" name="description"
+                                  th:placeholder="${#strings.isEmpty(video)? '' : video.description}">
+                        </textarea>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 20px; margin-left: 230px;"
+                            type="submit">등록
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block th:replace="fragments/script :: scriptFragment"/>
+
+</body>
+</html>
