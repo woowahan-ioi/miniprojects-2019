@@ -1,6 +1,6 @@
 .subscribe-btn {
     background-color: #CC0000;
-    border-radius: 2px;
+    border: none;
     color: #FFFFFF;
     padding: 10px 16px;
     margin-right: 4px;
@@ -11,10 +11,13 @@
     text-transform: uppercase;
 }
 
-.hr-style {
-    border: 0;
-    height: 2px;
-    background: #ccc;
+body {
+    width: 80%;
+    margin: auto;
+}
+
+header {
+    left: 0;
 }
 
 .video-height {
@@ -38,6 +41,16 @@
     display: inline-block;
     width: 30px;
     height: 17px;
+}
+
+.comment-writer-img {
+    width: 5%;
+    float: left;
+}
+
+.comment-block {
+    width: 94%;
+    display: inline-block;
 }
 
 .switch input {
@@ -91,3 +104,120 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+
+.title-views {
+    float: left;
+    font-size: 1.0em;
+}
+
+.title-btn {
+    float: right;
+}
+
+.title-like-btn, .title-save-btn, .title-share-btn, .title-more-btn {
+    background: none;
+    border: none;
+    color: gray;
+    font-size: 1.0em;
+}
+
+.title-line {
+    height: 1px;
+    background: #cccccc;
+}
+
+ul {
+    list-style: none;
+}
+
+.display-none {
+    display: none;
+}
+
+.like-btn {
+    background: none;
+    border: none;
+    color: gray;
+    font-size: 1.5em
+}
+
+.more-button {
+    transform: rotate(90deg);
+    font-size: 1.2em;
+    color: #999;
+    float: right;
+    background: none;
+    border: none;
+}
+
+.more-button:hover {
+    color: #333333;
+}
+
+.like-btn:hover {
+    color: #333333;
+}
+
+.reply-toggle-btn {
+    background: none;
+    border: none;
+    color: gray;
+}
+
+.reply-toggle-btn:hover {
+    color: #333333;
+}
+
+.comment-input {
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #dddddd;
+    height: 30px;
+    width: 90%;
+}
+
+.comment-input:focus {
+    border-bottom: 2px solid dimgray;
+    transition: ease-in-out border-bottom-color 0.3s;
+}
+
+.comment-input::placeholder {
+    color: #333;
+}
+
+.comment-btn {
+    float: right;
+}
+
+.comment-cancel-btn {
+    background: none;
+    color: #777777
+}
+
+.comment-save-btn.disabled {
+    background: lightgray;
+    cursor: unset;
+}
+
+.comment-save-btn {
+    border-radius: 5%;
+    background: #065fd4;
+    color: white;
+}
+
+.comment-more-box {
+    background: none;
+    border-radius: 1px;
+    color: #777777;
+    float: right;
+}
+
+.comment-more-buttons {
+    background: none;
+    border: none;
+    color: gray;
+}
+
