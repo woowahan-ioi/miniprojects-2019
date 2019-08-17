@@ -23,13 +23,13 @@ header {
 }
 
 .video-contents {
-    height: 500px;
+    height: 520px;
     background-color: #FFFFFF;
     margin: 5px;
 }
 
 .image-upload {
-    padding-top: 100px;
+    padding-top: 130px;
     text-align: center;
 }
 
@@ -40,7 +40,7 @@ header {
 }
 
 .video-progressbar-contents {
-    height: 100px;
+    height: 80px;
     background-color: #FFFFFF;
     margin: 5px;
 }
@@ -68,4 +68,17 @@ header {
     font-size: 1.4rem;
     font-weight: 500;
     text-transform: uppercase;
+}
+#uploadProgress {
+    width: 100%;
+    background-color: #dddddd;
+}
+
+#progressBar {
+    width: 0;
+    height: 30px;
+    background-color: #1664b9;
+    text-align: center;
+    line-height: 30px;
+    color: white;
 }
