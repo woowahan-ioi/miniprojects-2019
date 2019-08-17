@@ -4,18 +4,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/test")
+@RequestMapping
 @Controller
-public class TestController {
+public class IndexController {
 
     @GetMapping
-    public String test() {
+    public String index() {
         return "index.html";
-    }
-
-    @GetMapping("/video")
-    public String video() {
-        return "video.html";
     }
 
 }

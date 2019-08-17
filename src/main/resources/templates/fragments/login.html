@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="headFragment">
+    <meta charset="UTF-8">
+    <title>Wootube</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+          name="viewport">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans|Noto+Sans+KR&display=swap"
+          rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
+</th:block>
+<th:block th:fragment="scriptFragment">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script>
+        const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
+
+        const checkEmailInputForm = () => vue.email.length !== 0 && regExp.test(vue.email)
+        const checkPasswordInputForm = () => vue.password.length !== 0
+
+        const loginSubmitBtnHandler = () => {
+            if (checkEmailInputForm() && checkPasswordInputForm()) {
+                document.getElementById('login-form').submit();
+            }
+        }
+
+        const vue = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                email: '',
+                password: '',
+                rules: {
+                    emailRequired: value => !!value || '이메일을 입력해주세요.',
+                    emailPattern: value => {
+
+                        if (!regExp.test(value)) {
+                            return '올바른 이메일을 입력해주세요.'
+                        }
+
+                        return true
+                    },
+                    passwordRequired: value => !!value || '비밀번호를 입력해주세요.'
+                },
+            }
+        })
+    </script>
+</th:block>
+</html>
