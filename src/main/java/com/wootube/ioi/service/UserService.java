@@ -1,5 +1,6 @@
 package com.wootube.ioi.service;
 
+import com.wootube.ioi.assembler.UserAssembler;
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
@@ -25,7 +26,7 @@ public class UserService {
     }
 
     public User createUser(SignUpRequestDto signUpRequestDto) {
-        return userRepository.save(signUpRequestDto.toUser());
+        return userRepository.save(UserAssembler.toDomain(signUpRequestDto));
     }
 
     public User readUser(LogInRequestDto logInRequestDto) {

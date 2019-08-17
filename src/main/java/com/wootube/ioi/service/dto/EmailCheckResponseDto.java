@@ -8,7 +8,7 @@ import lombok.Getter;
 public class EmailCheckResponseDto {
     private String message;
 
-    public EmailCheckResponseDto() {
+    private EmailCheckResponseDto() {
     }
 
     public EmailCheckResponseDto(String message) {

@@ -18,7 +18,7 @@ public class UserSessionManager extends SessionManagerGenerator {
     }
 
     public void setUser(User user) {
-        super.set("user", UserSession.of(user));
+        super.set("user", new UserSession(user.getId(), user.getName(), user.getEmail()));
     }
 
     public void removeUser() {
