@@ -1,7 +1,5 @@
 package com.wootube.ioi.service.dto;
 
-import com.wootube.ioi.domain.model.User;
-
 import lombok.Getter;
 
 @Getter
@@ -14,9 +12,5 @@ public class SignUpRequestDto {
         this.name = name;
         this.email = email;
         this.password = password;
-    }
-
-    public User toUser() {
-        return new User(name, email, password);
     }
 }

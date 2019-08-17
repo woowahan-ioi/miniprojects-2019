@@ -1,5 +1,6 @@
 package com.wootube.ioi.domain.repository;
 
+import com.wootube.ioi.assembler.UserAssembler;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.service.exception.NotFoundUserException;
@@ -21,7 +22,7 @@ public class UserRepositoryTest {
     @Test
     void findByEmail() {
         SignUpRequestDto signUpRequestDto = new SignUpRequestDto("루피", "luffy@luffy.com", "1234567a");
-        userRepository.save(signUpRequestDto.toUser());
+        userRepository.save(UserAssembler.toDomain(signUpRequestDto));
 
         User foundUser = userRepository.findByEmail(signUpRequestDto.getEmail())
                 .orElseThrow(NotFoundUserException::new);
