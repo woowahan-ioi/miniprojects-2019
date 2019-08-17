@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/signup :: signUpHeadFragment"/>
+</head>
+<body>
+<div id="app">
+    <v-app>
+        <v-content>
+            <v-container fill-height>
+                <v-col align="center" justify="center">
+                    <div style="border: 1px solid #DADCE0; border-radius: 10px; padding: 48px 40px 36px; overflow-x: hidden; max-width: 451px;">
+                        <form id="signup-form" method="post">
+                            <v-col align="center" justify="center">
+                                <v-row class="pb-3 px-2" justify="start" pb-2>
+                                    <img src="/images/asset/woogle_logo.png" style="height: 24px"/>
+                                </v-row>
+                                <v-row class="pb-3 px-2" justify="start">
+                                    <div class="login-title">Woogle 계정 만들기</div>
+                                </v-row>
+                                <v-row class="pb-5 px-2" justify="start">
+                                    <div class="login-desc">Wootube로 이동</div>
+                                </v-row>
+                                <v-col class="input pt-5 row" cols="12">
+                                    <v-text-field
+                                            id="email-text-field"
+                                            :rules="[rules.emailRequired, rules.emailPattern]"
+                                            label="이메일 주소"
+                                            name="email"
+                                            outlined
+                                            type="email"
+                                            v-model="email"
+                                    ></v-text-field>
+                                    <v-btn :class="duplicationCheckBtn" icon
+                                           onclick="emailDuplicationCheck()"
+                                           small
+                                           style="margin: 4px;">
+                                        확인
+                                    </v-btn>
+                                </v-col>
+                                <v-col class="input" cols="12">
+                                    <v-text-field
+                                            :rules="[rules.nameRequired, rules.namePattern]"
+                                            label="이름"
+                                            name="name"
+                                            outlined
+                                            type="name"
+                                            v-model="name"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col class="input" cols="12">
+                                    <v-text-field
+                                            :rules="[rules.passwordRequired, rules.passwordPattern]"
+                                            label="비밀번호"
+                                            name="password"
+                                            outlined
+                                            type="password"
+                                            v-model="password"
+                                    ></v-text-field>
+                                    <v-text-field
+                                            :rules="[rules.passwordChecking]"
+                                            label="확인"
+                                            outlined
+                                            type="password"
+                                            v-model="passwordCheck"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-row class="pt-5 px-2">
+                                    <div style="color: red; padding-left: 12px;">
+                                        {{ duplicationCheckPlease }}
+                                    </div>
+                                    <v-spacer></v-spacer>
+                                    <v-btn class="primary" depressed
+                                           onclick="loginSubmitBtnHandler()"
+                                           width="75px">회원가입
+                                    </v-btn>
+                                </v-row>
+                            </v-col>
+                        </form>
+                    </div>
+                </v-col>
+            </v-container>
+        </v-content>
+    </v-app>
+</div>
+<th:block th:replace="fragments/signup :: signUpScriptFragment"/>
+</body>
+</html>

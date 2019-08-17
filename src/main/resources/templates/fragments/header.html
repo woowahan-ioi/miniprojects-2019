@@ -29,9 +29,41 @@
                     <i class="material-icons">notifications</i>
                 </a>
             </li>
-            <li class="user-profile">
-                <a>
-                    <img alt="" class="profile-img img-fluid" src="/images/default/eastjun_profile.jpg">
+            <li class="user-profile" th:if="${session.user}">
+                <ul class="nav-right">
+                    <li class="user-profile dropdown no-border pointer"
+                        id="header-user-dropdown-btn">
+                        <a class="user-info-link user-dropdown-menu dropdown-toggle"
+                           data-toggle="dropdown">
+                            <img alt="Brown"
+                                 class="profile-img img-fluid"
+                                 src="/images/default/eastjun_profile.jpg">
+                            <div class="user-info text-white">
+                                <span class="name pdd-right-5"
+                                      th:text="${session.user.name}"></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="text-dark">
+                                <a href="/user/mypage">
+                                    <i class="ti-user pdd-right-10"></i>
+                                    <span class="text-dark">마이 페이지</span>
+                                </a>
+                            </li>
+                            <li class="divider" role="separator"></li>
+                            <li class="text-dark">
+                                <a href="/user/logout">
+                                    <i class="ti-power-off pdd-right-10"></i>
+                                    <span class="text-dark">로그아웃</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="user-profile" th:unless="${session.user}">
+                <a href="/user/login">
+                    <i class="material-icons">account_circle</i>
                 </a>
             </li>
         </ul>

@@ -26,30 +26,34 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation group: 'org.passay', name: 'passay', version: '1.5.0'
-    implementation 'org.modelmapper:modelmapper:0.7.8'
-	implementation 'org.springframework.boot:spring-boot-devtools'
-	implementation "org.apache.tomcat.embed:tomcat-embed-el"
-	
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
-    testImplementation group: 'io.findify', name: 's3mock_2.12', version: '0.2.5'
-
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'junit'
+    }
+    testImplementation 'io.rest-assured:rest-assured:4.0.0'
+    testImplementation 'io.rest-assured:json-schema-validator:4.0.0'
+    testImplementation 'io.findify:s3mock_2.12:0.2.5'
+    
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.passay:passay:1.5.0'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation "org.apache.tomcat.embed:tomcat-embed-el"
+    implementation 'io.rest-assured:json-path:4.0.0'
+    implementation 'io.rest-assured:xml-path:4.0.0'
+    implementation 'org.modelmapper:modelmapper:0.7.8'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws'
 
     runtimeOnly 'mysql:mysql-connector-java'
-	runtimeOnly 'com.h2database:h2'
-    
-	annotationProcessor 'org.projectlombok:lombok'
-	
-	compileOnly 'org.projectlombok:lombok'
-    
-    compile('org.springframework.cloud:spring-cloud-starter-aws')
-    
+    runtimeOnly 'com.h2database:h2'
 
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
 }
 
 dependencyManagement {

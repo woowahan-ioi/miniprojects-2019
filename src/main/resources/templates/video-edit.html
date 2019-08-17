@@ -26,13 +26,16 @@
 
     <div class="page-container">
         <form enctype="multipart/form-data"
-              method="post" th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
+              method="post"
+              th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
             <input name="_method" th:if="not ${#strings.isEmpty(video)}" type="hidden" value="PUT">
             <div class="main-content" style="background: #f1f1f1; width: 900px;">
                 <div id="video-contents" style="background: white; height: 250px;">
-                    <div class="image-upload" style="margin-right: 450px; margin-left: 330px; margin-top: -70px;">
+                    <div class="image-upload"
+                         style="margin-right: 450px; margin-left: 330px; margin-top: -70px;">
                         <label for="file-input">
-                            <img src="/images/logo/youtube-upload-logo.jpg" style="height: 200px; width: 250px;"/>
+                            <img src="/images/logo/youtube-upload-logo.jpg"
+                                 style="height: 200px; width: 250px;"/>
                         </label>
                         <input id="file-input" name="uploadFile" type="file"/>
                     </div>
@@ -44,14 +47,16 @@
                      style="margin-right: 250px; height: 400px; margin-top: 20px; margin-left: 200px;">
                     <div class="form-group">
                         <input class="form-control" id="title" name="title" style="width: 500px;"
-                               th:placeholder="${#strings.isEmpty(video)? '' : video.title}" type="text">
+                               th:placeholder="${#strings.isEmpty(video)? '' : video.title}"
+                               type="text">
                     </div>
                     <div id="video-description" style="margin-top: 30px; cols: 20; rows: 15;">
                         <textarea class="description-upload" name="description"
                                   th:placeholder="${#strings.isEmpty(video)? '' : video.description}">
                         </textarea>
                     </div>
-                    <button class="btn btn-primary" style="margin-top: 20px; margin-left: 230px;" type="submit">등록
+                    <button class="btn btn-primary" style="margin-top: 20px; margin-left: 230px;"
+                            type="submit">등록
                     </button>
                 </div>
             </div>

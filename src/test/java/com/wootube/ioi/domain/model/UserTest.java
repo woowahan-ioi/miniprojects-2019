@@ -1,6 +1,6 @@
 package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.domain.model.User;
+import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +14,12 @@ import javax.validation.ValidatorFactory;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class UserTest {
-    public static final String VALID_NAME = "루피";
-    public static final String VALID_EMAIL = "luffy@luffy.com";
-    public static final String VALID_PASSWORD = "1234567a";
+import static org.junit.jupiter.api.Assertions.*;
 
+public class UserTest {
+    private static final String VALID_NAME = "루피";
+    private static final String VALID_EMAIL = "luffy@luffy.com";
+    private static final String VALID_PASSWORD = "1234567a";
 
     private Validator validator;
 
@@ -83,5 +84,31 @@ public class UserTest {
     void invalidPasswordNoAlphabet() {
         User user = new User(VALID_NAME, VALID_EMAIL, "12345678");
         assertContainViolation(user, "비밀번호 양식 오류, 8-32자, 영문자 숫자 조합");
+    }
+
+    @DisplayName("비밀번호 일치 확인")
+    @Test
+    void matchPassword() {
+        User user = new User(VALID_NAME, VALID_NAME, VALID_PASSWORD);
+
+        assertDoesNotThrow(() -> user.matchPassword(VALID_PASSWORD));
+    }
+
+    @DisplayName("비밀번호 불일치 예외")
+    @Test
+    void notMatchPassword() {
+        User user = new User(VALID_NAME, VALID_NAME, VALID_PASSWORD);
+        String notMatchPassword = "aaaa1234";
+
+        assertThrows(NotMatchPasswordException.class, () -> user.matchPassword(notMatchPassword));
+    }
+
+    @DisplayName("이름 업데이트")
+    @Test
+    void updateName() {
+        String newName = "샹크스";
+        User user = new User(VALID_NAME, VALID_NAME, VALID_PASSWORD);
+        User updatedUser = user.updateName(newName);
+        assertEquals(updatedUser.getName(), newName);
     }
 }
