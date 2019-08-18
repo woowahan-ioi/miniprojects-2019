@@ -1,12 +1,16 @@
 package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.service.dto.ReplyRequestDto;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class ReplyControllerTest extends CommentCommonControllerTest {
     @Test
@@ -17,9 +21,9 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 post(basicPath() + "/watch/1/comments/" + commentId + "/replies").
-        then().
+                then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_REPLY_RESPONSE.getContents())).
@@ -35,9 +39,9 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(new ReplyRequestDto("Update Contents")).
-        when().
+                when().
                 put(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(204);
 
 //        webTestClient.put()
@@ -58,9 +62,9 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
-        then().
+                then().
                 statusCode(400);
 
 //        webTestClient.put()
@@ -82,9 +86,9 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/watch/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(400);
 
 //        webTestClient.put()
@@ -105,9 +109,9 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
         int replyId = getReplyId(commentId);
 
         given().
-        when().
+                when().
                 delete(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(204);
 
 //        webTestClient.delete()
@@ -124,9 +128,9 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
         int replyId = getReplyId();
 
         given().
-        when().
+                when().
                 delete(basicPath() + "/watch/1/comments/" + differentCommentId + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(400);
 
 //        webTestClient.delete()
@@ -144,9 +148,9 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
         int commentId = getCommentId();
 
         given().
-        when().
+                when().
                 delete(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
-        then().
+                then().
                 statusCode(400);
 
 //        webTestClient.delete()

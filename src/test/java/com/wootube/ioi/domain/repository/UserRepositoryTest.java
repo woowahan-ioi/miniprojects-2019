@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 public class UserRepositoryTest {
 
     @Autowired
