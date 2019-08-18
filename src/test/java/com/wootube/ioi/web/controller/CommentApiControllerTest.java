@@ -31,19 +31,6 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_COMMENT_RESPONSE.getContents())).
                 body("updateTime", is(not(empty())));
-
-//        webTestClient.post()
-//                .uri("/api/videos/1/comments")
-//                //.cookie("JSESSIONID", loginSessionId)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(Mono.just(new CommentRequestDto(SAVE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
-//                .exchange()
-//                .expectStatus().isCreated()
-//                .expectBody()
-//                .jsonPath("$.contents").isEqualTo(SAVE_COMMENT_RESPONSE.getContents())
-//                .jsonPath("$.id").isEqualTo(SAVE_COMMENT_RESPONSE.getId())
-//                .jsonPath("$.updateTime").isNotEmpty()
-//        ;
     }
 
     @Test
@@ -58,13 +45,6 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
                 put(basicPath() + "/api/videos/1/comments/" + commentId).
                 then().
                 statusCode(204);
-
-//        webTestClient.put()
-//                .uri("/api/videos/1/comments/" + commentId)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(Mono.just(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
-//                .exchange()
-//                .expectStatus().isNoContent();
     }
 
     @Test
@@ -77,15 +57,6 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
                 put(basicPath() + "/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID).
                 then().
                 statusCode(400);
-
-//        webTestClient.put()
-//                .uri("/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(Mono.just(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
-//                .exchange()
-//                .expectStatus().isBadRequest()
-//                .expectBody()
-//                .jsonPath("$").isEqualTo(NOT_FOUND_COMMENT_EXCEPTION_MESSAGE);
     }
 
     @Test
@@ -98,11 +69,6 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
                 delete(basicPath() + "/api/videos/1/comments/" + commentId).
                 then().
                 statusCode(204);
-
-//        webTestClient.delete()
-//                .uri("/api/videos/1/comments/" + commentId)
-//                .exchange()
-//                .expectStatus().isNoContent();
     }
 
     @Test
@@ -113,25 +79,5 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
                 delete(basicPath() + "/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID).
                 then().
                 statusCode(400);
-
-//        webTestClient.delete()
-//                .uri("/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID)
-//                .exchange()
-//                .expectStatus().isBadRequest()
-//                .expectBody()
-//                .jsonPath("$").isEqualTo(NOT_FOUND_COMMENT_EXCEPTION_MESSAGE);
     }
-
-//    private String login() {
-//        User user = new User("hyo", "hyo@naver.com", "password123!");
-//
-//        return webTestClient.post()
-//                .uri("/login")
-//                .body(Mono.just(user), User.class)
-//                .exchange()
-//                .returnResult(String.class)
-//                .getResponseCookies()
-//                .getFirst("JSESSIONID")
-//                .getValue();
-//    }
 }
