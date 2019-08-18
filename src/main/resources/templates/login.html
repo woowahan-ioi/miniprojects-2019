@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:replace="fragments/login :: headFragment"/>
+</head>
+<body>
+<div id="app">
+    <v-app>
+        <v-content>
+            <v-container fill-height>
+                <v-col align="center" justify="center">
+                    <div style="border: 1px solid #DADCE0; border-radius: 10px; padding: 48px 40px 36px; overflow-x: hidden; max-width: 451px;">
+                        <form id="login-form" method="post">
+                            <v-col align="center" justify="center">
+                                <v-row class="pb-3" justify="center" pb-2>
+                                    <img src="/images/asset/woogle_logo.png" style="height: 24px"/>
+                                </v-row>
+                                <v-row class="pb-3" justify="center">
+                                    <div class="login-title">로그인</div>
+                                </v-row>
+                                <v-row class="pb-5" justify="center" pb-2>
+                                    <div class="login-desc">Wootube로 이동</div>
+                                </v-row>
+                                <v-col class="login-input pt-5" cols="12">
+                                    <v-text-field
+                                            :rules="[rules.emailRequired, rules.emailPattern]"
+                                            label="이메일"
+                                            name="email"
+                                            outlined
+                                            type="email"
+                                            v-model="email"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col class="login-input" cols="12">
+                                    <v-text-field
+                                            :rules="[rules.passwordRequired]"
+                                            label="비밀번호"
+                                            name="password"
+                                            outlined
+                                            type="password"
+                                            v-model="password"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-row class="pb-5 px-2">
+                                    <div><b class="forgot-password">회원정보를 잊으셨나요?</b></div>
+                                </v-row>
+                                <v-row class="pb-5">
+                                    <div class="login-option px-2"
+                                         style="overflow-y: auto; text-align: start">
+                                        내 컴퓨터가 아닌가요? 게스트 모드를 사용하여 비공개로 로그인하세요. <b
+                                            style="color: #3375E0">자세히 알아보기</b>
+                                    </div>
+                                </v-row>
+                                <v-row class="px-2" th:if="${errors}">
+                                    <div class="error-box">
+                                        <span class="error-text" th:text="${errors}"></span>
+                                    </div>
+                                </v-row>
+                                <v-row class="pt-5 px-2">
+                                    <a class="sign-up" href="/user/signup">계정 만들기</a>
+                                    <v-spacer></v-spacer>
+                                    <v-btn class="primary" depressed
+                                           onclick="loginSubmitBtnHandler()"
+                                           width="75px">로그인
+                                    </v-btn>
+                                </v-row>
+                            </v-col>
+                        </form>
+                    </div>
+                </v-col>
+            </v-container>
+        </v-content>
+    </v-app>
+</div>
+<th:block th:replace="fragments/login :: scriptFragment"/>
+</body>
+</html>
