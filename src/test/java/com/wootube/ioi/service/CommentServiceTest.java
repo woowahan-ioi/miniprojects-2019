@@ -5,12 +5,12 @@ import com.wootube.ioi.domain.repository.CommentRepository;
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.exception.NotFoundCommentException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -29,21 +29,21 @@ public class CommentServiceTest {
     private static final String COMMENT2_CONTENTS = "Comment Contents 2";
     private static final String COMMENT3_CONTENTS = "Comment Contents 3";
 
-    private static final CommentRequestDto COMMENT_REQUEST1 = new CommentRequestDto(COMMENT1_CONTENTS);
-    private static final CommentRequestDto COMMENT_REQUEST2 = new CommentRequestDto(COMMENT2_CONTENTS);
-    private static final CommentRequestDto COMMENT_REQUEST3 = new CommentRequestDto(COMMENT3_CONTENTS);
+    private static final CommentRequestDto COMMENT_REQUEST1 = CommentRequestDto.of(COMMENT1_CONTENTS);
+    private static final CommentRequestDto COMMENT_REQUEST2 = CommentRequestDto.of(COMMENT2_CONTENTS);
+    private static final CommentRequestDto COMMENT_REQUEST3 = CommentRequestDto.of(COMMENT3_CONTENTS);
 
-    private static final Comment COMMENT1 = new Comment(COMMENT_REQUEST1.getContents());
-    private static final Comment COMMENT2 = new Comment(COMMENT_REQUEST2.getContents());
-    private static final Comment COMMENT3 = new Comment(COMMENT_REQUEST3.getContents());
+    private static final Comment COMMENT1 = Comment.of(COMMENT_REQUEST1.getContents());
+    private static final Comment COMMENT2 = Comment.of(COMMENT_REQUEST2.getContents());
+    private static final Comment COMMENT3 = Comment.of(COMMENT_REQUEST3.getContents());
 
-    private static final CommentResponseDto COMMENT_RESPONSE1 = new CommentResponseDto(EXIST_COMMENT_ID,
+    private static final CommentResponseDto COMMENT_RESPONSE1 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 1",
             LocalDateTime.now());
-    private static final CommentResponseDto COMMENT_RESPONSE2 = new CommentResponseDto(EXIST_COMMENT_ID,
+    private static final CommentResponseDto COMMENT_RESPONSE2 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 2",
             LocalDateTime.now());
-    private static final CommentResponseDto COMMENT_RESPONSE3 = new CommentResponseDto(EXIST_COMMENT_ID,
+    private static final CommentResponseDto COMMENT_RESPONSE3 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 3",
             LocalDateTime.now());
 
@@ -52,6 +52,9 @@ public class CommentServiceTest {
 
     @Mock
     private Comment updateComment;
+
+    @Mock
+    private ModelMapper modelMapper;
 
     @InjectMocks
     private CommentService commentService;
@@ -63,6 +66,7 @@ public class CommentServiceTest {
     @DisplayName("댓글을 생성한다.")
     void save() {
         given(commentRepository.save(COMMENT1)).willReturn(COMMENT1);
+        given(modelMapper.map(COMMENT1, CommentResponseDto.class)).willReturn(COMMENT_RESPONSE1);
 
         commentService.save(COMMENT_REQUEST1);
 
@@ -73,6 +77,7 @@ public class CommentServiceTest {
     @DisplayName("댓글을 수정한다.")
     void update() {
         given(commentRepository.findById(EXIST_COMMENT_ID)).willReturn(Optional.of(updateComment));
+        given(modelMapper.map(updateComment, CommentResponseDto.class)).willReturn(COMMENT_RESPONSE2);
 
         commentService.update(EXIST_COMMENT_ID, COMMENT_REQUEST2);
 

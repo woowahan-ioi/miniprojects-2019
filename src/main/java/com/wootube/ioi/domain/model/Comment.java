@@ -1,24 +1,18 @@
 package com.wootube.ioi.domain.model;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
 public class Comment {
     @Id
@@ -45,8 +39,11 @@ public class Comment {
 //    @OnDelete(action = OnDeleteAction.CASCADE)
 //    private Video video;
 
-    public Comment(String contents) {
-        this.contents = contents;
+    public static Comment of(String contents) {
+        Comment comment = new Comment();
+        comment.contents = contents;
+
+        return comment;
     }
 
     //public void update(String contents, User writer, Video video)와 같이 수정

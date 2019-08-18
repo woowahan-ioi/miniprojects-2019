@@ -1,19 +1,15 @@
 package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.service.dto.CommentRequestDto;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 
-public class CommentControllerTest extends CommentCommonControllerTest {
+public class CommentApiControllerTest extends CommentCommonControllerTest {
     //로그인 안 했을 시 실패하는 테스트 추가
     //요청하는 Video id와 Comment의 video Id가 다른 경우 실패하는 테스트 추가
     //요청하는 Writer id와 Comment의 Writer Id가 다른 경우 실패하는 테스트 추가
@@ -23,10 +19,10 @@ public class CommentControllerTest extends CommentCommonControllerTest {
     void createComment() {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                body(new CommentRequestDto(SAVE_COMMENT_RESPONSE.getContents())).
-                when().
+                body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+        when().
                 post(basicPath() + "/watch/1/comments").
-                then().
+        then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_COMMENT_RESPONSE.getContents())).
@@ -53,10 +49,10 @@ public class CommentControllerTest extends CommentCommonControllerTest {
 
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                body(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())).
-                when().
+                body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
+        when().
                 put(basicPath() + "/watch/1/comments/" + commentId).
-                then().
+        then().
                 statusCode(204);
 
 //        webTestClient.put()
@@ -72,10 +68,10 @@ public class CommentControllerTest extends CommentCommonControllerTest {
     void updateCommentFail() {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                body(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())).
-                when().
+                body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
+        when().
                 put(basicPath() + "/watch/1/comments/" + NOT_EXIST_COMMENT_ID).
-                then().
+        then().
                 statusCode(400);
 
 //        webTestClient.put()
@@ -94,9 +90,9 @@ public class CommentControllerTest extends CommentCommonControllerTest {
         int commentId = getCommentId();
 
         given().
-                when().
+        when().
                 delete(basicPath() + "/watch/1/comments/" + commentId).
-                then().
+        then().
                 statusCode(204);
 
 //        webTestClient.delete()
@@ -109,9 +105,9 @@ public class CommentControllerTest extends CommentCommonControllerTest {
     @DisplayName("존재하지 않는 댓글 삭제하는 경우 예외발생")
     void deleteCommentFail() {
         given().
-                when().
+        when().
                 delete(basicPath() + "/watch/1/comments/" + NOT_EXIST_COMMENT_ID).
-                then().
+        then().
                 statusCode(400);
 
 //        webTestClient.delete()
