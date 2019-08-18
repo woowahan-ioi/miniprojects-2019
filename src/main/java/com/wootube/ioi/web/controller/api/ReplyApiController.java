@@ -1,4 +1,4 @@
-package com.wootube.ioi.web.controller;
+package com.wootube.ioi.web.controller.api;
 
 import com.wootube.ioi.service.ReplyService;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@RequestMapping("/watch/{videoId}/comments/{commentId}")
+@RequestMapping("/api/videos/{videoId}/comments/{commentId}")
 @Controller
-public class ReplyController {
+public class ReplyApiController {
     private ReplyService replyService;
 
-    public ReplyController(ReplyService replyService) {
+    public ReplyApiController(ReplyService replyService) {
         this.replyService = replyService;
     }
 
