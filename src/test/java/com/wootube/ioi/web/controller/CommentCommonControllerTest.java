@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
 
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommentCommonControllerTest {
     static final Long EXIST_COMMENT_ID = 1L;
