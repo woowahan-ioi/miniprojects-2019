@@ -29,7 +29,6 @@ public class CommentApiController {
     @ResponseBody
     @PostMapping("/{videoId}/comments")
     public ResponseEntity<CommentResponseDto> createComment(HttpSession session, @PathVariable Long videoId, @RequestBody CommentRequestDto commentRequestDto) {
-        //로그인 상태인가?
         return new ResponseEntity<>(commentService.save(commentRequestDto), HttpStatus.CREATED);
     }
 
@@ -38,16 +37,12 @@ public class CommentApiController {
     public ResponseEntity<Void> updateComment(@PathVariable Long videoId,
                                               @PathVariable Long commentId,
                                               @RequestBody CommentRequestDto commentRequestDto) {
-        //로그인 상태인가?
-        //세션 유저와 댓글 유저와 같은지 확인한다.
         commentService.update(commentId, commentRequestDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{videoId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long videoId, @PathVariable Long commentId) {
-        // 로그인 상태인가?
-        // 세션 유저와 댓글 유저와 같은지 확인한다.
         commentService.delete(commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
