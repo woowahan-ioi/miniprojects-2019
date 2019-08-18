@@ -19,9 +19,9 @@ public class UserSignUpService {
     public EmailCheckResponseDto checkDuplicate(String email) {
         try {
             userService.findByEmail(email);
-            return EmailCheckResponseDto.possible();
-        } catch (NotFoundUserException e) {
             return EmailCheckResponseDto.impossible();
+        } catch (NotFoundUserException e) {
+            return EmailCheckResponseDto.possible();
         }
     }
 }
