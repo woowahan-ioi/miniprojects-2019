@@ -15,6 +15,12 @@ public class AmazonS3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
+
     @Bean(value = "amazonS3Client")
     public AmazonS3 amazonS3Client() {
         return AmazonS3ClientBuilder.standard().withRegion(Regions.fromName(region))
