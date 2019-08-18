@@ -1,5 +1,9 @@
 package com.wootube.ioi.service;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.VideoRequestDto;
@@ -11,15 +15,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 class VideoServiceTest {
@@ -62,9 +65,7 @@ class VideoServiceTest {
         testVideoRequestDto.setTitle(TITLE);
         testVideoRequestDto.setDescription(DESCRIPTION);
 
-        testVideo = new Video();
-        testVideo.setTitle(testVideoRequestDto.getTitle());
-        testVideo.setDescription(testVideoRequestDto.getDescription());
+        testVideo = new Video(testVideoRequestDto.getTitle(), testVideoRequestDto.getDescription());
     }
 
     @Test
@@ -109,9 +110,8 @@ class VideoServiceTest {
     private MultipartFile getUpdateChangeUploadFile(String updateFileFullPath) {
         testVideoRequestDto.setTitle(UPDATE_TITLE);
         testVideoRequestDto.setDescription(UPDATE_DESCRIPTION);
-        testVideo.setTitle(testVideoRequestDto.getTitle());
-        testVideo.setDescription(testVideoRequestDto.getDescription());
 
+        testVideo = new Video(testVideoRequestDto.getTitle(), testVideoRequestDto.getDescription());
         return new MockMultipartFile(updateFileFullPath, UPDATE_FILE_NAME, null, UPDATE_CONTENTS.getBytes(StandardCharsets.UTF_8));
     }
 
