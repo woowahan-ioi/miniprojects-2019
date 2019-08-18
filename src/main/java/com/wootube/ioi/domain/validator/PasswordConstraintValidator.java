@@ -1,21 +1,33 @@
 package com.wootube.ioi.domain.validator;
 
-import org.passay.*;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.LengthRule;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
+import org.passay.RuleResult;
+import org.passay.WhitespaceRule;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
 public class PasswordConstraintValidator implements ConstraintValidator<Password, String> {
+
+    private static final int MIN_LENGTH = 8;
+    private static final int MAX_LENGTH = 32;
+    private static final int MINIMUM_CONTAIN = 1;
+
     public void initialize(Password constraint) {
     }
 
     public boolean isValid(String password, ConstraintValidatorContext context) {
         PasswordValidator validator = new PasswordValidator(Arrays.asList(
-                new LengthRule(8, 32),
-                new CharacterRule(EnglishCharacterData.Digit, 1),
-                new CharacterRule(EnglishCharacterData.Alphabetical, 1),
+                new LengthRule(MIN_LENGTH, MAX_LENGTH),
+                new CharacterRule(EnglishCharacterData.Digit, MINIMUM_CONTAIN),
+                new CharacterRule(EnglishCharacterData.Alphabetical, MINIMUM_CONTAIN),
                 new WhitespaceRule()
         ));
 

@@ -1,6 +1,6 @@
-package com.wootube.ioi.web.controller;
+package com.wootube.ioi.web.controller.api;
 
-import com.wootube.ioi.service.UserRestService;
+import com.wootube.ioi.service.UserSignUpService;
 import com.wootube.ioi.service.dto.EmailCheckRequestDto;
 import com.wootube.ioi.service.dto.EmailCheckResponseDto;
 
@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class UserRestController {
+public class UserApiController {
 
-    private UserRestService userRestService;
+    private final UserSignUpService userSignUpService;
 
-    public UserRestController(UserRestService userRestService) {
-        this.userRestService = userRestService;
+    public UserApiController(UserSignUpService userSignUpService) {
+        this.userSignUpService = userSignUpService;
     }
 
     @PostMapping("/users")
     public ResponseEntity<EmailCheckResponseDto> checkDuplicated(@RequestBody EmailCheckRequestDto requestDto) {
-        return new ResponseEntity<>(userRestService.checkDuplicate(requestDto.getEmail()), HttpStatus.OK);
+        return new ResponseEntity<>(userSignUpService.checkDuplicate(requestDto.getEmail()), HttpStatus.OK);
     }
 }

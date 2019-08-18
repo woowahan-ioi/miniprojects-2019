@@ -1,6 +1,5 @@
 package com.wootube.ioi.service;
 
-import com.wootube.ioi.assembler.UserAssembler;
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
@@ -9,8 +8,8 @@ import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.service.exception.LoginFailedException;
 import com.wootube.ioi.service.exception.NotFoundUserException;
-import com.wootube.ioi.web.session.UserSession;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     public User createUser(SignUpRequestDto signUpRequestDto) {
-        return userRepository.save(UserAssembler.toDomain(signUpRequestDto));
+        return userRepository.save(modelMapper.map(signUpRequestDto, User.class));
     }
 
     public User readUser(LogInRequestDto logInRequestDto) {
@@ -43,12 +44,17 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(UserSession userSession, EditUserRequestDto editUserRequestDto) {
-        return findByEmail(userSession.getEmail()).updateName(editUserRequestDto.getName());
+    public User updateUser(Long userId, EditUserRequestDto editUserRequestDto) {
+        return findById(userId).updateName(editUserRequestDto.getName());
     }
 
-    public User deleteUser(UserSession userSession) {
-        User deleteTargetUser = findByEmail(userSession.getEmail());
+    private User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(NotFoundUserException::new);
+    }
+
+    public User deleteUser(Long userId) {
+        User deleteTargetUser = findById(userId);
         userRepository.delete(deleteTargetUser);
         return deleteTargetUser;
     }

@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
-public class UserRestServiceTest {
+public class UserSignUpServiceTest {
     private static final User SAVED_USER = new User("루피", "luffy@luffy.com", "1234567a");
     private static final String NOT_FOUND_USER_EMAIL = "notfound@luffy.com";
 
     @InjectMocks
-    private UserRestService userRestService;
+    private UserSignUpService userSignUpService;
 
     @Mock
     private UserService userService;
@@ -31,8 +31,8 @@ public class UserRestServiceTest {
     void checkDuplicatedNotDuplicated() {
         given(userService.findByEmail(NOT_FOUND_USER_EMAIL)).willThrow(NotFoundUserException.class);
 
-        EmailCheckResponseDto responseDto = userRestService.checkDuplicate(NOT_FOUND_USER_EMAIL);
-        assertEquals(new EmailCheckResponseDto("possible").getMessage(), responseDto.getMessage());
+        EmailCheckResponseDto responseDto = userSignUpService.checkDuplicate(NOT_FOUND_USER_EMAIL);
+        assertEquals(EmailCheckResponseDto.possible().getMessage(), responseDto.getMessage());
     }
 
     @DisplayName("이메일 중복 체크 (중복된 이메일)")
@@ -40,7 +40,7 @@ public class UserRestServiceTest {
     void checkDuplicatedDuplicated() {
         given(userService.findByEmail(SAVED_USER.getEmail())).willReturn(SAVED_USER);
 
-        EmailCheckResponseDto responseDto = userRestService.checkDuplicate(SAVED_USER.getEmail());
-        assertEquals(new EmailCheckResponseDto("impossible").getMessage(), responseDto.getMessage());
+        EmailCheckResponseDto responseDto = userSignUpService.checkDuplicate(SAVED_USER.getEmail());
+        assertEquals(EmailCheckResponseDto.impossible().getMessage(), responseDto.getMessage());
     }
 }

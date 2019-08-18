@@ -5,6 +5,7 @@ import com.wootube.ioi.service.UserService;
 import com.wootube.ioi.service.dto.EditUserRequestDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
+import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class UserController {
 
-    private UserService userService;
-    private UserSessionManager userSessionManager;
+    private final UserService userService;
+    private final UserSessionManager userSessionManager;
 
     @Autowired
     public UserController(UserService userService, UserSessionManager userSessionManager) {
@@ -53,27 +54,29 @@ public class UserController {
     @PostMapping("/login")
     public RedirectView login(LogInRequestDto logInRequestDto) {
         User loginUser = userService.readUser(logInRequestDto);
-        userSessionManager.setUser(loginUser);
+        userSessionManager.setUserSession(loginUser);
         return new RedirectView("/");
     }
 
     @GetMapping("/logout")
     public RedirectView logout() {
-        userSessionManager.removeUser();
+        userSessionManager.removeUserSession();
         return new RedirectView("/");
     }
 
     @PutMapping("/")
     public RedirectView editUser(EditUserRequestDto editUserRequestDto) {
-        User updatedUser = userService.updateUser(userSessionManager.getUser(), editUserRequestDto);
-        userSessionManager.setUser(updatedUser);
+        UserSession userSession = userSessionManager.getUserSession();
+        User updatedUser = userService.updateUser(userSession.getId(), editUserRequestDto);
+        userSessionManager.setUserSession(updatedUser);
         return new RedirectView("/user/mypage");
     }
 
     @DeleteMapping("/")
     public RedirectView deleteUser() {
-        userService.deleteUser(userSessionManager.getUser());
-        userSessionManager.removeUser();
+        UserSession userSession = userSessionManager.getUserSession();
+        userService.deleteUser(userSession.getId());
+        userSessionManager.removeUserSession();
         return new RedirectView("/");
     }
 }
