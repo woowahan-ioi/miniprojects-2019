@@ -1,26 +1,19 @@
 package com.wootube.ioi.domain.model;
 
-import java.time.LocalDateTime;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @DynamicUpdate
-@EqualsAndHashCode(of = "id")
-public class Video {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Video extends BaseEntity {
     @Column(nullable = false,
             length = 50)
     private String title;
@@ -36,14 +29,6 @@ public class Video {
     @Lob
     @Column(nullable = false)
     private String originFileName;
-
-    @Column(updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createTime;
-
-    @Column
-    @UpdateTimestamp
-    private LocalDateTime updateTime;
 
     public Video(String title, String description) {
         this.title = title;
