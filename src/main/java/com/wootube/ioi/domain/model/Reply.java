@@ -2,6 +2,7 @@ package com.wootube.ioi.domain.model;
 
 import com.wootube.ioi.domain.exception.NotMatchCommentException;
 
+import lombok.AccessLevel;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
 public class Reply {
     @Id
