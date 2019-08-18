@@ -47,7 +47,7 @@ public class CommentCommonControllerTest {
                     contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                     body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
                 when().
-                    post(basicPath() + "/watch/1/comments").
+                    post(basicPath() + "/api/videos/1/comments").
                     getBody().
                     jsonPath().
                     get("id");
@@ -60,7 +60,7 @@ public class CommentCommonControllerTest {
                     contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                     body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
                 when().
-                    post(basicPath() + "/watch/1/comments/" + commentId + "/replies").
+                    post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
                     getBody().
                     jsonPath().
                     get("id");
@@ -71,7 +71,7 @@ public class CommentCommonControllerTest {
                     contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                     body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
                 when().
-                    post(basicPath() + "/watch/1/comments/" + commentId + "/replies").
+                    post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
                     getBody().
                     jsonPath().
                     get("id");

@@ -90,7 +90,7 @@ const commentButton = (function () {
         const saveComment = (event) => {
             const inputComment = event.target.parentElement.parentElement.querySelector("INPUT");
 
-            fetch('/watch/' + videoId + '/comments', {
+            fetch('/api/videos/' + videoId + '/comments', {
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8'
                 },
@@ -128,7 +128,7 @@ const commentButton = (function () {
 
             const contents = target.parentElement.querySelector("INPUT").value;
 
-            fetch('/watch/' + videoId + '/comments/' + commentId, {
+            fetch('/api/videos/' + videoId + '/comments/' + commentId, {
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8'
                 },
@@ -166,7 +166,7 @@ const commentButton = (function () {
 
             const commentId = target.closest("li").dataset.commentid;
 
-            fetch('/watch/' + videoId + '/comments/' + commentId, {
+            fetch('/api/videos/' + videoId + '/comments/' + commentId, {
                 method: 'DELETE'
             }).then(response => {
                 if (response.status === 204) {

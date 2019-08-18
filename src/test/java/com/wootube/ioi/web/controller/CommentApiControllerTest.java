@@ -21,7 +21,7 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
         when().
-                post(basicPath() + "/watch/1/comments").
+                post(basicPath() + "/api/videos/1/comments").
         then().
                 statusCode(201).
                 body("id", is(not(empty()))).
@@ -29,7 +29,7 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
                 body("updateTime", is(not(empty())));
 
 //        webTestClient.post()
-//                .uri("/watch/1/comments")
+//                .uri("/api/videos/1/comments")
 //                //.cookie("JSESSIONID", loginSessionId)
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
 //                .body(Mono.just(new CommentRequestDto(SAVE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
@@ -51,12 +51,12 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
         when().
-                put(basicPath() + "/watch/1/comments/" + commentId).
+                put(basicPath() + "/api/videos/1/comments/" + commentId).
         then().
                 statusCode(204);
 
 //        webTestClient.put()
-//                .uri("/watch/1/comments/" + commentId)
+//                .uri("/api/videos/1/comments/" + commentId)
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
 //                .body(Mono.just(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
 //                .exchange()
@@ -70,12 +70,12 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
         when().
-                put(basicPath() + "/watch/1/comments/" + NOT_EXIST_COMMENT_ID).
+                put(basicPath() + "/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID).
         then().
                 statusCode(400);
 
 //        webTestClient.put()
-//                .uri("/watch/1/comments/" + NOT_EXIST_COMMENT_ID)
+//                .uri("/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID)
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
 //                .body(Mono.just(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
 //                .exchange()
@@ -91,12 +91,12 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
 
         given().
         when().
-                delete(basicPath() + "/watch/1/comments/" + commentId).
+                delete(basicPath() + "/api/videos/1/comments/" + commentId).
         then().
                 statusCode(204);
 
 //        webTestClient.delete()
-//                .uri("/watch/1/comments/" + commentId)
+//                .uri("/api/videos/1/comments/" + commentId)
 //                .exchange()
 //                .expectStatus().isNoContent();
     }
@@ -106,12 +106,12 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
     void deleteCommentFail() {
         given().
         when().
-                delete(basicPath() + "/watch/1/comments/" + NOT_EXIST_COMMENT_ID).
+                delete(basicPath() + "/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID).
         then().
                 statusCode(400);
 
 //        webTestClient.delete()
-//                .uri("/watch/1/comments/" + NOT_EXIST_COMMENT_ID)
+//                .uri("/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID)
 //                .exchange()
 //                .expectStatus().isBadRequest()
 //                .expectBody()

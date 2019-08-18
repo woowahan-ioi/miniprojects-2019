@@ -1,4 +1,4 @@
-package com.wootube.ioi.web.controller;
+package com.wootube.ioi.web.controller.api;
 
 import com.wootube.ioi.service.CommentService;
 import com.wootube.ioi.service.dto.CommentRequestDto;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
-@RequestMapping("/watch")
+@RequestMapping("/api/videos")
 @Controller
-public class CommentController {
+public class CommentApiController {
     private final CommentService commentService;
 
-    public CommentController(CommentService commentService) {
+    public CommentApiController(CommentService commentService) {
         this.commentService = commentService;
     }
 
