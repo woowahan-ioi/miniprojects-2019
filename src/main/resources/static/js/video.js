@@ -1,7 +1,7 @@
 function readMoreTag() {
-    var dots = document.getElementById("dots");
-    var moreText = document.getElementById("more");
-    var btnText = document.getElementById("readMoreSpan");
+    const dots = document.getElementById("dots");
+    const moreText = document.getElementById("more");
+    const btnText = document.getElementById("readMoreSpan");
 
     if (dots.style.display === "none") {
         dots.style.display = "inline";
