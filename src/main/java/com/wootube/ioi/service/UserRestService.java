@@ -12,7 +12,7 @@ public class UserRestService {
     private static final EmailCheckResponseDto NOT_DUPLICATED_EMAIL_RESPONSE_DTO = new EmailCheckResponseDto("possible");
     private static final EmailCheckResponseDto DUPLICATED_EMAIL_RESPONSE_DTO = new EmailCheckResponseDto("impossible");
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserRestService(UserService userService) {

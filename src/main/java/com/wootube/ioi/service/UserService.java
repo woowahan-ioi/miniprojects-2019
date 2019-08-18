@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private ModelMapper modelMapper;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public UserService(UserRepository userRepository, ModelMapper modelMapper) {

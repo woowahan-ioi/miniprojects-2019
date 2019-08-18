@@ -21,8 +21,8 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class UserController {
 
-    private UserService userService;
-    private UserSessionManager userSessionManager;
+    private final UserService userService;
+    private final UserSessionManager userSessionManager;
 
     @Autowired
     public UserController(UserService userService, UserSessionManager userSessionManager) {

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class UserRestController {
 
-    private UserRestService userRestService;
+    private final UserRestService userRestService;
 
     public UserRestController(UserRestService userRestService) {
         this.userRestService = userRestService;
