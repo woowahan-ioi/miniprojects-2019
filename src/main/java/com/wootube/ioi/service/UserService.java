@@ -1,6 +1,5 @@
 package com.wootube.ioi.service;
 
-import com.wootube.ioi.assembler.UserAssembler;
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
@@ -11,6 +10,7 @@ import com.wootube.ioi.service.exception.LoginFailedException;
 import com.wootube.ioi.service.exception.NotFoundUserException;
 import com.wootube.ioi.web.session.UserSession;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +19,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private UserRepository userRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     public User createUser(SignUpRequestDto signUpRequestDto) {
-        return userRepository.save(UserAssembler.toDomain(signUpRequestDto));
+        return userRepository.save(modelMapper.map(signUpRequestDto, User.class));
     }
 
     public User readUser(LogInRequestDto logInRequestDto) {
