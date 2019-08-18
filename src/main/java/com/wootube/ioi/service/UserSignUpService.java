@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserRestService {
+public class UserSignUpService {
 
     private static final EmailCheckResponseDto NOT_DUPLICATED_EMAIL_RESPONSE_DTO = new EmailCheckResponseDto("possible");
     private static final EmailCheckResponseDto DUPLICATED_EMAIL_RESPONSE_DTO = new EmailCheckResponseDto("impossible");
@@ -15,7 +15,7 @@ public class UserRestService {
     private final UserService userService;
 
     @Autowired
-    public UserRestService(UserService userService) {
+    public UserSignUpService(UserService userService) {
         this.userService = userService;
     }
 
