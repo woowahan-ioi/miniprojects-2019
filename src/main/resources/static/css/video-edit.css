@@ -29,7 +29,7 @@ header {
 }
 
 .image-upload {
-    padding-top: 130px;
+    padding-top: 180px;
     text-align: center;
 }
 
@@ -89,4 +89,9 @@ header {
     text-align: center;
     line-height: 30px;
     color: white;
+}
+
+.upload-image {
+    width: 100px;
+    height: 70px
 }

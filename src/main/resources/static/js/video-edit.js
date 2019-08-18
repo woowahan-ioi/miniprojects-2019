@@ -1,9 +1,9 @@
 function hover(element) {
-    element.setAttribute('src', '/images/logo/youtube-upload-logo-hover.jpeg');
+    element.setAttribute('src', '/images/logo/youtube-upload-logo-hover.png');
 }
 
 function unHover(element) {
-    element.setAttribute('src', '/images/logo/youtube-upload-logo.jpg');
+    element.setAttribute('src', '/images/logo/youtube-upload-logo.png');
 }
 
 function move() {

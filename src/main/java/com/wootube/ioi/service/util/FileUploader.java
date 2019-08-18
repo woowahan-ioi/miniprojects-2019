@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @Component
 public class FileUploader {
 
+//    @Resource(name = "amazonS3Client")
     @Qualifier(value = "amazonS3Client")
     private final AmazonS3 amazonS3Client;
 

@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class AmazonS3Config {
@@ -22,7 +23,7 @@ public class AmazonS3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    @Bean
+    @Bean(value = "amazonS3Client")
     public AmazonS3 awsS3Client() {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsKeyId, secretKey);
         return AmazonS3ClientBuilder.standard().withRegion(Regions.fromName(region))
