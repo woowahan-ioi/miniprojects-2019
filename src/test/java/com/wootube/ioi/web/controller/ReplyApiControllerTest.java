@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
-public class ReplyControllerTest extends CommentCommonControllerTest {
+public class ReplyApiControllerTest extends CommentCommonControllerTest {
     @Test
     @DisplayName("답글을 생성한다.")
     void createReply() {
@@ -20,9 +20,9 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
 
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                body(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())).
+                body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
                 when().
-                post(basicPath() + "/watch/1/comments/" + commentId + "/replies").
+                post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
                 then().
                 statusCode(201).
                 body("id", is(not(empty()))).
@@ -38,14 +38,14 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
 
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                body(new ReplyRequestDto("Update Contents")).
+                body(ReplyRequestDto.of("Update Contents")).
                 when().
-                put(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + replyId).
+                put(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + replyId).
                 then().
                 statusCode(204);
 
 //        webTestClient.put()
-//                .uri("/watch/1/comments/" + commentId + "/replies/" + replyId)
+//                .uri("/api/videos/1/comments/" + commentId + "/replies/" + replyId)
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
 //                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
 //                .exchange()
@@ -61,14 +61,14 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
 
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                body(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())).
+                body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
                 when().
-                put(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
+                put(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
                 then().
                 statusCode(400);
 
 //        webTestClient.put()
-//                .uri("/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID)
+//                .uri("/api/videos/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID)
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
 //                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
 //                .exchange()
@@ -85,14 +85,14 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
 
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                body(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())).
+                body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
                 when().
-                put(basicPath() + "/watch/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId).
+                put(basicPath() + "/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId).
                 then().
                 statusCode(400);
 
 //        webTestClient.put()
-//                .uri("/watch/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId)
+//                .uri("/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId)
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
 //                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
 //                .exchange()
@@ -110,12 +110,12 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
 
         given().
                 when().
-                delete(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + replyId).
+                delete(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + replyId).
                 then().
                 statusCode(204);
 
 //        webTestClient.delete()
-//                .uri("/watch/1/comments/" + commentId + "/replies/" + replyId)
+//                .uri("/api/videos/1/comments/" + commentId + "/replies/" + replyId)
 //                .exchange()
 //                .expectStatus().isNoContent()
 //        ;
@@ -129,12 +129,12 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
 
         given().
                 when().
-                delete(basicPath() + "/watch/1/comments/" + differentCommentId + "/replies/" + replyId).
+                delete(basicPath() + "/api/videos/1/comments/" + differentCommentId + "/replies/" + replyId).
                 then().
                 statusCode(400);
 
 //        webTestClient.delete()
-//                .uri("/watch/1/comments/" + differentCommentId + "/replies/" + replyId)
+//                .uri("/api/videos/1/comments/" + differentCommentId + "/replies/" + replyId)
 //                .exchange()
 //                .expectStatus().isBadRequest()
 //                .expectBody()
@@ -149,12 +149,12 @@ public class ReplyControllerTest extends CommentCommonControllerTest {
 
         given().
                 when().
-                delete(basicPath() + "/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
+                delete(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
                 then().
                 statusCode(400);
 
 //        webTestClient.delete()
-//                .uri("/watch/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID)
+//                .uri("/api/videos/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID)
 //                .exchange()
 //                .expectStatus().isBadRequest()
 //                .expectBody()
