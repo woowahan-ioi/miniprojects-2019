@@ -32,7 +32,7 @@ public class UserSignUpServiceTest {
         given(userService.findByEmail(NOT_FOUND_USER_EMAIL)).willThrow(NotFoundUserException.class);
 
         EmailCheckResponseDto responseDto = userSignUpService.checkDuplicate(NOT_FOUND_USER_EMAIL);
-        assertEquals(new EmailCheckResponseDto("possible").getMessage(), responseDto.getMessage());
+        assertEquals(EmailCheckResponseDto.possible().getMessage(), responseDto.getMessage());
     }
 
     @DisplayName("이메일 중복 체크 (중복된 이메일)")
@@ -41,6 +41,6 @@ public class UserSignUpServiceTest {
         given(userService.findByEmail(SAVED_USER.getEmail())).willReturn(SAVED_USER);
 
         EmailCheckResponseDto responseDto = userSignUpService.checkDuplicate(SAVED_USER.getEmail());
-        assertEquals(new EmailCheckResponseDto("impossible").getMessage(), responseDto.getMessage());
+        assertEquals(EmailCheckResponseDto.impossible().getMessage(), responseDto.getMessage());
     }
 }
