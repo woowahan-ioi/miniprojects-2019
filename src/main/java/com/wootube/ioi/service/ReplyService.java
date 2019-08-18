@@ -23,7 +23,7 @@ public class ReplyService {
     public ReplyResponseDto save(ReplyRequestDto replyRequestDto, Long commentId) {
         Reply reply = new Reply(replyRequestDto.getContents(), commentService.findById(commentId));
         Reply savedReply = replyRepository.save(reply);
-        return new ReplyResponseDto(savedReply.getId(),
+        return ReplyResponseDto.of(savedReply.getId(),
                 savedReply.getContents(),
                 savedReply.getUpdateTime());
     }
@@ -36,7 +36,7 @@ public class ReplyService {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(NotFoundReplyException::new);
         reply.update(comment, replyRequestDto.getContents());
-        return new ReplyResponseDto(reply.getId(),
+        return ReplyResponseDto.of(reply.getId(),
                 reply.getContents(),
                 reply.getUpdateTime());
     }

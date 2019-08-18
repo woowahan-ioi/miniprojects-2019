@@ -1,0 +1,9 @@
+#aws
+cloud:
+  aws:
+    s3:
+      bucket: woowa-ioi
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
