@@ -7,14 +7,12 @@ import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.service.exception.FileUploadException;
 import com.wootube.ioi.service.exception.NotFoundVideoException;
 import com.wootube.ioi.service.util.FileUploader;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 import javax.transaction.Transactional;
+import java.io.IOException;
 
 @Service
 public class VideoService {

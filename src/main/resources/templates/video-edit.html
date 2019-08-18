@@ -3,67 +3,76 @@
 <head>
     <th:block th:replace="fragments/config :: configFragment"/>
     <title>Wootube</title>
-
     <link href="/css/video-edit.css" rel="stylesheet">
-
-    <style>
-        .image-upload > input {
-            display: none;
-        }
-
-        .description-upload {
-            width: 500px;
-            height: 300px;
-            border-radius: 10px;
-            box-shadow: 0 0 0 #000;
-            border: 5px solid transparent;
-        }
-    </style>
 </head>
 <body>
 <div class="app">
     <th:block th:replace="fragments/header :: headerFragment"/>
 
-    <div class="page-container">
+    <div class="edit-container pdd-top-75">
         <form enctype="multipart/form-data"
               method="post"
               th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
             <input name="_method" th:if="not ${#strings.isEmpty(video)}" type="hidden" value="PUT">
-            <div class="main-content" style="background: #f1f1f1; width: 900px;">
-                <div id="video-contents" style="background: white; height: 250px;">
-                    <div class="image-upload"
-                         style="margin-right: 450px; margin-left: 330px; margin-top: -70px;">
-                        <label for="file-input">
-                            <img src="/images/logo/youtube-upload-logo.jpg"
-                                 style="height: 200px; width: 250px;"/>
-                        </label>
-                        <input id="file-input" name="uploadFile" type="file"/>
+
+            <div class="row">
+                <div class="video-enroll-div col-md-8">
+                    <div class="video-contents">
+                        <div class="image-upload">
+                            <label for="file-input">
+                                <img class="upload-image" id="upload-image" src="/images/logo/youtube-upload-logo.png"
+                                     onmouseover="hover(this);" onmouseout="unHover(this);" alt="upload_img"/>
+                            </label>
+                        </div>
+                        <div class="image-upload-input">
+                            <input id="file-input" name="uploadFile" type="file"/>
+                        </div>
+                        <div class="text-center pdd-top-10">
+                            <p style="font-size: 15pt"> 버튼을 눌러 동영상을 선택해주세요. </p>
+                        </div>
                     </div>
-                    <div style="margin-left: 310px;">
-                        <p style="font-size: 15pt"> 버튼을 눌러 동영상을 선택해주세요. </p>
+                    <div class="video-progressbar-contents padding-10">
+                        <span class="font-size-12 text-bold">업로드 상황:</span>
+                        <div id="uploadProgress">
+                            <div id="progressBar"><span class="pdd-left-10">0%</span></div>
+                        </div>
+                        <br>
+                        <button type="button" onclick="move()">click</button>
                     </div>
                 </div>
-                <div id="video-title-and-description"
-                     style="margin-right: 250px; height: 400px; margin-top: 20px; margin-left: 200px;">
-                    <div class="form-group">
-                        <input class="form-control" id="title" name="title" style="width: 500px;"
-                               th:placeholder="${#strings.isEmpty(video)? '' : video.title}"
-                               type="text">
+
+                <div class="video-enroll-div col-md-4">
+
+                    <div class="video-supplement-img-div">
+                        <p class="font-size-15 text-bold">동영상 미리보기 이미지</p>
+                        <div class="custom-file mb-3">
+                            <input type="file" class="preview-file-input" id="previewFile"> <!--name="previewImage">-->
+                            <label class="custom-file-label" for="previewFile">파일 선택</label>
+                        </div>
                     </div>
-                    <div id="video-description" style="margin-top: 30px; cols: 20; rows: 15;">
-                        <textarea class="description-upload" name="description"
-                                  th:placeholder="${#strings.isEmpty(video)? '' : video.description}">
-                        </textarea>
+
+                    <div class="video-supplement-div">
+                        <p class="font-size-17 text-bold">기본 정보</p>
+                        <div class="form-group">
+                            <label for="title" class="font-size-12">제목 :</label>
+                            <input class="form-control" id="title" name="title"
+                                   th:placeholder="${#strings.isEmpty(video)? '' : video.title}"
+                                   type="text">
+                            <label for="description">설명 :</label>
+                            <textarea class="form-control" id="description" rows="10" name="description"
+                                      th:placeholder="${#strings.isEmpty(video)? '' : video.description}">
+                            </textarea>
+                        </div>
+                        <div class="form-group text-center">
+                            <button class="font-size-13 confirm-btn" type="submit">등록</button>
+                        </div>
                     </div>
-                    <button class="btn btn-primary" style="margin-top: 20px; margin-left: 230px;"
-                            type="submit">등록
-                    </button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+<script type="text/javascript" src="/js/video-edit.js"></script>
 <th:block th:replace="fragments/script :: scriptFragment"/>
-
 </body>
 </html>

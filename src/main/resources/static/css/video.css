@@ -1,3 +1,12 @@
+body {
+    width: 95%;
+    margin: auto;
+}
+
+header {
+    left: 0;
+}
+
 .subscribe-btn {
     background-color: #CC0000;
     border: none;
@@ -9,15 +18,6 @@
     font-size: 1.4rem;
     font-weight: 500;
     text-transform: uppercase;
-}
-
-body {
-    width: 80%;
-    margin: auto;
-}
-
-header {
-    left: 0;
 }
 
 .video-height {
@@ -221,3 +221,7 @@ ul {
     color: gray;
 }
 
+.img-responsive{
+    width: auto;
+    height: 132px;
+}

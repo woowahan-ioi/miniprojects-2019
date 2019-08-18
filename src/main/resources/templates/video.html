@@ -10,14 +10,15 @@
 <div class="app">
     <th:block th:replace="fragments/header :: headerFragment"/>
 
-    <div class="row padding-80 pdd-top-75">
+    <div class="row pdd-top-75 padding-25">
         <div class="col-lg-8 col-md-8 ">
             <embed allowfullscreen class="width-100" controls height="550px" preload
                    th:if="${video}" th:src="${video.contentPath}">
             <embed allowfullscreen class="width-100" controls height="550px" preload
                    src="https://www.youtube.com/embed/tgbNymZ7vqY" th:unless="${video}">
+
             <div class="comment mrg-btm-30">
-                <span class="comment-contents font-size-20">[류현진 하이라이트]★ERA 1.45★ 7이닝 무실점 시즌 12승, KBO&MLB 통산 150승을 달성한 류현진! / 8월 12일 애리조나전 하이라이트</span>
+                <span class="comment-contents font-size-20 text-bold">[류현진 하이라이트]★ERA 1.45★ 7이닝 무실점 시즌 12승, KBO&MLB 통산 150승을 달성한 류현진! / 8월 12일 애리조나전 하이라이트</span>
                 <div class="mrg-top-10">
                     <div class="title-views">
                         <span>조회수 132,323회</span>
@@ -43,8 +44,6 @@
                 <hr class="title-line mrg-top-50">
             </div>
 
-            <hr class="hr-style">
-
             <div class="width-100 row">
                 <div class="col-sm-2">
                     <img alt="" class="video-owner-img img-circle"
@@ -66,6 +65,7 @@
                     <span class="mrg-vertical-20 left-30" id="readMoreSpan" onclick="readMoreTag()">더보기</span>
                 </div>
                 <div class="col-sm-2">
+
                     <button class="subscribe-btn font-size-13" style="float: right">구독 <span
                             id="subscribe_number"> 00명</span>
                     </button>
@@ -82,16 +82,15 @@
                     <span class="font-size-17 text-bold">다음 동영상</span>
                 </div>
                 <div class="col-sm-4 auto-play-div">
-                    <label class="switch" style="float: right;">
+                    <span class="font-size-12">자동재생 &nbsp; &nbsp;</span>
+                    <label class="switch">
                         <input checked type="checkbox">
                         <span class="slider round"></span>
                     </label>
-                    <span></span>
-                    <span class="font-size-12" style="float: right">자동재생 &nbsp; &nbsp;</span>
                 </div>
             </div>
 
-            <hr class="hr-style">
+            <hr class="title-line mrg-top-50">
 
             <div class="row pdd-horizon-10">
                 <div class="padding-2">
@@ -193,6 +192,7 @@
 <script src="/js/reply.js" type="text/javascript"></script>
 <script src="/js/video.js" type="text/javascript"></script>
 <th:block th:replace="fragments/script :: scriptFragment"/>
+
 <script>
     function readMoreTag() {
         var dots = document.getElementById("dots");

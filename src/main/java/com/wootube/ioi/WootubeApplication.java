@@ -5,7 +5,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
 public class WootubeApplication {
-    public static final String APPLICATION_LOCATIONS = "spring.config.location="
+    private static final String APPLICATION_LOCATIONS = "spring.config.location="
             + "classpath:application.yml,"
             + "classpath:application.properties";
 

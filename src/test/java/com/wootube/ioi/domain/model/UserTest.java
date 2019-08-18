@@ -1,7 +1,6 @@
 package com.wootube.ioi.domain.model;
 
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
-
 import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,9 +15,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
     private static final String VALID_NAME = "루피";
