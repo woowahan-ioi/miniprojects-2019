@@ -3,6 +3,7 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
@@ -20,26 +21,13 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-        when().
+                when().
                 post(basicPath() + "/api/videos/1/comments").
-        then().
+                then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_COMMENT_RESPONSE.getContents())).
                 body("updateTime", is(not(empty())));
-
-//        webTestClient.post()
-//                .uri("/api/videos/1/comments")
-//                //.cookie("JSESSIONID", loginSessionId)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(Mono.just(new CommentRequestDto(SAVE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
-//                .exchange()
-//                .expectStatus().isCreated()
-//                .expectBody()
-//                .jsonPath("$.contents").isEqualTo(SAVE_COMMENT_RESPONSE.getContents())
-//                .jsonPath("$.id").isEqualTo(SAVE_COMMENT_RESPONSE.getId())
-//                .jsonPath("$.updateTime").isNotEmpty()
-//        ;
     }
 
     @Test
@@ -50,17 +38,10 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/1/comments/" + commentId).
-        then().
+                then().
                 statusCode(204);
-
-//        webTestClient.put()
-//                .uri("/api/videos/1/comments/" + commentId)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(Mono.just(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
-//                .exchange()
-//                .expectStatus().isNoContent();
     }
 
     @Test
@@ -69,19 +50,10 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID).
-        then().
+                then().
                 statusCode(400);
-
-//        webTestClient.put()
-//                .uri("/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(Mono.just(new CommentRequestDto(UPDATE_COMMENT_RESPONSE.getContents())), CommentRequestDto.class)
-//                .exchange()
-//                .expectStatus().isBadRequest()
-//                .expectBody()
-//                .jsonPath("$").isEqualTo(NOT_FOUND_COMMENT_EXCEPTION_MESSAGE);
     }
 
     @Test
@@ -90,44 +62,19 @@ public class CommentApiControllerTest extends CommentCommonControllerTest {
         int commentId = getCommentId();
 
         given().
-        when().
+                when().
                 delete(basicPath() + "/api/videos/1/comments/" + commentId).
-        then().
+                then().
                 statusCode(204);
-
-//        webTestClient.delete()
-//                .uri("/api/videos/1/comments/" + commentId)
-//                .exchange()
-//                .expectStatus().isNoContent();
     }
 
     @Test
     @DisplayName("존재하지 않는 댓글 삭제하는 경우 예외발생")
     void deleteCommentFail() {
         given().
-        when().
+                when().
                 delete(basicPath() + "/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID).
-        then().
+                then().
                 statusCode(400);
-
-//        webTestClient.delete()
-//                .uri("/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID)
-//                .exchange()
-//                .expectStatus().isBadRequest()
-//                .expectBody()
-//                .jsonPath("$").isEqualTo(NOT_FOUND_COMMENT_EXCEPTION_MESSAGE);
     }
-
-//    private String login() {
-//        User user = new User("hyo", "hyo@naver.com", "password123!");
-//
-//        return webTestClient.post()
-//                .uri("/login")
-//                .body(Mono.just(user), User.class)
-//                .exchange()
-//                .returnResult(String.class)
-//                .getResponseCookies()
-//                .getFirst("JSESSIONID")
-//                .getValue();
-//    }
 }

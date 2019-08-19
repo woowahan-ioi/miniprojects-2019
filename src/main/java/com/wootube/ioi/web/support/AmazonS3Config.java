@@ -25,7 +25,7 @@ public class AmazonS3Config {
     @Bean(value = "amazonS3Client")
     public AmazonS3 awsS3Client() {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsKeyId, secretKey);
-        return AmazonS3ClientBuilder.standard().withRegion(Regions.fromName(region))
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).build();
-    }
+            return AmazonS3ClientBuilder.standard().withRegion(Regions.fromName(region))
+                    .withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).build();
+        }
 }

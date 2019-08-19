@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class CommentRequestDto {
     private String contents;
 
-    public static CommentRequestDto of(String contents){
+    public static CommentRequestDto of(String contents) {
         CommentRequestDto commentRequestDto = new CommentRequestDto();
         commentRequestDto.contents = contents;
         return commentRequestDto;

@@ -3,6 +3,7 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
@@ -17,9 +18,9 @@ public class ReplyApiControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
-        then().
+                then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_REPLY_RESPONSE.getContents())).
@@ -35,43 +36,24 @@ public class ReplyApiControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(ReplyRequestDto.of("Update Contents")).
-        when().
+                when().
                 put(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(204);
-
-//        webTestClient.put()
-//                .uri("/api/videos/1/comments/" + commentId + "/replies/" + replyId)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
-//                .exchange()
-//                .expectStatus().isNoContent()
-//        ;
     }
 
     @Test
     @DisplayName("답글이 존재하지 않는 경우 예외가 발생한다.")
     void notExistReplyUpdate() {
-        //에러 메시지 확인하기
         int commentId = getCommentId();
 
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
-        then().
+                then().
                 statusCode(400);
-
-//        webTestClient.put()
-//                .uri("/api/videos/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
-//                .exchange()
-//                .expectStatus().isBadRequest()
-//                .expectBody()
-//                .jsonPath("$").isEqualTo(NOT_FOUND_REPLY_EXCEPTION_MESSAGE)
-//        ;
     }
 
     @Test
@@ -82,20 +64,10 @@ public class ReplyApiControllerTest extends CommentCommonControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(400);
-
-//        webTestClient.put()
-//                .uri("/api/videos/1/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(Mono.just(new ReplyRequestDto(SAVE_REPLY_RESPONSE.getContents())), ReplyRequestDto.class)
-//                .exchange()
-//                .expectStatus().isBadRequest()
-//                .expectBody()
-//                .jsonPath("$").isEqualTo(NOT_FOUND_COMMENT_EXCEPTION_MESSAGE)
-//        ;
     }
 
     @Test
@@ -105,16 +77,10 @@ public class ReplyApiControllerTest extends CommentCommonControllerTest {
         int replyId = getReplyId(commentId);
 
         given().
-        when().
+                when().
                 delete(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(204);
-
-//        webTestClient.delete()
-//                .uri("/api/videos/1/comments/" + commentId + "/replies/" + replyId)
-//                .exchange()
-//                .expectStatus().isNoContent()
-//        ;
     }
 
     @Test
@@ -124,18 +90,10 @@ public class ReplyApiControllerTest extends CommentCommonControllerTest {
         int replyId = getReplyId();
 
         given().
-        when().
+                when().
                 delete(basicPath() + "/api/videos/1/comments/" + differentCommentId + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(400);
-
-//        webTestClient.delete()
-//                .uri("/api/videos/1/comments/" + differentCommentId + "/replies/" + replyId)
-//                .exchange()
-//                .expectStatus().isBadRequest()
-//                .expectBody()
-//                .jsonPath("$").isEqualTo("댓글에 일치하지 않은 답글 입니다.")
-//        ;
     }
 
     @Test
@@ -144,17 +102,9 @@ public class ReplyApiControllerTest extends CommentCommonControllerTest {
         int commentId = getCommentId();
 
         given().
-        when().
+                when().
                 delete(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID).
-        then().
+                then().
                 statusCode(400);
-
-//        webTestClient.delete()
-//                .uri("/api/videos/1/comments/" + commentId + "/replies/" + NOT_EXIST_REPLY_ID)
-//                .exchange()
-//                .expectStatus().isBadRequest()
-//                .expectBody()
-//                .jsonPath("$").isEqualTo("존재하지 않는 답글 입니다.")
-//        ;
     }
 }
