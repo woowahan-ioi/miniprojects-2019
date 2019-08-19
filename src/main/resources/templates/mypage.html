@@ -105,6 +105,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<th:block th:replace="fragments/form-rules:: formRulesFragment"/>
 <script>
     document.querySelector(".side-nav-toggle").addEventListener("click", sideNavToggle);
 
@@ -113,8 +114,6 @@
         document.querySelector(".app").classList.toggle("is-collapsed");
     }
 
-    const nameRegExp = /^[^ \-!@#$%^&*(),.?":{}|<>0-9]{2,10}$/i
-
     new Vue({
         el: '#mypage',
         vuetify: new Vuetify(),
@@ -122,13 +121,8 @@
             name: '',
             dialog: false,
             rules: {
-                nameRequired: value => !!value || '수정할 이름을 입력해주세요.',
-                namePattern: value => {
-                    if (!nameRegExp.test(value)) {
-                        return '이름은 2-10자, 영문자와 한글만 가능합니다.'
-                    }
-                    return true
-                },
+                nameRequired: value => Rules.nameRequired(value),
+                namePattern: value => Rules.namePattern(value),
             }
         }),
         methods: {
@@ -137,7 +131,7 @@
             },
 
             _namePattern() {
-                return nameRegExp.test(this.name)
+                return Rules.nameRegExp.test(this.name)
             },
 
             _fieldCheck() {
