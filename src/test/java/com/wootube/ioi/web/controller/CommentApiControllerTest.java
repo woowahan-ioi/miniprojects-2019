@@ -1,16 +1,13 @@
 package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.service.dto.CommentRequestDto;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 
 public class CommentApiControllerTest extends CommentCommonControllerTest {

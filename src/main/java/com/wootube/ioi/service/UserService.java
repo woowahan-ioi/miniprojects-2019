@@ -8,6 +8,10 @@ import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.service.exception.LoginFailedException;
 import com.wootube.ioi.service.exception.NotFoundUserException;
+<<<<<<< HEAD
+=======
+import org.modelmapper.ModelMapper;
+>>>>>>> upstream/develop
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

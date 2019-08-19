@@ -1,9 +1,12 @@
 package com.wootube.ioi.web.controller;
 
+import java.net.URI;
+
 import com.wootube.ioi.web.config.TestConfig;
 import io.findify.s3mock.S3Mock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,8 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-
-import java.net.URI;
 
 @AutoConfigureWebTestClient
 @Import(TestConfig.class)
