@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -18,7 +19,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
@@ -30,15 +30,21 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private ModelMapper modelMapper;
+
     private User SAVED_USER = new User("루피", "luffy@luffy.com", "1234567a");
 
     @DisplayName("유저 등록 (회원 가입)")
     @Test
     void signUp() {
         SignUpRequestDto signUpRequestDto = new SignUpRequestDto("루피", "luffy@luffy.com", "1234567a");
+
+        given(modelMapper.map(signUpRequestDto, User.class)).willReturn(SAVED_USER);
+
         userService.createUser(signUpRequestDto);
 
-        verify(userRepository, atLeast(1)).save(SAVED_USER);
+        verify(userRepository).save(SAVED_USER);
     }
 
     @DisplayName("유저 조회 (로그인 성공)")

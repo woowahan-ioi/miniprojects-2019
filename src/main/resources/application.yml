@@ -7,3 +7,6 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+    credentials:
+      accessKey: # https://woowacourse.slack.com/archives/CFE64TG1X/p1566115394191400 참고
+      secretKey: # https://woowacourse.slack.com/archives/CFE64TG1X/p1566115394191400 참고

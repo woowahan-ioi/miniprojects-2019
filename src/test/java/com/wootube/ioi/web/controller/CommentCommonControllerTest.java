@@ -1,5 +1,7 @@
 package com.wootube.ioi.web.controller;
 
+import java.time.LocalDateTime;
+
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
@@ -9,14 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 
-import java.time.LocalDateTime;
-
 import static io.restassured.RestAssured.given;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommentCommonControllerTest {
     static final Long EXIST_COMMENT_ID = 1L;
-    static final Long EXIST_REPLY_ID = 1L;
     static final Long NOT_EXIST_COMMENT_ID = 0L;
     static final Long NOT_EXIST_REPLY_ID = 0L;
 
@@ -29,9 +28,6 @@ public class CommentCommonControllerTest {
     static final ReplyResponseDto SAVE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Reply Contents",
             LocalDateTime.now());
-
-    static final String NOT_FOUND_COMMENT_EXCEPTION_MESSAGE = "존재하지 않는 댓글 입니다.";
-    static final String NOT_FOUND_REPLY_EXCEPTION_MESSAGE = "존재하지 않는 답글 입니다.";
 
     @LocalServerPort
     private int port;

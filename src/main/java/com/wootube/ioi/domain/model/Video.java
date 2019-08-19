@@ -1,25 +1,19 @@
 package com.wootube.ioi.domain.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @DynamicUpdate
-public class Video {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Video extends BaseEntity {
     @Column(nullable = false,
             length = 50)
     private String title;
@@ -36,16 +30,9 @@ public class Video {
     @Column(nullable = false)
     private String originFileName;
 
-    @Column(updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createTime;
-
-    @Column
-    @UpdateTimestamp
-    private LocalDateTime updateTime;
-
-    public void setContentPath(String contentPath) {
-        this.contentPath = contentPath;
+    public Video(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 
     public void update(Video updateVideo) {
@@ -54,5 +41,13 @@ public class Video {
         }
         this.title = updateVideo.title;
         this.description = updateVideo.description;
+    }
+
+    public void setContentPath(String contentPath) {
+        this.contentPath = contentPath;
+    }
+
+    public void setOriginFileName(String originFileName) {
+        this.originFileName = originFileName;
     }
 }

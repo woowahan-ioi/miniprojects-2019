@@ -32,7 +32,7 @@
                                             v-model="email"
                                     ></v-text-field>
                                     <v-btn :class="duplicationCheckBtn" icon
-                                           onclick="emailDuplicationCheck()"
+                                           @click="duplicationCheckBtnHandler"
                                            small
                                            style="margin: 4px;">
                                         확인
@@ -71,7 +71,7 @@
                                     </div>
                                     <v-spacer></v-spacer>
                                     <v-btn class="primary" depressed
-                                           onclick="loginSubmitBtnHandler()"
+                                           @click="loginSubmitBtnHandler"
                                            width="75px">회원가입
                                     </v-btn>
                                 </v-row>
@@ -83,6 +83,7 @@
         </v-content>
     </v-app>
 </div>
+<th:block th:replace="fragments/form-rules:: formRulesFragment"/>
 <th:block th:replace="fragments/signup :: signUpScriptFragment"/>
 </body>
 </html>
