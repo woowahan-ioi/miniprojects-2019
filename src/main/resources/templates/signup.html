@@ -32,7 +32,7 @@
                                             v-model="email"
                                     ></v-text-field>
                                     <v-btn :class="duplicationCheckBtn" icon
-                                           onclick="emailDuplicationCheck()"
+                                           @click="duplicationCheckBtnHandler"
                                            small
                                            style="margin: 4px;">
                                         확인
@@ -71,7 +71,7 @@
                                     </div>
                                     <v-spacer></v-spacer>
                                     <v-btn class="primary" depressed
-                                           onclick="loginSubmitBtnHandler()"
+                                           @click="loginSubmitBtnHandler"
                                            width="75px">회원가입
                                     </v-btn>
                                 </v-row>
@@ -83,6 +83,162 @@
         </v-content>
     </v-app>
 </div>
-<th:block th:replace="fragments/signup :: signUpScriptFragment"/>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script>
+    const BASE_URL = `http://${window.location.host}`
+
+    const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    const success = 'green'
+    const warning = 'yellow'
+    const error = 'red'
+
+    const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
+    const nameRegExp = /^[^ \-!@#$%^&*(),.?":{}|<>0-9]{2,10}$/i
+
+    const vue = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: {
+            email: '',
+            emailDuplicationCheck: false,
+            duplicationCheckBtn: warning,
+            duplicationCheckPlease: '',
+            name: '',
+            password: '',
+            passwordCheck: '',
+            rules: {
+                emailRequired: value => !!value || '이메일을 입력해주세요.',
+                emailPattern: value => {
+                    if (!emailRegExp.test(value)) {
+                        return '올바른 이메일을 입력해주세요.'
+                    }
+                    return true
+                },
+                nameRequired: value => !!value || '이름을 입력해주세요.',
+                namePattern: value => {
+                    if (!nameRegExp.test(value)) {
+                        return '이름은 2-10자, 영문자와 한글만 가능합니다.'
+                    }
+                    return true
+                },
+                passwordRequired: value => !!value || '비밀번호를 입력해주세요.',
+                passwordPattern: value => {
+                    if (!value.match(/[a-z]/g) ||
+                        !value.match(/[0-9]/g) ||
+                        value.length < 8) {
+                        return '강력한 비밀번호를 설정해주세요'
+                    }
+                    if (value.length > 32) {
+                        return '너무 깁니다.'
+                    }
+                    return true
+                },
+                passwordChecking: (value) => {
+                    if (vue.password !== value) {
+                        return '일치하지 않습니다.'
+                    }
+                    return true
+                }
+            }
+        },
+        methods: {
+            _fieldNotEmpty(field) {
+                return field.length !== 0
+            },
+
+            _allFieldNotEmpty() {
+                return this._fieldNotEmpty(this.name)
+                    && this._fieldNotEmpty(this.email)
+                    && this._fieldNotEmpty(this.password)
+            },
+
+            _emailPattern() {
+                return emailRegExp.test(this.email)
+            },
+
+            _namePattern() {
+                return nameRegExp.test(this.name)
+            },
+            _passwordPattern() {
+                return this.password.match(/[a-z]/g)
+                    && this.password.match(/[0-9]/g)
+                    && this.password.length >= 8
+                    && this.password.length <= 32
+            },
+
+            _passwordCheck() {
+                return this.password === this.passwordCheck
+            },
+
+            _allFormFieldCheck() {
+                return this._allFieldNotEmpty()
+                    && this._emailPattern()
+                    && this._namePattern()
+                    && this._passwordPattern()
+                    && this._passwordCheck()
+            },
+
+            loginSubmitBtnHandler() {
+                if (this.duplicationCheckBtn === warning
+                    || this.duplicationCheckBtn === error) {
+                    this.duplicationCheckPlease = '이메일 중복 확인이 필요합니다.'
+                    return
+                }
+                if (!this._allFormFieldCheck()) {
+                    this.duplicationCheckPlease = '빈칸을 모두 채워주세요.'
+                    return
+                }
+                this.duplicationCheckPlease = ''
+                if (this._allFormFieldCheck() && this.duplicationCheckBtn === success) {
+                    document.getElementById('signup-form').submit();
+                }
+            },
+
+            duplicationCheckBtnHandler() {
+                if (this.duplicationCheckBtn === warning
+                    || this.duplicationCheckBtn === error) {
+                    this._duplicationCheckRequest()
+                }
+            },
+
+            _duplicationCheckRequest() {
+                if (!this._fieldNotEmpty(this.email) || !this._emailPattern()) {
+                    return
+                }
+
+                if (this.duplicationCheckBtn === success) {
+                    return
+                }
+
+                fetch(`${BASE_URL}/api/users`, {
+                    headers,
+                    method: "POST",
+                    body: JSON.stringify({email: this.email})
+                }).then((response) => {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                }).then((data) => {
+                    if (data.message === 'impossible') {
+                        this.duplicationCheckBtn = error
+                    }
+                    if (data.message === 'possible') {
+                        this.duplicationCheckBtn = success
+                        document.getElementById('email-text-field').disable = true
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                    this.duplicationCheckBtn = error
+                })
+            }
+        }
+    })
+</script>
 </body>
 </html>
