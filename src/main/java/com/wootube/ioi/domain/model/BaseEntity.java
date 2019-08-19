@@ -12,14 +12,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @EqualsAndHashCode(of = "id")
 public abstract class BaseEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(updatable = false)
-	@CreationTimestamp
-	private LocalDateTime createTime;
+    @Column(updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createTime;
 
-	@UpdateTimestamp
-	private LocalDateTime updateTime;
+    @UpdateTimestamp
+    private LocalDateTime updateTime;
 }
