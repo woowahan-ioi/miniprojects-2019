@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="formRulesFragment">
+    <script>
+        class Rules {
+            static emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
+            static nameRegExp = /^[^ \-!@#$%^&*(),.?":{}|<>0-9]{2,10}$/i
+
+            static emailRequired(value) {
+                return !!value || '이메일을 입력해주세요.'
+            }
+
+            static emailPattern(value) {
+                if (!this.emailRegExp.test(value)) {
+                    return '올바른 이메일을 입력해주세요.'
+                }
+                return true
+            }
+
+            static nameRequired(value) {
+                return !!value || '이름을 입력해주세요.'
+            }
+
+            static namePattern(value) {
+                if (!this.nameRegExp.test(value)) {
+                    return '이름은 2-10자, 영문자와 한글만 가능합니다.'
+                }
+                return true
+            }
+
+            static passwordRequired(value) {
+                return !!value || '비밀번호를 입력해주세요.'
+            }
+
+            static passwordPattern(value) {
+                if (!value.match(/[a-z]/g) ||
+                    !value.match(/[0-9]/g) ||
+                    value.length < 8) {
+                    return '강력한 비밀번호를 설정해주세요'
+                }
+                if (value.length > 32) {
+                    return '너무 깁니다.'
+                }
+                return true
+            }
+
+            static passwordCheckValid(value) {
+                if (vue.password !== value) {
+                    return '일치하지 않습니다.'
+                }
+                return true
+            }
+        }
+    </script>
+</th:block>
+</html>
+

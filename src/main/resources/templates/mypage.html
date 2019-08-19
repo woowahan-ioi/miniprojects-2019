@@ -47,7 +47,7 @@
                                       style="padding-top: 8px;">
                                     <input name="_method" type="hidden" value="delete"/>
                                     <v-btn class="red" dark depressed
-                                           onclick="deleteSubmitBtnHandler()">회원 탈퇴
+                                           @click="deleteSubmitBtnHandler">회원 탈퇴
                                     </v-btn>
                                 </form>
                             </v-col>
@@ -83,7 +83,7 @@
                                             취소
                                         </v-btn>
                                         <v-btn color="blue darken-1"
-                                               onclick="editSubmitBtnHandler()" text>저장
+                                               @click="editSubmitBtnHandler" text>저장
                                         </v-btn>
                                     </v-card-actions>
                                 </v-card>
@@ -105,6 +105,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<th:block th:replace="fragments/form-rules:: formRulesFragment"/>
 <script>
     document.querySelector(".side-nav-toggle").addEventListener("click", sideNavToggle);
 
@@ -113,42 +114,41 @@
         document.querySelector(".app").classList.toggle("is-collapsed");
     }
 
-    const _nameRegExp = /^[^ \-!@#$%^&*(),.?":{}|<>0-9]{2,10}$/i
-
-    const _fieldNotEmpty = (field) => field.length !== 0
-    const _namePattern = () => _nameRegExp.test(vue.name)
-
-    const fieldCheck = () => {
-        return _fieldNotEmpty(vue.name)
-            && _namePattern()
-    }
-
-    const editSubmitBtnHandler = () => {
-        if (fieldCheck()) {
-            document.getElementById('edit-form').submit();
-        }
-    }
-
-    const deleteSubmitBtnHandler = () => {
-        document.getElementById('delete-form').submit();
-    }
-
-    const vue = new Vue({
+    new Vue({
         el: '#mypage',
         vuetify: new Vuetify(),
         data: () => ({
             name: '',
             dialog: false,
             rules: {
-                nameRequired: value => !!value || '수정할 이름을 입력해주세요.',
-                namePattern: value => {
-                    if (!_nameRegExp.test(value)) {
-                        return '이름은 2-10자, 영문자와 한글만 가능합니다.'
-                    }
-                    return true
-                },
+                nameRequired: value => Rules.nameRequired(value),
+                namePattern: value => Rules.namePattern(value),
             }
         }),
+        methods: {
+            _fieldNotEmpty(field) {
+                return field.length !== 0
+            },
+
+            _namePattern() {
+                return Rules.nameRegExp.test(this.name)
+            },
+
+            _fieldCheck() {
+                return this._fieldNotEmpty(this.name)
+                    && this._namePattern()
+            },
+
+            editSubmitBtnHandler() {
+                if (this._fieldCheck()) {
+                    document.getElementById('edit-form').submit();
+                }
+            },
+
+            deleteSubmitBtnHandler() {
+                document.getElementById('delete-form').submit();
+            }
+        }
     })
 </script>
 </body>

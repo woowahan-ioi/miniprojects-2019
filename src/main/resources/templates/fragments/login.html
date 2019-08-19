@@ -18,10 +18,9 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <!--    <th:block th:replace="/form-rules:: formRulesFragment"/>-->
     <script>
-        const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
-
-        const checkEmailInputForm = () => vue.email.length !== 0 && regExp.test(vue.email)
+        const checkEmailInputForm = () => vue.email.length !== 0 && Rules.emailRegExp.test(vue.email)
         const checkPasswordInputForm = () => vue.password.length !== 0
 
         const loginSubmitBtnHandler = () => {
@@ -37,16 +36,9 @@
                 email: '',
                 password: '',
                 rules: {
-                    emailRequired: value => !!value || '이메일을 입력해주세요.',
-                    emailPattern: value => {
-
-                        if (!regExp.test(value)) {
-                            return '올바른 이메일을 입력해주세요.'
-                        }
-
-                        return true
-                    },
-                    passwordRequired: value => !!value || '비밀번호를 입력해주세요.'
+                    emailRequired: value => Rules.emailRequired(value),
+                    emailPattern: value => Rules.emailPattern(value),
+                    passwordRequired: value => Rules.passwordRequired(value)
                 },
             }
         })
