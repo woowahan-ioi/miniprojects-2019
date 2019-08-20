@@ -22,9 +22,11 @@ public class Comment extends BaseEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_comment_to_video"), nullable = false)
     private Video video;
 
-    public static Comment of(String contents) {
+    public static Comment of(String contents, Video video, User writer) {
         Comment comment = new Comment();
         comment.contents = contents;
+        comment.video = video;
+        comment.writer = writer;
 
         return comment;
     }

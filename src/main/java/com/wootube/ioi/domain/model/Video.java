@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.LazyCollection;
 
 @Entity
 @Getter
@@ -52,5 +51,9 @@ public class Video extends BaseEntity {
 
     public void setOriginFileName(String originFileName) {
         this.originFileName = originFileName;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 }

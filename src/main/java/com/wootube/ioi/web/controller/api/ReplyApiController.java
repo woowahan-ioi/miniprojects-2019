@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/videos/{videoId}/comments/{commentId}")
 @RestController
 public class ReplyApiController {
-    private ReplyService replyService;
+    private final ReplyService replyService;
 
     public ReplyApiController(ReplyService replyService) {
         this.replyService = replyService;

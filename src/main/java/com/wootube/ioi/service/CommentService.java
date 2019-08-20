@@ -1,6 +1,8 @@
 package com.wootube.ioi.service;
 
 import com.wootube.ioi.domain.model.Comment;
+import com.wootube.ioi.domain.model.User;
+import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.CommentRepository;
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
@@ -12,16 +14,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
-    private CommentRepository commentRepository;
-    private ModelMapper modelMapper;
+    private final CommentRepository commentRepository;
 
-    public CommentService(CommentRepository commentRepository, ModelMapper modelMapper) {
+    private final VideoService videoService;
+    private final UserService userService;
+
+    private final ModelMapper modelMapper;
+
+    public CommentService(CommentRepository commentRepository, VideoService videoService, UserService userService, ModelMapper modelMapper) {
         this.commentRepository = commentRepository;
+        this.videoService = videoService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
-    public CommentResponseDto save(CommentRequestDto commentRequestDto) {
-        Comment comment = commentRepository.save(Comment.of(commentRequestDto.getContents()));
+    public CommentResponseDto save(CommentRequestDto commentRequestDto, Long videoId, String email) {
+        Video video = videoService.findVideo(videoId);
+        User writer = userService.findByEmail(email);
+        Comment comment = commentRepository.save(Comment.of(commentRequestDto.getContents(), video, writer));
         return modelMapper.map(comment, CommentResponseDto.class);
     }
 
