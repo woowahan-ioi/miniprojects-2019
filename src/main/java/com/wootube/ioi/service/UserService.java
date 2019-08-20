@@ -49,7 +49,7 @@ public class UserService {
     }
 
     private User findById(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdAndIsActiveTrue(userId)
                 .orElseThrow(NotFoundUserException::new);
     }
 
