@@ -40,7 +40,8 @@ public class CommentApiController {
     public ResponseEntity updateComment(@PathVariable Long videoId,
                                         @PathVariable Long commentId,
                                         @RequestBody CommentRequestDto commentRequestDto) {
-        commentService.update(commentId, commentRequestDto);
+        UserSession userSession = userSessionManager.getUserSession();
+        commentService.update(commentId, userSession.getEmail(), videoId, commentRequestDto);
         return ResponseEntity.noContent()
                 .build();
     }

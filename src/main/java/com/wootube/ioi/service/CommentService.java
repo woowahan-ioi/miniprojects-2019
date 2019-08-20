@@ -36,10 +36,12 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto update(Long commentId, CommentRequestDto commentRequestDto) {
+    public CommentResponseDto update(Long commentId, String email, Long videoId, CommentRequestDto commentRequestDto) {
         Comment comment = findById(commentId);
+        User writer = userService.findByEmail(email);
+        Video video = videoService.findVideo(videoId);
 
-        comment.update(commentRequestDto.getContents());
+        comment.update(writer, video, commentRequestDto.getContents());
         return modelMapper.map(comment, CommentResponseDto.class);
     }
 

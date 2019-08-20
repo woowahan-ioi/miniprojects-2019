@@ -2,6 +2,8 @@ package com.wootube.ioi.domain.model;
 
 import javax.persistence.*;
 
+import com.wootube.ioi.domain.exception.NotMatchVideoException;
+import com.wootube.ioi.domain.exception.NotMatchWriterException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +33,13 @@ public class Comment extends BaseEntity {
         return comment;
     }
 
-    public void update(String contents) {
+    public void update(User writer, Video video, String contents) {
+        if (!this.writer.equals(writer)) {
+            throw new NotMatchWriterException();
+        }
+        if (!this.video.equals(video)) {
+            throw new NotMatchVideoException();
+        }
         this.contents = contents;
     }
 }
