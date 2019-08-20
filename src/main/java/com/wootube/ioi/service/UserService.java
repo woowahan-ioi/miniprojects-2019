@@ -53,13 +53,14 @@ public class UserService {
     }
 
     private User findById(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdAndIsActiveTrue(userId)
                 .orElseThrow(NotFoundUserException::new);
     }
 
+    @Transactional
     public User deleteUser(Long userId) {
         User deleteTargetUser = findById(userId);
-        userRepository.delete(deleteTargetUser);
+        deleteTargetUser.softDelete();
         return deleteTargetUser;
     }
 }

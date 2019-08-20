@@ -72,7 +72,6 @@ public class UserController {
     public RedirectView deleteUser() {
         UserSession userSession = userSessionManager.getUserSession();
         userService.deleteUser(userSession.getId());
-        userSessionManager.removeUserSession();
-        return new RedirectView("/");
+        return logout();
     }
 }

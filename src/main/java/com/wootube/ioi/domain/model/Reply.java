@@ -2,10 +2,7 @@ package com.wootube.ioi.domain.model;
 
 import com.wootube.ioi.domain.exception.NotMatchCommentException;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,8 +16,13 @@ public class Reply extends BaseEntity {
     @Column(nullable = false)
     private String contents;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_comment"), nullable = false)
     private Comment comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_user"), nullable = false)
+    private User writer;
 
     public Reply(String contents, Comment comment) {
         this.contents = contents;
