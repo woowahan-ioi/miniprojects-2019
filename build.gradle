@@ -1,12 +1,11 @@
 plugins {
     id 'org.springframework.boot' version '2.1.8.BUILD-SNAPSHOT'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
 }
 
 apply plugin: 'io.spring.dependency-management'
 
-group = 'com.s3'
+group = 'com.wootube'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -62,6 +61,6 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR2"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
