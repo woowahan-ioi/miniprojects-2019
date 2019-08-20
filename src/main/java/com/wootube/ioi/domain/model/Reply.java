@@ -1,36 +1,27 @@
 package com.wootube.ioi.domain.model;
 
-import java.time.LocalDateTime;
 import javax.persistence.*;
 
 import com.wootube.ioi.domain.exception.NotMatchCommentException;
-import lombok.EqualsAndHashCode;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-@Getter
 @Entity
-@NoArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class Reply {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class Reply extends BaseEntity {
     @Lob
     @Column(nullable = false)
     private String contents;
 
-    @CreationTimestamp
-    private LocalDateTime createTime;
-
-    @UpdateTimestamp
-    private LocalDateTime updateTime;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_comment"), nullable = false)
     private Comment comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_user"), nullable = false)
+    private User writer;
 
     public Reply(String contents, Comment comment) {
         this.contents = contents;
