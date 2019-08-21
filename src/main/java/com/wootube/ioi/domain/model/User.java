@@ -1,14 +1,15 @@
 package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.domain.exception.NotMatchPasswordException;
-import com.wootube.ioi.domain.validator.Password;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+
+import com.wootube.ioi.domain.exception.ActivatedException;
+import com.wootube.ioi.domain.exception.NotMatchPasswordException;
+import com.wootube.ioi.domain.validator.Password;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -48,5 +49,12 @@ public class User extends BaseEntity {
     public User updateName(String name) {
         this.name = name;
         return this;
+    }
+
+    public void activeUser() {
+        if(this.isActive) {
+            throw new ActivatedException();
+        }
+        this.isActive = true;
     }
 }

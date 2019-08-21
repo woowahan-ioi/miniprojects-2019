@@ -1,11 +1,13 @@
 package com.wootube.ioi.domain.model;
 
 import com.wootube.ioi.domain.exception.NotMatchCommentException;
+
+import javax.persistence.*;
+
+import com.wootube.ioi.domain.exception.NotMatchWriterException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -23,14 +25,24 @@ public class Reply extends BaseEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_user"), nullable = false)
     private User writer;
 
-    public Reply(String contents, Comment comment) {
-        this.contents = contents;
-        this.comment = comment;
+    public static Reply of(String contents, Comment comment, User writer) {
+        Reply reply = new Reply();
+        reply.contents = contents;
+        reply.comment = comment;
+        reply.writer = writer;
+        return reply;
     }
 
-    public void update(Comment comment, String contents) {
+    public void update(User writer, Comment comment, String contents) {
+        checkMatchWriter(writer);
         checkMatchComment(comment);
         this.contents = contents;
+    }
+
+    public void checkMatchWriter(User writer) {
+        if (!this.writer.equals(writer)) {
+            throw new NotMatchWriterException();
+        }
     }
 
     public void checkMatchComment(Comment comment) {

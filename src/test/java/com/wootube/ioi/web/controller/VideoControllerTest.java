@@ -1,17 +1,11 @@
 package com.wootube.ioi.web.controller;
 
-import java.net.URI;
-
-import com.wootube.ioi.domain.repository.UserRepository;
-import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.web.config.TestConfig;
 import io.findify.s3mock.S3Mock;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +19,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 
+import java.net.URI;
+
 import static org.springframework.http.HttpMethod.POST;
 
 @AutoConfigureWebTestClient
@@ -36,12 +32,6 @@ class VideoControllerTest {
 
     @Autowired
     private S3Mock s3Mock;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private VideoRepository videoRepository;
 
     @Test
     @DisplayName("비디오 등록 페이지로 이동한다.")
@@ -150,7 +140,7 @@ class VideoControllerTest {
         signUpRequest();
         return webTestClient.method(requestMethod)
                 .uri(requestUri)
-                .header("Cookie", getLoginCookie(webTestClient, new LogInRequestDto("test@test.com","1234qwer")))
+                .header("Cookie", getLoginCookie(webTestClient, new LogInRequestDto("test@test.com", "1234qwer")))
                 .body(BodyInserters.fromObject(bodyBuilder.build()))
                 .exchange();
     }
@@ -191,9 +181,4 @@ class VideoControllerTest {
         return multiValueMap;
     }
 
-    @AfterEach
-    void tearDown() {
-        videoRepository.deleteAll();
-        userRepository.deleteAll();
-    }
 }

@@ -8,6 +8,7 @@ import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -77,7 +78,12 @@ public class UserController {
     public RedirectView deleteUser() {
         UserSession userSession = userSessionManager.getUserSession();
         userService.deleteUser(userSession.getId());
-        userSessionManager.removeUserSession();
-        return new RedirectView("/");
+        return logout();
+    }
+
+    @GetMapping("/confirm")
+    public RedirectView user(@RequestParam String email, @RequestParam String verifyKey) {
+        userService.activateUser(email, verifyKey);
+        return new RedirectView("/user/login");
     }
 }

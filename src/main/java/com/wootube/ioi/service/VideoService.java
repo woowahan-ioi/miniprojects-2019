@@ -50,7 +50,7 @@ public class VideoService {
         return modelMapper.map(findVideo(id), VideoResponseDto.class);
     }
 
-    private Video findVideo(Long id) {
+    public Video findVideo(Long id) {
         return videoRepository.findById(id)
                 .orElseThrow(NotFoundVideoException::new);
     }
