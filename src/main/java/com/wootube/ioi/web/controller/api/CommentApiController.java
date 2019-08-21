@@ -22,7 +22,7 @@ public class CommentApiController {
     }
 
     @PostMapping
-    public ResponseEntity createComment( @PathVariable Long videoId, @RequestBody CommentRequestDto commentRequestDto) {
+    public ResponseEntity createComment(@PathVariable Long videoId, @RequestBody CommentRequestDto commentRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
         CommentResponseDto commentResponseDto = commentService.save(commentRequestDto, videoId, userSession.getEmail());
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentResponseDto.getId()))
