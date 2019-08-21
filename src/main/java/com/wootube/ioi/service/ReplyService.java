@@ -27,6 +27,8 @@ public class ReplyService {
         Video video = validatorService.getVideoService().findVideo(videoId);
         Comment comment = validatorService.getCommentService().findById(commentId);
 
+        comment.checkMatchVideo(video);
+
         Reply savedReply = replyRepository.save(Reply.of(replyRequestDto.getContents(), comment, writer));
         return ReplyResponseDto.of(savedReply.getId(),
                 savedReply.getContents(),
@@ -34,13 +36,15 @@ public class ReplyService {
     }
 
     @Transactional
-    public ReplyResponseDto update(ReplyRequestDto replyRequestDto, Long commentId, Long replyId) {
-        //비디오 번호 확인하기
-        //답글 작성자 확인하기
+    public ReplyResponseDto update(ReplyRequestDto replyRequestDto, String email, Long videoId, Long commentId, Long replyId) {
+        User writer = validatorService.getUserService().findByEmail(email);
+        Video video = validatorService.getVideoService().findVideo(videoId);
         Comment comment = validatorService.getCommentService().findById(commentId);
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(NotFoundReplyException::new);
-        reply.update(comment, replyRequestDto.getContents());
+
+        comment.checkMatchVideo(video);
+        reply.update(writer, comment, replyRequestDto.getContents());
         return ReplyResponseDto.of(reply.getId(),
                 reply.getContents(),
                 reply.getUpdateTime());

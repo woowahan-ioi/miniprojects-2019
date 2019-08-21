@@ -37,7 +37,8 @@ public class ReplyApiController {
                                       @PathVariable Long commentId,
                                       @PathVariable Long replyId,
                                       @RequestBody ReplyRequestDto replyRequestDto) {
-        replyService.update(replyRequestDto, commentId, replyId);
+        UserSession userSession = userSessionManager.getUserSession();
+        replyService.update(replyRequestDto, userSession.getEmail(), videoId, commentId, replyId);
         return ResponseEntity.noContent()
                 .build();
     }
