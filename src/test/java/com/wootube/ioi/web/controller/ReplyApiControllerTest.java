@@ -13,14 +13,18 @@ public class ReplyApiControllerTest extends CommonControllerTest {
     @Test
     @DisplayName("답글을 생성한다.")
     void createReply() {
-        int commentId = getCommentId();
+        signup(SIGN_UP_COMMON_REQUEST_DTO);
+        String sessionId = login(LOG_IN_COMMON_REQUEST_DTO);
+        String videoId = getSavedVideoId(sessionId);
+        int commentId = getSavedCommentId(sessionId, videoId);
 
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                cookie("JSESSIONID", sessionId).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-                when().
-                post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
-                then().
+        when().
+                post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
+        then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_REPLY_RESPONSE.getContents())).
