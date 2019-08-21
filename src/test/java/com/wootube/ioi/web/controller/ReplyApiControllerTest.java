@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-public class ReplyApiControllerTest extends CommentCommonControllerTest {
+public class ReplyApiControllerTest extends CommonControllerTest {
     @Test
     @DisplayName("답글을 생성한다.")
     void createReply() {
