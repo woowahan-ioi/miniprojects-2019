@@ -2,14 +2,14 @@ package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.service.UserService;
+import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.EditUserRequestDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -18,11 +18,12 @@ import org.springframework.web.servlet.view.RedirectView;
 public class UserController {
 
     private final UserService userService;
+    private final VideoService videoService;
     private final UserSessionManager userSessionManager;
 
-    @Autowired
-    public UserController(UserService userService, UserSessionManager userSessionManager) {
+    public UserController(UserService userService, VideoService videoService, UserSessionManager userSessionManager) {
         this.userService = userService;
+        this.videoService = videoService;
         this.userSessionManager = userSessionManager;
     }
 
@@ -37,7 +38,11 @@ public class UserController {
     }
 
     @GetMapping("/mypage")
-    public String myPage() {
+    public String myPage(Model model) {
+        UserSession userSession = userSessionManager.getUserSession();
+        if (userSession.getId() != null) {
+            model.addAttribute("videos", videoService.findVideosByWriter(userSession.getId()));
+        }
         return "mypage";
     }
 
