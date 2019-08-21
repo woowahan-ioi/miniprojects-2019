@@ -1,7 +1,5 @@
 package com.wootube.ioi.web.support;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -16,16 +14,10 @@ public class AmazonS3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    @Value("${cloud.aws.credentials.accessKey}")
-    private String accessKey;
-
-    @Value("${cloud.aws.credentials.secretKey}")
-    private String secretKey;
-
     @Bean(value = "amazonS3Client")
     public AmazonS3 awsS3Client() {
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-            return AmazonS3ClientBuilder.standard().withRegion(Regions.fromName(region))
-                    .withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).build();
+            return AmazonS3ClientBuilder.standard()
+					.withRegion(Regions.fromName(region))
+					.build();
         }
 }
