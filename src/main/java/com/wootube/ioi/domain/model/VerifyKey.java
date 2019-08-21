@@ -19,4 +19,9 @@ public class VerifyKey {
 
     @Column(unique = true, nullable = false)
     private String verifyKey;
+
+	public VerifyKey(String inActiveUserEmail, String key) {
+		this.email = inActiveUserEmail;
+		this.verifyKey = key;
+	}
 }
