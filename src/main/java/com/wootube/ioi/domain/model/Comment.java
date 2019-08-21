@@ -34,12 +34,20 @@ public class Comment extends BaseEntity {
     }
 
     public void update(User writer, Video video, String contents) {
+        checkMatchWriter(writer);
+        checkMatchVideo(video);
+        this.contents = contents;
+    }
+
+    public void checkMatchWriter(User writer) {
         if (!this.writer.equals(writer)) {
             throw new NotMatchWriterException();
         }
+    }
+
+    public void checkMatchVideo(Video video) {
         if (!this.video.equals(video)) {
             throw new NotMatchVideoException();
         }
-        this.contents = contents;
     }
 }
