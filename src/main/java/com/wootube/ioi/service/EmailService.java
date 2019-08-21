@@ -1,0 +1,57 @@
+package com.wootube.ioi.service;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+import com.wootube.ioi.service.exception.SendFailException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+
+@Service
+public class EmailService {
+	private static final String EMAIL_CONTENTS = "현재 귀하의 계정은 비활성화 상태입니다. %s를 클릭할 시 활성화 상태로 변경됩니다. <br>";
+	private static final String EMAIL_SUBJECT = "계정 비활성화 관련 안내 메일입니다.";
+
+	@Autowired
+	private Environment environment;
+
+	private final VerifyKeyService verifyKeyService;
+	private final JavaMailSender emailSender;
+
+	@Autowired
+	public EmailService(VerifyKeyService verifyKeyService, JavaMailSender emailSender) {
+		this.verifyKeyService = verifyKeyService;
+		this.emailSender = emailSender;
+	}
+
+	public void sendMessage(String inActiveUserEmail) {
+		try {
+			String hostUrl = InetAddress.getLocalHost().getHostAddress();
+			String verifyKey = verifyKeyService.createVerifyKey(inActiveUserEmail);
+			String contents = String.format(EMAIL_CONTENTS, generateLink(hostUrl, inActiveUserEmail, verifyKey));
+			MimeMessage message = generateMessage(inActiveUserEmail, contents);
+			emailSender.send(message);
+		} catch (UnknownHostException | MessagingException e) {
+			throw new SendFailException();
+		}
+	}
+
+	private String generateLink(String hostUrl, String inActiveUserEmail, String verifyKey) {
+		return "<a href=\"http://" + hostUrl + ":" + environment.getProperty("local.server.port") + "/user/confirm?email=" + inActiveUserEmail + "&verifyKey=" + verifyKey + "\">여기</a>";
+	}
+
+	private MimeMessage generateMessage(String inActiveUserEmail, String contents) throws MessagingException {
+		MimeMessage message = emailSender.createMimeMessage();
+		message.setSubject(EMAIL_SUBJECT);
+		message.setText(contents, "UTF-8", "html");
+		message.addRecipient(Message.RecipientType.TO, new InternetAddress(inActiveUserEmail));
+		return message;
+	}
+}
