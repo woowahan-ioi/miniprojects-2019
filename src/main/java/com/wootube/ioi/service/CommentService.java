@@ -1,7 +1,5 @@
 package com.wootube.ioi.service;
 
-import com.wootube.ioi.domain.exception.NotMatchVideoException;
-import com.wootube.ioi.domain.exception.NotMatchWriterException;
 import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
@@ -50,12 +48,9 @@ public class CommentService {
         User writer = userService.findByEmail(email);
         Video video = videoService.findVideo(videoId);
         Comment comment = findById(commentId);
-        if (!comment.getWriter().equals(writer)) {
-            throw new NotMatchWriterException();
-        }
-        if (!comment.getVideo().equals(video)) {
-            throw new NotMatchVideoException();
-        }
+
+        comment.checkMatchVideo(video);
+        comment.checkMatchWriter(writer);
 
         commentRepository.deleteById(commentId);
     }
