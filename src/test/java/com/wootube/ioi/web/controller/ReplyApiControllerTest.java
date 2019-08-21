@@ -16,14 +16,7 @@ import static org.hamcrest.Matchers.*;
 
 public class ReplyApiControllerTest extends CommonControllerTest {
 
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private VideoRepository videoRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
 
     @Test
     @DisplayName("답글을 생성한다.")
@@ -135,7 +128,4 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 statusCode(400);
     }
 
-    @AfterEach
-    void tearDown() {
-    }
 }

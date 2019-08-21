@@ -128,7 +128,8 @@ public class CommonControllerTest {
                 .getFirst("location");
 
         stopS3Mock();
-        return videoId.substring(videoId.length() - 1);
+        String[] urlValues = videoId.split("/");
+        return urlValues[urlValues.length - 1];
     }
 
     int getSavedCommentId(String sessionId, String videoId) {
@@ -155,7 +156,6 @@ public class CommonControllerTest {
                     get("id");
     }
 
-    //TODO 수정이 필요한 메소드임........
     int getCommentId() {
         return given().
                     contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
@@ -167,7 +167,6 @@ public class CommonControllerTest {
                     get("id");
     }
 
-    //TODO 수정이 필요한 메소드임........
     int getReplyId() {
         int commentId = getCommentId();
 
