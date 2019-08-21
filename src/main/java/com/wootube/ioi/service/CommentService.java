@@ -1,5 +1,7 @@
 package com.wootube.ioi.service;
 
+import com.wootube.ioi.domain.exception.NotMatchVideoException;
+import com.wootube.ioi.domain.exception.NotMatchWriterException;
 import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
@@ -37,16 +39,25 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto update(Long commentId, String email, Long videoId, CommentRequestDto commentRequestDto) {
-        Comment comment = findById(commentId);
         User writer = userService.findByEmail(email);
         Video video = videoService.findVideo(videoId);
+        Comment comment = findById(commentId);
 
         comment.update(writer, video, commentRequestDto.getContents());
         return modelMapper.map(comment, CommentResponseDto.class);
     }
 
-    public void delete(Long commentId) {
+    public void delete(Long commentId, String email, Long videoId) {
+        User writer = userService.findByEmail(email);
+        Video video = videoService.findVideo(videoId);
         Comment comment = findById(commentId);
+        if (!comment.getWriter().equals(writer)) {
+            throw new NotMatchWriterException();
+        }
+        if (!comment.getVideo().equals(video)) {
+            throw new NotMatchVideoException();
+        }
+
         commentRepository.deleteById(commentId);
     }
 
