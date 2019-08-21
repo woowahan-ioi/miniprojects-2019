@@ -1,13 +1,13 @@
 package com.wootube.ioi.domain.model;
 
-import java.time.LocalDateTime;
-import javax.persistence.*;
-
 import com.wootube.ioi.domain.exception.InactivatedException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
