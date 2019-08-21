@@ -4,6 +4,7 @@ import com.wootube.ioi.domain.exception.NotMatchCommentException;
 
 import javax.persistence.*;
 
+import com.wootube.ioi.domain.exception.NotMatchWriterException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,9 +33,16 @@ public class Reply extends BaseEntity {
         return reply;
     }
 
-    public void update(Comment comment, String contents) {
+    public void update(User writer, Comment comment, String contents) {
+        checkMatchWriter(writer);
         checkMatchComment(comment);
         this.contents = contents;
+    }
+
+    public void checkMatchWriter(User writer) {
+        if (!this.writer.equals(writer)) {
+            throw new NotMatchWriterException();
+        }
     }
 
     public void checkMatchComment(Comment comment) {
