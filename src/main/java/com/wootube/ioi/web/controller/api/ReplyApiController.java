@@ -6,6 +6,8 @@ import com.wootube.ioi.service.ReplyService;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 
+import com.wootube.ioi.web.session.UserSession;
+import com.wootube.ioi.web.session.UserSessionManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,16 +15,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ReplyApiController {
     private final ReplyService replyService;
+    private final UserSessionManager userSessionManager;
 
-    public ReplyApiController(ReplyService replyService) {
+    public ReplyApiController(ReplyService replyService, UserSessionManager userSessionManager) {
         this.replyService = replyService;
+        this.userSessionManager = userSessionManager;
     }
 
     @PostMapping
     public ResponseEntity createReply(@PathVariable Long videoId,
                                       @PathVariable Long commentId,
                                       @RequestBody ReplyRequestDto replyRequestDto) {
-        ReplyResponseDto replyResponseDto = replyService.save(replyRequestDto, commentId);
+        UserSession userSession = userSessionManager.getUserSession();
+        ReplyResponseDto replyResponseDto = replyService.save(replyRequestDto, commentId, userSession.getEmail(), videoId);
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId + "/replies/" + replyResponseDto.getId()))
                 .body(replyResponseDto);
     }
