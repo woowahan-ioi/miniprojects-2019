@@ -3,7 +3,9 @@ package com.wootube.ioi.service;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
+import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.util.FileUploader;
@@ -31,6 +33,7 @@ class VideoServiceTest {
 	private static final String UPDATE_TITLE = "title";
 	private static final String UPDATE_DESCRIPTION = "description";
 	private static final String UPDATE_CONTENTS = "<<update testVideo data>>";
+	private static final Long USER_ID = 1L;
 
 	private static final Long ID = 1L;
 	private static final String DIRECTORY = "wootube";
@@ -41,21 +44,29 @@ class VideoServiceTest {
 	private VideoRepository videoRepository;
 
 	@Mock
+	private UserRepository userRepository;
+
+	@Mock
 	private FileUploader fileUploader;
 
 	@Mock
 	private ModelMapper modelMapper;
 
+	@Mock
+	private Video testVideo;
+
 	@InjectMocks
 	private VideoService videoService;
 
 	private VideoRequestDto testVideoRequestDto;
-	private Video testVideo;
+
 	private MultipartFile testUploadFile;
 	private String fileFullPath;
+	private User writer;
 
 	@BeforeEach
 	void setUp() {
+		writer = new User();
 		fileFullPath = String.format("%s/%s", DIRECTORY, FILE_NAME);
 
 		testUploadFile = new MockMultipartFile(fileFullPath, FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
@@ -63,8 +74,6 @@ class VideoServiceTest {
 		testVideoRequestDto = new VideoRequestDto();
 		testVideoRequestDto.setTitle(TITLE);
 		testVideoRequestDto.setDescription(DESCRIPTION);
-
-		testVideo = new Video(testVideoRequestDto.getTitle(), testVideoRequestDto.getDescription());
 	}
 
 	@Test
@@ -72,8 +81,9 @@ class VideoServiceTest {
 	void create() {
 		given(fileUploader.uploadFile(testUploadFile)).willReturn(fileFullPath);
 		given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
+		given(userRepository.findById(USER_ID)).willReturn(Optional.of(writer));
 
-		videoService.create(testUploadFile, testVideoRequestDto);
+		videoService.create(testUploadFile, testVideoRequestDto, USER_ID);
 
 		verify(modelMapper, atLeast(1)).map(testVideoRequestDto, Video.class);
 		verify(videoRepository, atLeast(1)).save(testVideo);
@@ -91,8 +101,9 @@ class VideoServiceTest {
 	void update() {
 		given(fileUploader.uploadFile(testUploadFile)).willReturn(fileFullPath);
 		given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
+		given(userRepository.findById(USER_ID)).willReturn(Optional.of(writer));
 
-		videoService.create(testUploadFile, testVideoRequestDto);
+		videoService.create(testUploadFile, testVideoRequestDto, USER_ID);
 
 		String updateFileFullPath = String.format("%s/%s", DIRECTORY, UPDATE_FILE_NAME);
 		MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
@@ -110,14 +121,16 @@ class VideoServiceTest {
 		testVideoRequestDto.setTitle(UPDATE_TITLE);
 		testVideoRequestDto.setDescription(UPDATE_DESCRIPTION);
 
-		testVideo = new Video(testVideoRequestDto.getTitle(), testVideoRequestDto.getDescription());
 		return new MockMultipartFile(updateFileFullPath, UPDATE_FILE_NAME, null, UPDATE_CONTENTS.getBytes(StandardCharsets.UTF_8));
 	}
 
 	@Test
 	@DisplayName("서비스에서 비디오 아이디로 비디오를 삭제한다.")
 	void deleteById() {
+		given(testVideo.getId()).willReturn(ID);
+		given(testVideo.matchWriter(USER_ID)).willReturn(testVideo);
 		given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
+//		videoService.deleteById(ID, USER_ID);
 		videoService.deleteById(ID);
 
 		verify(fileUploader, atLeast(1)).deleteFile(testVideo.getOriginFileName());
