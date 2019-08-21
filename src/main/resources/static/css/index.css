@@ -1,4 +1,4 @@
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width:767px){
     .main-banner-cover {
         display: none;
     }
@@ -22,7 +22,7 @@ header ul.nav-right li, header ul.nav-left li {
     position: relative;
 }
 
-.search {
+.search{
     width: 400px;
     height: 25px;
     max-width: 400px;
@@ -34,8 +34,7 @@ header ul.nav-right li, header ul.nav-left li {
     border-radius: 3px;
     background: white;
 }
-
-.searchbox {
+.searchbox{
     width: 378px;
     height: 18px;
     position: absolute;
@@ -47,7 +46,6 @@ header ul.nav-right li, header ul.nav-left li {
     font-size: 10pt;
     outline-style: none;
 }
-
 .search-btn {
     width: 27px;
     height: 17px;
@@ -55,7 +53,7 @@ header ul.nav-right li, header ul.nav-left li {
     top: 4px;
     left: 370px;
     background: none;
-    background-image: url('/static/images/default/icons.png');
+    background-image: url('static/images/default/icons.png');
     background-position: -26px -202px;
     border-style: none;
     border-left: 1px solid rgb(220, 220, 220);
@@ -76,7 +74,7 @@ header ul.nav-right li, header ul.nav-left li {
     overflow: hidden;
 }
 
-.video-container iframe {
+.video-container iframe{
     position: absolute;
     top: 0;
     left: 0;
@@ -115,9 +113,4 @@ header ul.nav-right li, header ul.nav-left li {
 
 .padding-8 {
     padding: 8px;
-}
-
-.video-line {
-    height: 1px;
-    background: #cccccc;
 }
