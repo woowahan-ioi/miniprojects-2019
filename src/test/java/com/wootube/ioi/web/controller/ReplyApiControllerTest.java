@@ -34,15 +34,19 @@ public class ReplyApiControllerTest extends CommonControllerTest {
     @Test
     @DisplayName("답글을 수정한다.")
     void updateReply() {
-        int commentId = getCommentId();
-        int replyId = getReplyId(commentId);
+        signup(SIGN_UP_COMMON_REQUEST_DTO);
+        String sessionId = login(LOG_IN_COMMON_REQUEST_DTO);
+        String videoId = getSavedVideoId(sessionId);
+        int commentId = getSavedCommentId(sessionId, videoId);
+        int replyId = getSavedReplyId(videoId, commentId, sessionId);
 
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                body(ReplyRequestDto.of("Update Contents")).
-                when().
-                put(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + replyId).
-                then().
+                cookie("JSESSIONID", sessionId).
+                body(ReplyRequestDto.of(UPDATE_REPLY_RESPONSE.getContents())).
+        when().
+                put(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies/" + replyId).
+        then().
                 statusCode(204);
     }
 

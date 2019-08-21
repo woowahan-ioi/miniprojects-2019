@@ -45,6 +45,9 @@ public class CommonControllerTest {
     static final ReplyResponseDto SAVE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Reply Contents",
             LocalDateTime.now());
+    static final ReplyResponseDto UPDATE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
+            "Update Contents",
+            LocalDateTime.now());
 
     @LocalServerPort
     private int port;
@@ -135,6 +138,18 @@ public class CommonControllerTest {
                     body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
                 when().
                     post(basicPath() + "/api/videos/" + videoId + "/comments").
+                    getBody().
+                    jsonPath().
+                    get("id");
+    }
+
+    int getSavedReplyId(String videoId, int commentId, String sessionId) {
+        return given().
+                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                    cookie("JSESSIONID", sessionId).
+                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+                when().
+                    post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
                     getBody().
                     jsonPath().
                     get("id");
