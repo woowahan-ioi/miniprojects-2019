@@ -221,7 +221,7 @@ ul {
     color: gray;
 }
 
-.img-responsive{
+.span-form {
     width: auto;
-    height: 132px;
+    word-break:break-all
 }
