@@ -24,9 +24,12 @@ public class Reply extends BaseEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_user"), nullable = false)
     private User writer;
 
-    public Reply(String contents, Comment comment) {
-        this.contents = contents;
-        this.comment = comment;
+    public static Reply of(String contents, Comment comment, User writer) {
+        Reply reply = new Reply();
+        reply.contents = contents;
+        reply.comment = comment;
+        reply.writer = writer;
+        return reply;
     }
 
     public void update(Comment comment, String contents) {
