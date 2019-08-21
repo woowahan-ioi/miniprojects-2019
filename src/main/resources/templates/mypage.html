@@ -90,8 +90,41 @@
                             </v-dialog>
                         </v-row>
                     </v-row>
-                    <div>
+                    <div class="padding-20">
                         <!-- 동영상 리스트 -->
+                        <div class="row" id="video-area">
+                            <div class="video col-lg-2 padding-2" th:each="video : ${videos}">
+                                <div class="card bg-transparent no-border">
+                                    <a th:href="@{'/videos/' + ${video.id} + '/edit'}" style="text-decoration: none; color: #000;">
+                                        <div class="card-media">
+                                            <img alt="" class="img-responsive"
+                                                 src="/images/default/thumb_001.jpeg">
+                                        </div>
+                                    </a>
+                                    <div class="card-block padding-10">
+                                        <div class="row">
+                                            <div class="col-lg-10">
+                                                <h4 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0"
+                                                    th:text="${video.title}">title</h4>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <button class="remove-btn" type="button" th:data-videoid = "${video.id}">
+                                                    <i class="ti-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span class="font-size-13" th:text="${video.writer.name}">name</span>
+                                        <div class="font-size-13">
+                                            <span>조회수 952회</span>
+                                            <span> · </span>
+                                            <span id="create-time" th:text="${video.updateTime}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </v-col>
             </v-app>
@@ -105,8 +138,10 @@
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script type="text/javascript" src="/js/mypage.js"></script>
+
 <th:block th:replace="fragments/form-rules:: formRulesFragment"/>
-<script>
+<script th:inline="javascript">
     document.querySelector(".side-nav-toggle").addEventListener("click", sideNavToggle);
 
     function sideNavToggle(event) {
@@ -149,7 +184,9 @@
                 document.getElementById('delete-form').submit();
             }
         }
-    })
+    });
+
+    document.querySelector("#video-area").addEventListener("click", deleteVideo);
 </script>
 </body>
 </html>

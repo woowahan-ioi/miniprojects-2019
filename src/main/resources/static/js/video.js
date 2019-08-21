@@ -1,15 +1,31 @@
 function readMoreTag() {
-    const dots = document.getElementById("dots");
-    const moreText = document.getElementById("more");
-    const btnText = document.getElementById("readMoreSpan");
+    const desc = document.getElementById("description");
+    const descStorage = document.querySelector("#description-storage");
 
-    if (dots.style.display === "none") {
-        dots.style.display = "inline";
-        btnText.innerHTML = "더보기";
-        moreText.style.display = "none";
-    } else {
-        dots.style.display = "none";
-        btnText.innerHTML = "간략히";
-        moreText.style.display = "inline";
+    if(descStorage.innerText.length > 30) {
+        desc.innerText = descStorage.innerText.substr(0, 50) + " ...";
+        document.querySelector("#readMoreSpan").addEventListener("click", readMoreTagEvent);
+        return;
     }
+
+    desc.innerText = descStorage.innerText;
 }
+
+function readMoreTagEvent() {
+    const desc = document.getElementById("description");
+    const readMoreSpan = document.querySelector("#readMoreSpan");
+
+    if(readMoreSpan.classList.contains("clicked")) {
+        readMoreSpan.innerText = "간략히";
+        readMoreSpan.classList.remove("clicked");
+
+        desc.innerText = document.querySelector("#description-storage").innerText;
+        return;
+    }
+
+    readMoreSpan.innerText = "더보기";
+    readMoreSpan.classList.add("clicked");
+    desc.innerText = document.querySelector("#description-storage").innerText.substr(0, 50) + " ...";
+}
+
+readMoreTag();

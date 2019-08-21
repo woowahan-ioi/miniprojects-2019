@@ -1,24 +1,20 @@
 package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.domain.exception.NotMatchPasswordException;
-import com.wootube.ioi.domain.validator.Password;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
-import lombok.EqualsAndHashCode;
+import com.wootube.ioi.domain.exception.ActivatedException;
+import com.wootube.ioi.domain.exception.NotMatchPasswordException;
+import com.wootube.ioi.domain.validator.Password;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
     @Pattern(regexp = "[^ \\-!@#$%^&*(),.?\":{}|<>0-9]{2,10}",
             message = "이름은 2~10자, 숫자나 특수문자가 포함될 수 없습니다.")
@@ -53,5 +49,12 @@ public class User extends BaseEntity{
     public User updateName(String name) {
         this.name = name;
         return this;
+    }
+
+    public void activeUser() {
+        if(this.isActive) {
+            throw new ActivatedException();
+        }
+        this.isActive = true;
     }
 }

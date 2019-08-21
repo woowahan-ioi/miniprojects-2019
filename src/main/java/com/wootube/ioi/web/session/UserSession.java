@@ -8,7 +8,11 @@ public class UserSession {
     private String name;
     private String email;
 
-    UserSession(Long id, String name, String email) {
+    public UserSession() {
+
+    }
+
+    public UserSession(Long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;

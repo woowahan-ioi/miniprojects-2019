@@ -18,7 +18,8 @@
                    src="https://www.youtube.com/embed/tgbNymZ7vqY" th:unless="${video}">
 
             <div class="comment mrg-btm-30">
-                <span class="comment-contents font-size-20 text-bold">[류현진 하이라이트]★ERA 1.45★ 7이닝 무실점 시즌 12승, KBO&MLB 통산 150승을 달성한 류현진! / 8월 12일 애리조나전 하이라이트</span>
+                <span class="comment-contents font-size-20 text-bold" th:if="${video.title}" th:text="${video.title}"></span>
+                <span class="comment-contents font-size-20 text-bold" th:unless="${video.title}" th:text="${video.title}">title</span>
                 <div class="mrg-top-10">
                     <div class="title-views">
                         <span>조회수 132,323회</span>
@@ -50,19 +51,17 @@
                          src="/images/default/eastjun_big.jpg">
                 </div>
                 <div class="relative banner-info d-inline-block col-sm-8">
-                    <span class="left-30 bottom-35 font-size-17 text-bold">UserName</span><br>
-                    <span class="left-30 bottom-35 font-size-13">DateTime: 19.08.13</span>
+                    <span class="left-30 bottom-35 font-size-17 text-bold" th:if="${video.writer.name}" th:text="${video.writer.name}"></span><br>
+                    <span class="left-30 bottom-35 font-size-17 text-bold" th:unless="${video.writer.name}">UserName</span><br>
+
+                    <span class="left-30 bottom-35 font-size-13" th:if="${video.updateTime}" th:text="${video.updateTime}"></span>
+                    <span class="left-30 bottom-35 font-size-13" th:unless="${video.updateTime}">DateTime</span>
+
                     <div class="left-30 mrg-vertical-10">
-                    <span>description<span id="dots">...</span>
-                        <span id="more" style="display:none"> erisque enim ligula venenatis dolor.
-                            Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.
-                            Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac.
-                            In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis.
-                            Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.
-                        </span>
-                    </span>
+                        <span class="span-form" id="description" th:if="${video.description}"></span>
+                        <span class="span-form" id="description-storage" th:text="${video.description}" hidden></span>
                     </div>
-                    <span class="mrg-vertical-20 left-30" id="readMoreSpan" onclick="readMoreTag()">더보기</span>
+                    <button class="title-more-btn left-30 clicked" id="readMoreSpan">더보기</button>
                 </div>
                 <div class="col-sm-2">
 
@@ -90,7 +89,7 @@
                 </div>
             </div>
 
-            <hr class="title-line mrg-top-50">
+            <hr class="title-line">
 
             <div class="row pdd-horizon-10">
                 <div class="padding-2">
@@ -115,8 +114,7 @@
                     <div class="card bg-transparent no-border">
                         <div class="card-media row">
                             <div class="col-md-6">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_002.jpeg">
+                                <img alt="" src="/images/default/thumb_002.jpeg">
                             </div>
                             <div class="col-md-6">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
@@ -133,8 +131,7 @@
                     <div class="card bg-transparent no-border">
                         <div class="card-media row">
                             <div class="col-md-6">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_003.jpeg">
+                                <img alt="" src="/images/default/thumb_003.jpeg">
                             </div>
                             <div class="col-md-6">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
@@ -151,8 +148,7 @@
                     <div class="card bg-transparent no-border">
                         <div class="card-media row">
                             <div class="col-md-6">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_004.jpeg">
+                                <img alt="" src="/images/default/thumb_004.jpeg">
                             </div>
                             <div class="col-md-6">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
@@ -169,8 +165,7 @@
                     <div class="card bg-transparent no-border">
                         <div class="card-media row">
                             <div class="col-md-6">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_005.jpeg">
+                                <img alt="" src="/images/default/thumb_005.jpeg">
                             </div>
                             <div class="col-md-6">
                                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
@@ -193,22 +188,5 @@
 <script src="/js/video.js" type="text/javascript"></script>
 <th:block th:replace="fragments/script :: scriptFragment"/>
 
-<script>
-    function readMoreTag() {
-        var dots = document.getElementById("dots");
-        var moreText = document.getElementById("more");
-        var btnText = document.getElementById("readMoreSpan");
-
-        if (dots.style.display === "none") {
-            dots.style.display = "inline";
-            btnText.innerHTML = "더보기";
-            moreText.style.display = "none";
-        } else {
-            dots.style.display = "none";
-            btnText.innerHTML = "간략히";
-            moreText.style.display = "inline";
-        }
-    }
-</script>
 </body>
 </html>

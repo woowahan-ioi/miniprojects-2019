@@ -3,7 +3,6 @@ package com.wootube.ioi.web.controller.api;
 import com.wootube.ioi.service.UserSignUpService;
 import com.wootube.ioi.service.dto.EmailCheckRequestDto;
 import com.wootube.ioi.service.dto.EmailCheckResponseDto;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
