@@ -1,5 +1,6 @@
 package com.wootube.ioi.service.dto;
 
+import com.wootube.ioi.domain.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,5 +15,6 @@ public class VideoResponseDto {
     private String title;
     private String description;
     private String contentPath;
-    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+    private User writer;
 }
