@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Wootube</title>
+    <th:block th:replace="fragments/config :: configFragment"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+          name="viewport">
+</head>
+
+<body>
+<div class="app">
+    <th:block th:replace="fragments/header :: headerFragment"/>
+    <th:block th:replace="fragments/sidebar :: sidebarFragment"/>
+
+    <div class="page-container">
+        <div id="mypage" style="padding: 56px 0 0 0;">
+            <v-app>
+                <v-col style="padding-top: 0; background-color: #FFFFFF;">
+                    <v-row style="height: 150px; padding: 16px 107px 4px; background-color: #FAFAFA;">
+                        <v-row style="width: 5vw; align-content: center;">
+                            <v-avatar
+                                    color="white"
+                                    size="100"
+                                    style="margin-right: 24px;"
+                            >
+                                <img
+                                        alt="avatar"
+                                        src="/images/default/eastjun_profile.jpg"
+                                >
+                            </v-avatar>
+                        </v-row>
+                        <v-row style="width: 50vw; align-content: center;">
+                            <div style="font-size: 28px; font-weight: 500; margin-left: 12px; height: 45px;"
+                                 th:text="${session.user.name}">유저 아이디
+                            </div>
+                        </v-row>
+                        <v-row style="width: 10vw; align-content: center;">
+                            <v-col>
+                                <v-btn @click="dialog = true" class="primary" depressed>정보 수정
+                                </v-btn>
+                                <form action="/user/" id="delete-form" method="post"
+                                      style="padding-top: 8px;">
+                                    <input name="_method" type="hidden" value="delete"/>
+                                    <v-btn class="red" dark depressed
+                                           @click="deleteSubmitBtnHandler">회원 탈퇴
+                                    </v-btn>
+                                </form>
+                            </v-col>
+                        </v-row>
+                        <v-row justify="center">
+                            <v-dialog max-width="600px" persistent v-model="dialog">
+                                <v-card>
+                                    <v-card-title>
+                                        <span class="headline">정보 수정</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-container>
+                                            <form action="/user/" id="edit-form" method="post">
+                                                <input name="_method" type="hidden" value="put"/>
+                                                <v-row>
+                                                    <v-col cols="12">
+                                                        <v-text-field
+                                                                :rules="[rules.nameRequired, rules.namePattern]"
+                                                                label="이름"
+                                                                name="name"
+                                                                outlined
+                                                                type="name"
+                                                                v-model="name">
+                                                        </v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                            </form>
+                                        </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn @click="dialog = false" color="red darken-1" text>
+                                            취소
+                                        </v-btn>
+                                        <v-btn color="blue darken-1"
+                                               @click="editSubmitBtnHandler" text>저장
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-row>
+                    </v-row>
+                    <div class="padding-20">
+                        <!-- 동영상 리스트 -->
+                        <div class="row" id="video-area">
+                            <div class="video col-lg-2 padding-2" th:each="video : ${videos}">
+                                <div class="card bg-transparent no-border">
+                                    <a th:href="@{'/videos/' + ${video.id} + '/edit'}" style="text-decoration: none; color: #000;">
+                                        <div class="card-media">
+                                            <img alt="" class="img-responsive"
+                                                 src="/images/default/thumb_001.jpeg">
+                                        </div>
+                                    </a>
+                                    <div class="card-block padding-10">
+                                        <div class="row">
+                                            <div class="col-lg-10">
+                                                <h4 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0"
+                                                    th:text="${video.title}">title</h4>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <button class="remove-btn" type="button" th:data-videoid = "${video.id}">
+                                                    <i class="ti-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span class="font-size-13" th:text="${video.writer.name}">name</span>
+                                        <div class="font-size-13">
+                                            <span>조회수 952회</span>
+                                            <span> · </span>
+                                            <span id="create-time" th:text="${video.updateTime}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </v-col>
+            </v-app>
+        </div>
+    </div>
+
+</div>
+
+<th:block th:replace="fragments/script :: scriptFragment"/>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script type="text/javascript" src="/js/mypage.js"></script>
+
+<th:block th:replace="fragments/form-rules:: formRulesFragment"/>
+<script th:inline="javascript">
+    document.querySelector(".side-nav-toggle").addEventListener("click", sideNavToggle);
+
+    function sideNavToggle(event) {
+        event.preventDefault();
+        document.querySelector(".app").classList.toggle("is-collapsed");
+    }
+
+    new Vue({
+        el: '#mypage',
+        vuetify: new Vuetify(),
+        data: () => ({
+            name: '',
+            dialog: false,
+            rules: {
+                nameRequired: value => Rules.nameRequired(value),
+                namePattern: value => Rules.namePattern(value),
+            }
+        }),
+        methods: {
+            _fieldNotEmpty(field) {
+                return field.length !== 0
+            },
+
+            _namePattern() {
+                return Rules.nameRegExp.test(this.name)
+            },
+
+            _fieldCheck() {
+                return this._fieldNotEmpty(this.name)
+                    && this._namePattern()
+            },
+
+            editSubmitBtnHandler() {
+                if (this._fieldCheck()) {
+                    document.getElementById('edit-form').submit();
+                }
+            },
+
+            deleteSubmitBtnHandler() {
+                document.getElementById('delete-form').submit();
+            }
+        }
+    });
+
+    document.querySelector("#video-area").addEventListener("click", deleteVideo);
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="headFragment">
+    <meta charset="UTF-8">
+    <title>Wootube</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+          name="viewport">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans|Noto+Sans+KR&display=swap"
+          rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
+</th:block>
+<th:block th:fragment="scriptFragment">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <!--    <th:block th:replace="/form-rules:: formRulesFragment"/>-->
+    <script>
+        const checkEmailInputForm = () => vue.email.length !== 0 && Rules.emailRegExp.test(vue.email)
+        const checkPasswordInputForm = () => vue.password.length !== 0
+
+        const loginSubmitBtnHandler = () => {
+            if (checkEmailInputForm() && checkPasswordInputForm()) {
+                document.getElementById('login-form').submit();
+            }
+        }
+
+        const vue = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                email: '',
+                password: '',
+                rules: {
+                    emailRequired: value => Rules.emailRequired(value),
+                    emailPattern: value => Rules.emailPattern(value),
+                    passwordRequired: value => Rules.passwordRequired(value)
+                },
+            }
+        })
+    </script>
+</th:block>
+</html>

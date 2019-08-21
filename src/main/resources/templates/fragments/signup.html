@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="signUpHeadFragment">
+    <meta charset="UTF-8">
+    <title>Wootube</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+          name="viewport">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans|Noto+Sans+KR&display=swap"
+          rel="stylesheet">
+    <link href="/css/signup.css" rel="stylesheet">
+</th:block>
+<th:block th:fragment="signUpScriptFragment">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <!--    <th:block th:replace="/form-rules:: formRulesFragment"/>-->
+    <script>
+        const BASE_URL = `http://${window.location.host}`
+
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+
+        const success = 'green'
+        const warning = 'yellow'
+        const error = 'red'
+
+        const vue = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                email: '',
+                emailDuplicationCheck: false,
+                duplicationCheckBtn: warning,
+                duplicationCheckPlease: '',
+                name: '',
+                password: '',
+                passwordCheck: '',
+                rules: {
+                    emailRequired: value => Rules.emailRequired(value),
+                    emailPattern: value => Rules.emailPattern(value),
+                    nameRequired: value => Rules.nameRequired(value),
+                    namePattern: value => Rules.namePattern(value),
+                    passwordRequired: value => Rules.passwordRequired(value),
+                    passwordPattern: value => Rules.passwordPattern(value),
+                    passwordChecking: value => Rules.passwordCheckValid(value)
+                }
+            },
+            methods: {
+                _fieldNotEmpty(field) {
+                    return field.length !== 0
+                },
+
+                _allFieldNotEmpty() {
+                    return this._fieldNotEmpty(this.name)
+                        && this._fieldNotEmpty(this.email)
+                        && this._fieldNotEmpty(this.password)
+                },
+
+                _emailPattern() {
+                    return Rules.emailRegExp.test(this.email)
+                },
+
+                _namePattern() {
+                    return Rules.nameRegExp.test(this.name)
+                },
+                _passwordPattern() {
+                    return this.password.match(/[a-z]/g)
+                        && this.password.match(/[0-9]/g)
+                        && this.password.length >= 8
+                        && this.password.length <= 32
+                },
+
+                _passwordCheck() {
+                    return this.password === this.passwordCheck
+                },
+
+                _allFormFieldCheck() {
+                    return this._allFieldNotEmpty()
+                        && this._emailPattern()
+                        && this._namePattern()
+                        && this._passwordPattern()
+                        && this._passwordCheck()
+                },
+
+                loginSubmitBtnHandler() {
+                    if (this.duplicationCheckBtn === warning
+                        || this.duplicationCheckBtn === error) {
+                        this.duplicationCheckPlease = '이메일 중복 확인이 필요합니다.'
+                        return
+                    }
+                    if (!this._allFormFieldCheck()) {
+                        this.duplicationCheckPlease = '빈칸을 모두 채워주세요.'
+                        return
+                    }
+                    this.duplicationCheckPlease = ''
+                    if (this._allFormFieldCheck() && this.duplicationCheckBtn === success) {
+                        document.getElementById('signup-form').submit();
+                    }
+                },
+
+                duplicationCheckBtnHandler() {
+                    if (this.duplicationCheckBtn === warning
+                        || this.duplicationCheckBtn === error) {
+                        this._duplicationCheckRequest()
+                    }
+                },
+
+                _duplicationCheckRequest() {
+                    if (!this._fieldNotEmpty(this.email) || !this._emailPattern()) {
+                        return
+                    }
+
+                    if (this.duplicationCheckBtn === success) {
+                        return
+                    }
+
+                    fetch(`${BASE_URL}/api/users`, {
+                        headers,
+                        method: "POST",
+                        body: JSON.stringify({email: this.email})
+                    }).then((response) => {
+                        if (response.ok) {
+                            return response.json()
+                        }
+                    }).then((data) => {
+                        if (data.message === 'impossible') {
+                            this.duplicationCheckBtn = error
+                        }
+                        if (data.message === 'possible') {
+                            this.duplicationCheckBtn = success
+                            document.getElementById('email-text-field').disable = true
+                        }
+                    }).catch((error) => {
+                        console.log(error)
+                        this.duplicationCheckBtn = error
+                    })
+                }
+            }
+        })
+    </script>
+</th:block>
+</html>

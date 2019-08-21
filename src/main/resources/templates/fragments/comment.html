@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="commentFragment">
+    <div>
+        <div>댓글 <span id="comment-count">1,131</span>개</div>
+        <div class="comment mrg-btm-50">
+            <div class="mrg-top-5">
+                <div class="reply-area">
+                    <div class="mrg-btm-10">
+                        <img alt="" class="img-circle width-50 comment-writer-img"
+                             src="/images/default/eastjun_big.jpg">
+                        <input class="comment-input" id="comment-input-text"
+                               placeholder="공개 댓글 추가..." type="text">
+                    </div>
+                    <div class="display-none" id="comment-button-area">
+                        <button class="btn comment-btn edit comment-save-btn disabled"
+                                id="comment-save-button">댓글
+                        </button>
+                        <button class="btn comment-btn comment-cancel-btn"
+                                id="comment-cancel-button">취소
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul id="comment-area">
+
+        </ul>
+    </div>
+</th:block>
+</html>
