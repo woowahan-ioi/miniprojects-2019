@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
-@RequestMapping("/api/videos")
+@RequestMapping("/api/videos/{videoId}/comments")
 @RestController
 public class CommentApiController {
     private final CommentService commentService;
@@ -21,7 +21,7 @@ public class CommentApiController {
         this.userSessionManager = userSessionManager;
     }
 
-    @PostMapping("/{videoId}/comments")
+    @PostMapping
     public ResponseEntity createComment( @PathVariable Long videoId, @RequestBody CommentRequestDto commentRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
         CommentResponseDto commentResponseDto = commentService.save(commentRequestDto, videoId, userSession.getEmail());
@@ -29,7 +29,7 @@ public class CommentApiController {
                 .body(commentResponseDto);
     }
 
-    @PutMapping("/{videoId}/comments/{commentId}")
+    @PutMapping("/{commentId}")
     public ResponseEntity updateComment(@PathVariable Long videoId,
                                         @PathVariable Long commentId,
                                         @RequestBody CommentRequestDto commentRequestDto) {
@@ -39,7 +39,7 @@ public class CommentApiController {
                 .build();
     }
 
-    @DeleteMapping("/{videoId}/comments/{commentId}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity deleteComment(@PathVariable Long videoId, @PathVariable Long commentId) {
         UserSession userSession = userSessionManager.getUserSession();
         commentService.delete(commentId, userSession.getEmail(), videoId);

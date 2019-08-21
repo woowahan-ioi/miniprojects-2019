@@ -1,15 +1,8 @@
 package com.wootube.ioi.web.controller;
 
-import java.time.LocalDateTime;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.wootube.ioi.service.dto.*;
-
 import com.wootube.ioi.web.config.TestConfig;
 import io.findify.s3mock.S3Mock;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,13 +12,14 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 
-import static io.restassured.RestAssured.*;
+import java.time.LocalDateTime;
+
+import static io.restassured.RestAssured.given;
 
 @AutoConfigureWebTestClient
 @Import(TestConfig.class)
@@ -36,6 +30,12 @@ public class CommonControllerTest {
     static final Long NOT_EXIST_REPLY_ID = 0L;
     static final Long NOT_EXIST_VIDEO_ID = 0L;
 
+    static final SignUpRequestDto SIGN_UP_COMMON_REQUEST_DTO = new SignUpRequestDto("루피", "luffy@luffy.com", "1234567a");
+    static final LogInRequestDto LOG_IN_COMMON_REQUEST_DTO = new LogInRequestDto("luffy@luffy.com", "1234567a");
+    static final SignUpRequestDto SIGN_UP_SECOND_USER_DTO = new SignUpRequestDto("효오", "hyo@test.com", "1234qwer");
+    static final LogInRequestDto LOG_IN_SECOND_USER_DTO = new LogInRequestDto("hyo@test.com", "1234qwer");
+
+
     static final CommentResponseDto SAVE_COMMENT_RESPONSE = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents",
             LocalDateTime.now());
@@ -44,6 +44,9 @@ public class CommonControllerTest {
             LocalDateTime.now());
     static final ReplyResponseDto SAVE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Reply Contents",
+            LocalDateTime.now());
+    static final ReplyResponseDto UPDATE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
+            "Update Contents",
             LocalDateTime.now());
 
     @LocalServerPort
@@ -55,55 +58,12 @@ public class CommonControllerTest {
     @Autowired
     private S3Mock s3Mock;
 
+    private void stopS3Mock() {
+        s3Mock.stop();
+    }
+
     String basicPath() {
         return "http://localhost:" + port;
-    }
-
-    int getCommentId2(String sessionId, String videoId) {
-        return  given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    cookie("JSESSIONID", sessionId).
-                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/"+ videoId +"/comments").
-                    getBody().
-                    jsonPath().
-                    get("id");
-    }
-
-    int getCommentId() {
-        return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/1/comments").
-                    getBody().
-                    jsonPath().
-                    get("id");
-    }
-
-    int getReplyId() {
-        int commentId = getCommentId();
-
-        return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
-                    getBody().
-                    jsonPath().
-                    get("id");
-    }
-
-    int getReplyId(int commentId) {
-        return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
-                    getBody().
-                    jsonPath().
-                    get("id");
     }
 
     private MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {
@@ -129,6 +89,7 @@ public class CommonControllerTest {
                 .exchange();
     }
 
+
     private MultipartBodyBuilder createMultipartBodyBuilder() {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("uploadFile", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
@@ -142,24 +103,16 @@ public class CommonControllerTest {
         return bodyBuilder;
     }
 
-    private void stopS3Mock() {
-        s3Mock.stop();
-    }
-
-    void signup() {
-        SignUpRequestDto signUpRequestDto = new SignUpRequestDto("루피", "luffy@luffy.com", "1234567a");
-
-        webTestClient.post().uri("/user/signup")
+    void signup(SignUpRequestDto signUpRequestDto) {
+        webTestClient.post()
+                .uri("/user/signup")
                 .body(BodyInserters.fromFormData(parser(signUpRequestDto)))
-                .exchange()
-                .expectStatus()
-                .isFound();
+                .exchange();
     }
 
-    String login() {
-        LogInRequestDto logInRequestDto = new LogInRequestDto("luffy@luffy.com", "1234567a");
-
-        return webTestClient.post().uri("/user/login")
+    String login(LogInRequestDto logInRequestDto) {
+        return webTestClient.post()
+                .uri("/user/login")
                 .body(BodyInserters.fromFormData(parser(logInRequestDto)))
                 .exchange()
                 .returnResult(String.class)
@@ -168,23 +121,74 @@ public class CommonControllerTest {
                 .getValue();
     }
 
-
-    void saveVideo(String sessionId) {
-        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/videos/new", sessionId)
-                .expectStatus().is3xxRedirection()
-                .expectHeader().valueMatches("Location", ".*/videos/[1-9][0-9]*");
-
-        stopS3Mock();
-    }
-
-    String getSaveVideoId(String sessionId) {
+    String getSavedVideoId(String sessionId) {
         String videoId = requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/videos/new", sessionId)
-                .expectStatus().is3xxRedirection()
                 .returnResult(String.class)
                 .getResponseHeaders()
                 .getFirst("location");
 
         stopS3Mock();
         return videoId.substring(videoId.length() - 1);
+    }
+
+    int getSavedCommentId(String sessionId, String videoId) {
+        return given().
+                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                    cookie("JSESSIONID", sessionId).
+                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+                when().
+                    post(basicPath() + "/api/videos/" + videoId + "/comments").
+                    getBody().
+                    jsonPath().
+                    get("id");
+    }
+
+    int getSavedReplyId(String videoId, int commentId, String sessionId) {
+        return given().
+                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                    cookie("JSESSIONID", sessionId).
+                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+                when().
+                    post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
+                    getBody().
+                    jsonPath().
+                    get("id");
+    }
+
+    //TODO 수정이 필요한 메소드임........
+    int getCommentId() {
+        return given().
+                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+                when().
+                    post(basicPath() + "/api/videos/1/comments").
+                    getBody().
+                    jsonPath().
+                    get("id");
+    }
+
+    //TODO 수정이 필요한 메소드임........
+    int getReplyId() {
+        int commentId = getCommentId();
+
+        return given().
+                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                    body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
+                when().
+                    post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
+                    getBody().
+                    jsonPath().
+                    get("id");
+    }
+
+    int getReplyId(int commentId) {
+        return given().
+                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                    body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
+                when().
+                    post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
+                    getBody().
+                    jsonPath().
+                    get("id");
     }
 }
