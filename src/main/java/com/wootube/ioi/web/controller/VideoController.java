@@ -3,6 +3,7 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
+import com.wootube.ioi.web.session.UserSessionManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class VideoController {
     private final VideoService videoService;
+    private final UserSessionManager userSessionManager;
 
-    public VideoController(final VideoService videoService) {
+    public VideoController(VideoService videoService, UserSessionManager userSessionManager) {
         this.videoService = videoService;
+        this.userSessionManager = userSessionManager;
     }
 
     @GetMapping("/new")
@@ -24,7 +27,8 @@ public class VideoController {
 
     @PostMapping("/new")
     public String video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
-        VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto);
+        Long userId = userSessionManager.getUserSession().getId();
+        VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto, userId);
         return "redirect:/videos/" + videoResponseDto.getId();
     }
 
@@ -46,9 +50,4 @@ public class VideoController {
         return "redirect:/videos/" + id;
     }
 
-    @DeleteMapping("/{id}")
-    public String video(@PathVariable Long id) {
-        videoService.deleteById(id);
-        return "redirect:/";
-    }
 }
