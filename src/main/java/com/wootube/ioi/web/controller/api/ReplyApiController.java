@@ -9,7 +9,7 @@ import com.wootube.ioi.service.dto.ReplyResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/videos/{videoId}/comments/{commentId}")
+@RequestMapping("/api/videos/{videoId}/comments/{commentId}/replies")
 @RestController
 public class ReplyApiController {
     private final ReplyService replyService;
@@ -18,7 +18,7 @@ public class ReplyApiController {
         this.replyService = replyService;
     }
 
-    @PostMapping("/replies")
+    @PostMapping
     public ResponseEntity createReply(@PathVariable Long videoId,
                                       @PathVariable Long commentId,
                                       @RequestBody ReplyRequestDto replyRequestDto) {
@@ -27,7 +27,7 @@ public class ReplyApiController {
                 .body(replyResponseDto);
     }
 
-    @PutMapping("/replies/{replyId}")
+    @PutMapping("/{replyId}")
     public ResponseEntity updateReply(@PathVariable Long videoId,
                                       @PathVariable Long commentId,
                                       @PathVariable Long replyId,
@@ -37,7 +37,7 @@ public class ReplyApiController {
                 .build();
     }
 
-    @DeleteMapping("/replies/{replyId}")
+    @DeleteMapping("/{replyId}")
     public ResponseEntity deleteReply(@PathVariable Long videoId,
                                       @PathVariable Long commentId,
                                       @PathVariable Long replyId) {
