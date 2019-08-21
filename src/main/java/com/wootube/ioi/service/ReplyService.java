@@ -50,13 +50,15 @@ public class ReplyService {
                 reply.getUpdateTime());
     }
 
-    public void delete(Long commentId, Long replyId) {
-        //비디오 번호 확인하기
-        //답글 작성자 확인하기
+    public void delete(Long videoId, Long commentId, Long replyId, String email) {
+        User writer = validatorService.getUserService().findByEmail(email);
+        Video video = validatorService.getVideoService().findVideo(videoId);
         Comment comment = validatorService.getCommentService().findById(commentId);
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(NotFoundReplyException::new);
 
+        comment.checkMatchVideo(video);
+        reply.checkMatchWriter(writer);
         reply.checkMatchComment(comment);
 
         replyRepository.delete(reply);
