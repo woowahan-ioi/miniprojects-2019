@@ -47,7 +47,8 @@ public class ReplyApiController {
     public ResponseEntity deleteReply(@PathVariable Long videoId,
                                       @PathVariable Long commentId,
                                       @PathVariable Long replyId) {
-        replyService.delete(commentId, replyId);
+        UserSession userSession = userSessionManager.getUserSession();
+        replyService.delete(videoId, commentId, replyId, userSession.getEmail());
         return ResponseEntity.noContent()
                 .build();
     }
