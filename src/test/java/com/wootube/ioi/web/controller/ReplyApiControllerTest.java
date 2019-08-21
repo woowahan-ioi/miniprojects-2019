@@ -81,13 +81,17 @@ public class ReplyApiControllerTest extends CommonControllerTest {
     @Test
     @DisplayName("답글을 삭제한다.")
     void deleteReply() {
-        int commentId = getCommentId();
-        int replyId = getReplyId(commentId);
+        signup(SIGN_UP_COMMON_REQUEST_DTO);
+        String sessionId = login(LOG_IN_COMMON_REQUEST_DTO);
+        String videoId = getSavedVideoId(sessionId);
+        int commentId = getSavedCommentId(sessionId, videoId);
+        int replyId = getSavedReplyId(videoId, commentId, sessionId);
 
         given().
-                when().
-                delete(basicPath() + "/api/videos/1/comments/" + commentId + "/replies/" + replyId).
-                then().
+                cookie("JSESSIONID", sessionId).
+        when().
+                delete(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies/" + replyId).
+        then().
                 statusCode(204);
     }
 
