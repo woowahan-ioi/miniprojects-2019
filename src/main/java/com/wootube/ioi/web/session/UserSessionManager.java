@@ -3,14 +3,18 @@ package com.wootube.ioi.web.session;
 import javax.servlet.http.HttpServletRequest;
 
 import com.wootube.ioi.domain.model.User;
+import org.modelmapper.ModelMapper;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserSessionManager extends SessionManagerGenerator {
 
-    public UserSessionManager(HttpServletRequest request) {
+    private final ModelMapper modelMapper;
+
+    public UserSessionManager(HttpServletRequest request, ModelMapper modelMapper) {
         super(request);
+        this.modelMapper = modelMapper;
     }
 
     public UserSession getUserSession() {
@@ -18,7 +22,7 @@ public class UserSessionManager extends SessionManagerGenerator {
     }
 
     public void setUserSession(User user) {
-        super.set("user", new UserSession(user.getId(), user.getName(), user.getEmail()));
+        super.set("user", modelMapper.map(user, UserSession.class));
     }
 
     public void removeUserSession() {
