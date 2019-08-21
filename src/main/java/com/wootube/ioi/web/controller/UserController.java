@@ -77,7 +77,12 @@ public class UserController {
     public RedirectView deleteUser() {
         UserSession userSession = userSessionManager.getUserSession();
         userService.deleteUser(userSession.getId());
-        userSessionManager.removeUserSession();
-        return new RedirectView("/");
+        return logout();
+    }
+
+    @GetMapping("/confirm")
+    public RedirectView user(@RequestParam String email, @RequestParam String verifyKey) {
+        userService.activateUser(email, verifyKey);
+        return new RedirectView("/user/login");
     }
 }
