@@ -3,11 +3,14 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
+import com.wootube.ioi.service.exception.InvalidUserException;
+import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RequestMapping("/videos")
 @Controller
@@ -25,29 +28,38 @@ public class VideoController {
         return "video-edit";
     }
 
-    @PostMapping("/new")
-    public String video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
-        Long userId = userSessionManager.getUserSession().getId();
-        VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto, userId);
-        return "redirect:/videos/" + videoResponseDto.getId();
-    }
-
     @GetMapping("/{id}")
     public String video(@PathVariable Long id, Model model) {
-        model.addAttribute("video", videoService.findById(id));
+        model.addAttribute("video", videoService.findVideo(id));
         return "video";
     }
 
     @GetMapping("/{id}/edit")
     public String updateVideoPage(@PathVariable Long id, Model model) {
+        checkUserSession();
         model.addAttribute("video", videoService.findById(id));
         return "video-edit";
     }
 
+    @PostMapping("/new")
+    public RedirectView video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+        checkUserSession();
+        VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto);
+        return new RedirectView("/videos/" + videoResponseDto.getId());
+    }
+
     @PutMapping("/{id}")
-    public String updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+    public RedirectView updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+        checkUserSession();
         videoService.update(id, uploadFile, videoRequestDto);
-        return "redirect:/videos/" + id;
+        return new RedirectView("/videos/" + id);
+    }
+
+    private void checkUserSession() {
+        UserSession userSession = userSessionManager.getUserSession();
+        if (userSession == null) {
+            throw new InvalidUserException();
+        }
     }
 
 }
