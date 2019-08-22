@@ -11,4 +11,5 @@ public class VideoRequestDto {
     private String title;
     private String description;
     private String contentPath;
+    private Long writerId;
 }
