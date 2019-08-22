@@ -4,6 +4,7 @@ import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.web.controller.exception.InvalidUserException;
+import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
 
 import org.springframework.stereotype.Controller;
@@ -36,11 +37,11 @@ public class VideoController {
     }
 
     private Long checkUserSession() {
-        Long userId = userSessionManager.getUserSession().getId();
-        if(userId == null) {
+        UserSession userSession = userSessionManager.getUserSession();
+        if (userSession == null) {
             throw new InvalidUserException();
         }
-        return userId;
+        return userSession.getId();
     }
 
     @GetMapping("/{id}")
@@ -51,7 +52,8 @@ public class VideoController {
 
     @GetMapping("/{id}/edit")
     public String updateVideoPage(@PathVariable Long id, Model model) {
-        checkUserSession();
+        Long userId = checkUserSession();
+        videoService.matchWriter(userId, id);
         model.addAttribute("video", videoService.findById(id));
         return "video-edit";
     }
@@ -62,5 +64,4 @@ public class VideoController {
         videoService.update(id, uploadFile, videoRequestDto);
         return "redirect:/videos/" + id;
     }
-
 }
