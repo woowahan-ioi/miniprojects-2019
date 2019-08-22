@@ -23,10 +23,7 @@ public class ReplyService {
 
     public ReplyResponseDto save(ReplyRequestDto replyRequestDto, Long commentId, String email, Long videoId) {
         User writer = validatorService.getUserService().findByEmail(email);
-        Video video = validatorService.getVideoService().findVideo(videoId);
-        Comment comment = validatorService.getCommentService().findById(commentId);
-
-        comment.checkMatchVideo(video);
+        Comment comment = validatorService.findComment(commentId, videoId);
 
         Reply savedReply = replyRepository.save(Reply.of(replyRequestDto.getContents(), comment, writer));
         return ReplyResponseDto.of(savedReply.getId(),
@@ -37,12 +34,10 @@ public class ReplyService {
     @Transactional
     public ReplyResponseDto update(ReplyRequestDto replyRequestDto, String email, Long videoId, Long commentId, Long replyId) {
         User writer = validatorService.getUserService().findByEmail(email);
-        Video video = validatorService.getVideoService().findVideo(videoId);
-        Comment comment = validatorService.getCommentService().findById(commentId);
+        Comment comment = validatorService.findComment(commentId, videoId);
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(NotFoundReplyException::new);
 
-        comment.checkMatchVideo(video);
         reply.update(writer, comment, replyRequestDto.getContents());
         return ReplyResponseDto.of(reply.getId(),
                 reply.getContents(),
@@ -51,12 +46,10 @@ public class ReplyService {
 
     public void delete(Long videoId, Long commentId, Long replyId, String email) {
         User writer = validatorService.getUserService().findByEmail(email);
-        Video video = validatorService.getVideoService().findVideo(videoId);
-        Comment comment = validatorService.getCommentService().findById(commentId);
+        Comment comment = validatorService.findComment(commentId, videoId);
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(NotFoundReplyException::new);
 
-        comment.checkMatchVideo(video);
         reply.checkMatchWriter(writer);
         reply.checkMatchComment(comment);
 

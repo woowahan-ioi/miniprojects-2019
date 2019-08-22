@@ -183,41 +183,4 @@ public class CommonControllerTest {
                     jsonPath().
                     get("id");
     }
-
-    //TODO 수정이 필요한 메소드임........
-    int getCommentId() {
-        return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/1/comments").
-                    getBody().
-                    jsonPath().
-                    get("id");
-    }
-
-    //TODO 수정이 필요한 메소드임........
-    int getReplyId() {
-        int commentId = getCommentId();
-
-        return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
-                    getBody().
-                    jsonPath().
-                    get("id");
-    }
-
-    int getReplyId(int commentId) {
-        return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/1/comments/" + commentId + "/replies").
-                    getBody().
-                    jsonPath().
-                    get("id");
-    }
 }
