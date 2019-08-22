@@ -59,7 +59,7 @@ public class UserService {
 		return findByIdAndIsActiveTrue(userId).updateName(editUserRequestDto.getName());
 	}
 
-	private User findByIdAndIsActiveTrue(Long userId) {
+	public User findByIdAndIsActiveTrue(Long userId) {
 		return userRepository.findByIdAndIsActiveTrue(userId)
 				.orElseThrow(NotFoundUserException::new);
 	}
