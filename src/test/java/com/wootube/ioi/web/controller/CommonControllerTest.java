@@ -49,9 +49,6 @@ public class CommonControllerTest {
             "Update Contents",
             LocalDateTime.now());
 
-    public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
-    public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
-
     @LocalServerPort
     private int port;
 
@@ -67,31 +64,6 @@ public class CommonControllerTest {
 
     String basicPath() {
         return "http://localhost:" + port;
-    }
-
-    public WebTestClient.ResponseSpec request(HttpMethod method, String uri, MultiValueMap<String, String> data) {
-        return webTestClient.method(method)
-                .uri(uri)
-                .body(BodyInserters.fromFormData(data))
-                .exchange();
-    }
-
-    public WebTestClient.ResponseSpec request(HttpMethod method, String uri) {
-        return request(method, uri, new LinkedMultiValueMap<>());
-    }
-
-    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, MultiValueMap<String, String> data, LogInRequestDto logInRequestDto) {
-        String sessionValue = login(logInRequestDto);
-
-        return webTestClient.method(method)
-                .uri(uri)
-                .cookie("JSESSIONID", sessionValue)
-                .body(BodyInserters.fromFormData(data))
-                .exchange();
-    }
-
-    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri,LogInRequestDto logInRequestDto) {
-        return loginAndRequest(method, uri, new LinkedMultiValueMap<>(), logInRequestDto);
     }
 
     private MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {

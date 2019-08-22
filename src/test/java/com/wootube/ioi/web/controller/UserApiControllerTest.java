@@ -3,10 +3,10 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.service.dto.EmailCheckRequestDto;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -32,6 +32,7 @@ public class UserApiControllerTest {
 
     @BeforeEach
     void setUp() {
+        userRepository.deleteAll();
         userRepository.save(SAVED_USER);
     }
 
