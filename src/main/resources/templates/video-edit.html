@@ -14,7 +14,7 @@
               method="post"
               th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
             <input name="_method" th:if="not ${#strings.isEmpty(video)}" type="hidden" value="PUT">
-
+            <input type="hidden" name="userId" th:value="${session.user.id}">
             <div class="row">
                 <div class="video-enroll-div col-md-8">
                     <div class="video-contents">

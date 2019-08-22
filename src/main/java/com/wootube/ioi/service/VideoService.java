@@ -1,5 +1,8 @@
 package com.wootube.ioi.service;
 
+import java.util.List;
+import javax.transaction.Transactional;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.UserRepository;
@@ -10,11 +13,9 @@ import com.wootube.ioi.service.exception.NotFoundUserException;
 import com.wootube.ioi.service.exception.NotFoundVideoException;
 import com.wootube.ioi.service.util.FileUploader;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 public class VideoService {
@@ -31,12 +32,12 @@ public class VideoService {
         this.userRepository = userRepository;
     }
 
-    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long userId) {
+    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
         String videoUrl = fileUploader.uploadFile(uploadFile);
         String originFileName = uploadFile.getOriginalFilename();
 
         Video video = modelMapper.map(videoRequestDto, Video.class);
-        User writer = findUser(userId);
+        User writer = findUser(videoRequestDto.getUserId());
 
         video.initialize(videoUrl, originFileName, writer);
         return modelMapper.map(videoRepository.save(video), VideoResponseDto.class);
