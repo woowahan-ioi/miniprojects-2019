@@ -1,8 +1,11 @@
 package com.wootube.ioi.web.controller;
 
+import java.time.LocalDateTime;
+
 import com.wootube.ioi.service.dto.*;
 import com.wootube.ioi.web.config.TestConfig;
 import io.findify.s3mock.S3Mock;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,8 +19,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
-
-import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
 
@@ -90,7 +91,7 @@ public class CommonControllerTest {
                 .exchange();
     }
 
-    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri,LogInRequestDto logInRequestDto) {
+    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, LogInRequestDto logInRequestDto) {
         return loginAndRequest(method, uri, new LinkedMultiValueMap<>(), logInRequestDto);
     }
 
@@ -118,7 +119,7 @@ public class CommonControllerTest {
     }
 
 
-    private MultipartBodyBuilder createMultipartBodyBuilder() {
+    public MultipartBodyBuilder createMultipartBodyBuilder() {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("uploadFile", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
             @Override
@@ -128,6 +129,7 @@ public class CommonControllerTest {
         }, MediaType.parseMediaType("video/mp4"));
         bodyBuilder.part("title", "video_title");
         bodyBuilder.part("description", "video_description");
+        bodyBuilder.part("userId", 1);
         return bodyBuilder;
     }
 
