@@ -1,7 +1,7 @@
 package com.wootube.ioi.web.advice;
 
-import com.wootube.ioi.domain.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.exception.NotFoundVideoIdException;
+import com.wootube.ioi.service.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
 import com.wootube.ioi.web.controller.exception.InvalidUserException;
 import lombok.extern.slf4j.Slf4j;

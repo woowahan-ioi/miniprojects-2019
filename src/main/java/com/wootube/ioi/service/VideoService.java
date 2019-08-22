@@ -3,7 +3,6 @@ package com.wootube.ioi.service;
 import java.util.List;
 import javax.transaction.Transactional;
 
-import com.wootube.ioi.domain.exception.NotMatchUserIdException;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.UserRepository;
@@ -12,6 +11,7 @@ import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.service.exception.NotFoundUserException;
 import com.wootube.ioi.service.exception.NotFoundVideoIdException;
+import com.wootube.ioi.service.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
 import com.wootube.ioi.service.util.FileUploader;
 import org.modelmapper.ModelMapper;
