@@ -8,6 +8,7 @@ import com.wootube.ioi.domain.repository.ReplyRepository;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.service.exception.NotFoundReplyException;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +18,14 @@ public class ReplyService {
     private final UserService userService;
     private final VideoService videoService;
     private final CommentService commentService;
+    private final ModelMapper modelMapper;
 
-    public ReplyService(ReplyRepository replyRepository, UserService userService, VideoService videoService, CommentService commentService) {
+    public ReplyService(ReplyRepository replyRepository, UserService userService, VideoService videoService, CommentService commentService, ModelMapper modelMapper) {
         this.replyRepository = replyRepository;
         this.userService = userService;
         this.videoService = videoService;
         this.commentService = commentService;
+        this.modelMapper = modelMapper;
     }
 
     public ReplyResponseDto save(ReplyRequestDto replyRequestDto, Long commentId, String email, Long videoId) {
@@ -30,9 +33,7 @@ public class ReplyService {
         Comment comment = findComment(commentId, videoId);
 
         Reply savedReply = replyRepository.save(Reply.of(replyRequestDto.getContents(), comment, writer));
-        return ReplyResponseDto.of(savedReply.getId(),
-                savedReply.getContents(),
-                savedReply.getUpdateTime());
+        return modelMapper.map(savedReply, ReplyResponseDto.class);
     }
 
     @Transactional
@@ -43,9 +44,8 @@ public class ReplyService {
                 .orElseThrow(NotFoundReplyException::new);
 
         reply.update(writer, comment, replyRequestDto.getContents());
-        return ReplyResponseDto.of(reply.getId(),
-                reply.getContents(),
-                reply.getUpdateTime());
+        return modelMapper.map(reply, ReplyResponseDto.class);
+
     }
 
     public void delete(Long videoId, Long commentId, Long replyId, String email) {
