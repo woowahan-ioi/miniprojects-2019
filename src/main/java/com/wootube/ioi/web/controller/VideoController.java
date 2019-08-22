@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RequestMapping("/videos")
 @Controller
@@ -45,9 +46,10 @@ public class VideoController {
     }
 
     @GetMapping("/{id}")
-    public String video(@PathVariable Long id, Model model) {
-        model.addAttribute("video", videoService.findById(id));
-        return "video";
+    public RedirectView video(@PathVariable Long id, Model model) {
+        VideoResponseDto videoResponseDto = videoService.findById(id);
+        model.addAttribute("video", videoResponseDto);
+        return new RedirectView("/videos/"+videoResponseDto.getId());
     }
 
     @GetMapping("/{id}/edit")
