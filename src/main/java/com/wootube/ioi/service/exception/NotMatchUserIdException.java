@@ -1,4 +1,4 @@
-package com.wootube.ioi.domain.exception;
+package com.wootube.ioi.service.exception;
 
 public class NotMatchUserIdException extends RuntimeException {
 	public NotMatchUserIdException() {
