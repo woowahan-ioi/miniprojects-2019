@@ -14,29 +14,50 @@ import static org.springframework.http.HttpMethod.POST;
 @ExtendWith(SpringExtension.class)
 public class UserControllerTest extends CommonControllerTest {
 
-    @DisplayName("로그인 폼 페이지로 이동")
     @Test
+    @DisplayName("[로그인 X] 로그인 페이지로 이동")
     void loginForm() {
         request(GET, "/user/login")
                 .expectStatus().isOk();
     }
 
-    @DisplayName("회원가입 폼 페이지로 이동")
     @Test
+    @DisplayName("[로그인 O] 로그인 페이지로 이동")
+    void loginFormAfterLogin() {
+        loginAndRequest(GET, "/user/login", USER_A_LOGIN_REQUEST_DTO)
+                .expectStatus().isFound();
+    }
+
+    @Test
+    @DisplayName("[로그인 X] 회원가입 페이지로 이동")
     void signUpForm() {
         request(GET, "/user/signup")
                 .expectStatus().isOk();
     }
 
-    @DisplayName("로그인 하지 않고 마이 페이지로 이동")
     @Test
+    @DisplayName("[로그인 O] 회원가입 페이지로 이동")
+    void signUpFormAfterLogin() {
+        loginAndRequest(GET, "/user/signup", USER_A_LOGIN_REQUEST_DTO)
+                .expectStatus().isFound();
+    }
+
+    @Test
+    @DisplayName("[로그인 X] 마이 페이지로 이동")
     void mypage() {
         request(GET, "/user/mypage")
                 .expectStatus().isFound();
     }
 
-    @DisplayName("회원등록")
     @Test
+    @DisplayName("[로그인 O] 마이 페이지로 이동")
+    void mypageAfterLogin() {
+        loginAndRequest(GET, "/user/mypage", USER_A_LOGIN_REQUEST_DTO)
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DisplayName("회원등록")
     void signUp() {
         SignUpRequestDto signUpRequestDto = new SignUpRequestDto("루피", "luffy1@luffy.com", "1234567a");
 
@@ -44,15 +65,15 @@ public class UserControllerTest extends CommonControllerTest {
                 .expectStatus().isFound();
     }
 
-    @DisplayName("회원조회 (로그인 성공)")
     @Test
+    @DisplayName("회원조회 (로그인 성공)")
     void login() {
         request(POST, "/user/login", parser(USER_A_LOGIN_REQUEST_DTO))
                 .expectStatus().isFound();
     }
 
-    @DisplayName("회원조회 (로그인 실패)")
     @Test
+    @DisplayName("회원조회 (로그인 실패)")
     void loginFailedNoUser() {
         LogInRequestDto logInRequestDto = new LogInRequestDto("nono@luffy.com", "1234567a");
 
