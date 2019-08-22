@@ -90,7 +90,7 @@
 //    @Test
 //    @DisplayName("댓글을 수정한다.")
 //    void update() {
-//        given(commentRepository.findById(EXIST_COMMENT_ID)).willReturn(Optional.of(updateComment));
+//        given(commentRepository.findVideo(EXIST_COMMENT_ID)).willReturn(Optional.of(updateComment));
 //        given(modelMapper.map(updateComment, CommentResponseDto.class)).willReturn(COMMENT_RESPONSE2);
 //        given(videoService.findVideo(EXIST_COMMENT_ID)).willReturn(VIDEO);
 //        given(userService.findByEmail(WRITER.getEmail())).willReturn(WRITER);
@@ -109,7 +109,7 @@
 //    @Test
 //    @DisplayName("댓글을 삭제한다.")
 //    void delete() {
-//        given(commentRepository.findById(EXIST_COMMENT_ID)).willReturn(Optional.of(COMMENT1));
+//        given(commentRepository.findVideo(EXIST_COMMENT_ID)).willReturn(Optional.of(COMMENT1));
 //
 //        commentService.delete(EXIST_COMMENT_ID);
 //

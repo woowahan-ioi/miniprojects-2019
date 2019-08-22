@@ -49,7 +49,7 @@ public class CommonControllerTest {
             "Update Contents",
             LocalDateTime.now());
 
-    public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
+    public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("findById@test.com", "1234qwer");
     public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
 
     @LocalServerPort

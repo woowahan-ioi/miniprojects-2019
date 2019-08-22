@@ -1,5 +1,5 @@
 INSERT INTO user(name, email, password, is_active)
-VALUES ('회원에이', 'a@test.com', '1234qwer', true);
+VALUES ('회원에이', 'findById@test.com', '1234qwer', true);
 
 INSERT INTO user(name, email, password, is_active)
 VALUES ('회원비', 'b@test.com', '1234qwer', true);
