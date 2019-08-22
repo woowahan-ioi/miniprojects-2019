@@ -14,16 +14,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReplyService {
     private final ReplyRepository replyRepository;
-    private final ValidatorService validatorService;
+    private final UserService userService;
+    private final VideoService videoService;
+    private final CommentService commentService;
 
-    public ReplyService(ReplyRepository replyRepository, ValidatorService validatorService) {
+    public ReplyService(ReplyRepository replyRepository, UserService userService, VideoService videoService, CommentService commentService) {
         this.replyRepository = replyRepository;
-        this.validatorService = validatorService;
+        this.userService = userService;
+        this.videoService = videoService;
+        this.commentService = commentService;
     }
 
     public ReplyResponseDto save(ReplyRequestDto replyRequestDto, Long commentId, String email, Long videoId) {
-        User writer = validatorService.getUserService().findByEmail(email);
-        Comment comment = validatorService.findComment(commentId, videoId);
+        User writer = userService.findByEmail(email);
+        Comment comment = findComment(commentId, videoId);
 
         Reply savedReply = replyRepository.save(Reply.of(replyRequestDto.getContents(), comment, writer));
         return ReplyResponseDto.of(savedReply.getId(),
@@ -33,8 +37,8 @@ public class ReplyService {
 
     @Transactional
     public ReplyResponseDto update(ReplyRequestDto replyRequestDto, String email, Long videoId, Long commentId, Long replyId) {
-        User writer = validatorService.getUserService().findByEmail(email);
-        Comment comment = validatorService.findComment(commentId, videoId);
+        User writer = userService.findByEmail(email);
+        Comment comment = findComment(commentId, videoId);
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(NotFoundReplyException::new);
 
@@ -45,8 +49,8 @@ public class ReplyService {
     }
 
     public void delete(Long videoId, Long commentId, Long replyId, String email) {
-        User writer = validatorService.getUserService().findByEmail(email);
-        Comment comment = validatorService.findComment(commentId, videoId);
+        User writer = userService.findByEmail(email);
+        Comment comment = findComment(commentId, videoId);
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(NotFoundReplyException::new);
 
@@ -54,5 +58,13 @@ public class ReplyService {
         reply.checkMatchComment(comment);
 
         replyRepository.delete(reply);
+    }
+
+    private Comment findComment(Long commentId, Long videoId) {
+        Video video = videoService.findVideo(videoId);
+        Comment comment = commentService.findById(commentId);
+
+        comment.checkMatchVideo(video);
+        return comment;
     }
 }
