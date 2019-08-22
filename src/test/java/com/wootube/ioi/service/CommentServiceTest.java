@@ -1,10 +1,7 @@
 package com.wootube.ioi.service;
 
 import com.wootube.ioi.domain.model.Comment;
-import com.wootube.ioi.domain.model.User;
-import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.CommentRepository;
-import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.exception.NotFoundCommentException;
 import org.junit.jupiter.api.DisplayName;
@@ -15,37 +12,15 @@ import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static com.wootube.ioi.service.testutil.TestUtil.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 public class CommentServiceTest {
-    private static final Long EXIST_COMMENT_ID = 1L;
-    private static final Long EXIST_VIDEO_ID = 1L;
-    private static final Long NOT_EXIST_COMMENT_ID = 0L;
-
-    private static final String COMMENT1_CONTENTS = "Comment Contents 1";
-    private static final String COMMENT2_CONTENTS = "Comment Contents 2";
-
-    private static final CommentRequestDto COMMENT_REQUEST1 = CommentRequestDto.of(COMMENT1_CONTENTS);
-    private static final CommentRequestDto COMMENT_REQUEST2 = CommentRequestDto.of(COMMENT2_CONTENTS);
-
-    private static final Video VIDEO = new Video("test", "test");
-    private static final User WRITER = new User("name", "test@email.com", "1234qwer");
-
-    private static final Comment COMMENT1 = Comment.of(COMMENT_REQUEST1.getContents(), VIDEO, WRITER);
-
-    private static final CommentResponseDto COMMENT_RESPONSE1 = CommentResponseDto.of(EXIST_COMMENT_ID,
-            "Comment Contents 1",
-            LocalDateTime.now());
-    private static final CommentResponseDto COMMENT_RESPONSE2 = CommentResponseDto.of(EXIST_COMMENT_ID,
-            "Comment Contents 2",
-            LocalDateTime.now());
-
     @Mock
     private CommentRepository commentRepository;
 
