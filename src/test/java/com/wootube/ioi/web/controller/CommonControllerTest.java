@@ -94,7 +94,7 @@ public class CommonControllerTest {
         return loginAndRequest(method, uri, new LinkedMultiValueMap<>(), logInRequestDto);
     }
 
-    private MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {
+    public MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("name", signUpRequestDto.getName());
         multiValueMap.add("email", signUpRequestDto.getEmail());
@@ -102,7 +102,7 @@ public class CommonControllerTest {
         return multiValueMap;
     }
 
-    private MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
+    public MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("email", logInRequestDto.getEmail());
         multiValueMap.add("password", logInRequestDto.getPassword());
