@@ -17,23 +17,12 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "is_active")
-    protected Boolean isActive = true;
-
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createTime;
 
     @UpdateTimestamp
     private LocalDateTime updateTime;
-
-    public void softDelete() {
-        if (!this.isActive) {
-            throw new InactivatedException();
-        }
-
-        this.isActive = false;
-    }
 
     public boolean isSameUserAndWriter(Long userId) {
         return id.equals(userId);
