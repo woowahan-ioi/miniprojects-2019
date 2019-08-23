@@ -1,9 +1,8 @@
 package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.domain.exception.NotMatchCommentException;
-
 import javax.persistence.*;
 
+import com.wootube.ioi.domain.exception.NotMatchCommentException;
 import com.wootube.ioi.domain.exception.NotMatchWriterException;
 import lombok.AccessLevel;
 import lombok.Getter;

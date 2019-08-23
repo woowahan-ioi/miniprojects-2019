@@ -1,12 +1,11 @@
 package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -56,11 +55,7 @@ public class Video extends BaseEntity {
         this.writer = writer;
     }
 
-    public Video matchWriter(Long userId) {
-        if (!userId.equals(writer.getId())) {
-            throw new UserAndWriterMisMatchException();
-        }
-
-        return this;
+    public boolean matchWriter(Long userId) {
+        return userId.equals(writer.getId());
     }
 }

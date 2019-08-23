@@ -1,5 +1,7 @@
 package com.wootube.ioi.service.testutil;
 
+import java.time.LocalDateTime;
+
 import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.model.Reply;
 import com.wootube.ioi.domain.model.User;
@@ -8,8 +10,6 @@ import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
-
-import java.time.LocalDateTime;
 
 public class TestUtil {
     public static final Video VIDEO = new Video("test", "test");

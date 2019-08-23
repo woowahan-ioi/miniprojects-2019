@@ -10,6 +10,9 @@ VALUES ('video_a', '비디오 에이 입니다.', 'pathA', 'video_a.mp4', 1);
 INSERT INTO video (title, description, content_path, origin_file_name, writer_id)
 VALUES ('video_b', '비디오 비 입니다.', 'pathB', 'video_b.mp4', 2);
 
+INSERT INTO video (title, description, content_path, origin_file_name, writer_id)
+VALUES ('video_c', '비디오 씨 입니다.', 'pathC', 'video_c.mp4', 1);
+
 INSERT INTO comment (contents, video_id, writer_id)
 VALUES ('비디오 A의 회원 A의 댓글', 1, 1);
 

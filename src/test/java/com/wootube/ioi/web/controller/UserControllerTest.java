@@ -2,10 +2,10 @@ package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.springframework.http.HttpMethod.GET;

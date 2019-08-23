@@ -1,21 +1,24 @@
 package com.wootube.ioi.web.controller;
 
+import java.time.LocalDateTime;
+
 import com.wootube.ioi.service.dto.*;
 import com.wootube.ioi.web.config.TestConfig;
 import io.findify.s3mock.S3Mock;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
-
-import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
 
@@ -124,5 +127,19 @@ public class CommonControllerTest {
                 getBody().
                 jsonPath().
                 get("id");
+    }
+
+    public MultipartBodyBuilder createMultipartBodyBuilder() {
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("uploadFile", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
+            @Override
+            public String getFilename() {
+                return "test_file.mp4";
+            }
+        }, MediaType.parseMediaType("video/mp4"));
+        bodyBuilder.part("title", "video_title");
+        bodyBuilder.part("description", "video_description");
+        bodyBuilder.part("userId", 1);
+        return bodyBuilder;
     }
 }

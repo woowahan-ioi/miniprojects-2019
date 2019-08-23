@@ -1,9 +1,9 @@
 package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.service.dto.EmailCheckRequestDto;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
