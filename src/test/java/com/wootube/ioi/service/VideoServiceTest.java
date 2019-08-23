@@ -6,6 +6,7 @@ import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
+import com.wootube.ioi.service.testutil.TestUtil;
 import com.wootube.ioi.service.util.FileUploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,20 +28,7 @@ import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
-class VideoServiceTest {
-    private static final String TITLE = "title";
-    private static final String DESCRIPTION = "description";
-    private static final String CONTENTS = "<<testVideo data>>";
-    private static final String UPDATE_TITLE = "title";
-    private static final String UPDATE_DESCRIPTION = "description";
-    private static final String UPDATE_CONTENTS = "<<update testVideo data>>";
-    private static final Long USER_ID = 1L;
-    private static final Long OTHER_USER_ID = 2L;
-
-    private static final Long ID = 1L;
-    private static final String DIRECTORY = "wootube";
-    private static final String FILE_NAME = "testVideo.mp4";
-    private static final String UPDATE_FILE_NAME = "changeTestVideo.mp4";
+class VideoServiceTest extends TestUtil {
 
     @Mock
     private VideoRepository videoRepository;
@@ -69,7 +57,7 @@ class VideoServiceTest {
     @BeforeEach
     void setUp() {
         writer = new User();
-        fileFullPath = String.format("%s/%s", DIRECTORY, FILE_NAME);
+        fileFullPath = String.format("%s/%s",DIRECTORY, FILE_NAME);
 
         testUploadFile = new MockMultipartFile(fileFullPath, FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
 

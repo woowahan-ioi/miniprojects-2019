@@ -1,19 +1,19 @@
 package com.wootube.ioi.service;
 
-import java.util.Optional;
-
 import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.repository.CommentRepository;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.exception.NotFoundCommentException;
+import com.wootube.ioi.service.testutil.TestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
-
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
 
 import static com.wootube.ioi.service.testutil.TestUtil.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
-public class CommentServiceTest {
+public class CommentServiceTest extends TestUtil {
     @Mock
     private CommentRepository commentRepository;
 
