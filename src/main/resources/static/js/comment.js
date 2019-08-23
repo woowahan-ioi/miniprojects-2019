@@ -172,6 +172,8 @@ const commentButton = (function () {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
                     target.closest("li").remove();
+                    let currentCommentCount = parseInt(commentCount.innerText)
+                    commentCount.innerText = String(currentCommentCount - 1);
                 } else {
                     throw response;
                 }
