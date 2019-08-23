@@ -3,6 +3,7 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
@@ -57,7 +58,7 @@ public class CommentApiControllerTest extends CommonControllerTest {
         when().
                 post(basicPath() + "/api/videos/" + NOT_EXIST_VIDEO_ID + "/comments").
         then().
-                statusCode(400);
+                statusCode(302);
     }
 
     @Test
