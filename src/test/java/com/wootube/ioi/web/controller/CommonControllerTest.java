@@ -8,10 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -29,19 +27,14 @@ public class CommonControllerTest {
     static final Long NOT_EXIST_COMMENT_ID = 0L;
     static final Long NOT_EXIST_REPLY_ID = 0L;
     static final Long NOT_EXIST_VIDEO_ID = 0L;
-
     static final Long USER_A_VIDEO_ID = 1L;
     static final Long USER_B_VIDEO_ID = 2L;
-
     static final Long USER_A_VIDEO_USER_A_COMMENT = 1L;
     static final Long USER_A_VIDEO_USER_B_COMMENT = 2L;
     static final Long USER_B_VIDEO_USER_A_COMMENT = 3L;
     static final Long USER_B_VIDEO_USER_B_COMMENT = 4L;
-
-
     static final SignUpRequestDto SIGN_UP_COMMON_REQUEST_DTO = new SignUpRequestDto("루피", "luffy@luffy.com", "1234567a");
     static final LogInRequestDto LOG_IN_COMMON_REQUEST_DTO = new LogInRequestDto("luffy@luffy.com", "1234567a");
-
     static final CommentResponseDto SAVE_COMMENT_RESPONSE = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents",
             LocalDateTime.now());
@@ -54,15 +47,18 @@ public class CommonControllerTest {
     static final ReplyResponseDto UPDATE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Update Contents",
             LocalDateTime.now());
-
     public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
     public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
-
     @LocalServerPort
     private int port;
-
     @Autowired
     private WebTestClient webTestClient;
+    @Autowired
+    private S3Mock s3Mock;
+
+    private void stopS3Mock() {
+        s3Mock.stop();
+    }
 
     String basicPath() {
         return "http://localhost:" + port;
@@ -79,10 +75,18 @@ public class CommonControllerTest {
         return request(method, uri, new LinkedMultiValueMap<>());
     }
 
-    private MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
+    public MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("email", logInRequestDto.getEmail());
         multiValueMap.add("password", logInRequestDto.getPassword());
+        return multiValueMap;
+    }
+
+    public MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.add("name", signUpRequestDto.getName());
+        multiValueMap.add("email", signUpRequestDto.getEmail());
+        multiValueMap.add("password", signUpRequestDto.getPassword());
         return multiValueMap;
     }
 
@@ -97,15 +101,28 @@ public class CommonControllerTest {
                 .getValue();
     }
 
+    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, MultiValueMap<String, String> data, LogInRequestDto logInRequestDto) {
+        String sessionValue = login(logInRequestDto);
+        return webTestClient.method(method)
+                .uri(uri)
+                .cookie("JSESSIONID", sessionValue)
+                .body(BodyInserters.fromFormData(data))
+                .exchange();
+    }
+
+    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, LogInRequestDto logInRequestDto) {
+        return loginAndRequest(method, uri, new LinkedMultiValueMap<>(), logInRequestDto);
+    }
+
     int getSavedReplyId(Long videoId, Long commentId, String sessionId) {
         return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    cookie("JSESSIONID", sessionId).
-                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                cookie("JSESSIONID", sessionId).
+                body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
                 when().
-                    post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
-                    getBody().
-                    jsonPath().
-                    get("id");
+                post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
+                getBody().
+                jsonPath().
+                get("id");
     }
 }
