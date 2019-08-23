@@ -56,7 +56,7 @@ public class VideoController {
     public String updateVideoPage(@PathVariable Long id, Model model) {
         Long userId = checkUserSession();
         videoService.matchWriter(userId, id);
-        model.addAttribute("video", videoService.findById(id));
+        model.addAttribute("video", videoService.findVideo(id));
         return "video-edit";
     }
 
