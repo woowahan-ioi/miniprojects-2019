@@ -61,7 +61,7 @@ class VideoControllerTest extends CommonControllerTest {
 
         bodyBuilder.part("title", "video_title");
         bodyBuilder.part("description", "video_description");
-        bodyBuilder.part("userId", 1);
+        bodyBuilder.part("writerId", 1);
 
         requestWithBodyBuilder(bodyBuilder, POST, "/videos/new")
                 .expectStatus().isFound();
@@ -172,7 +172,7 @@ class VideoControllerTest extends CommonControllerTest {
         }, MediaType.parseMediaType("video/mp4"));
         bodyBuilder.part("title", "video_title");
         bodyBuilder.part("description", "video_description");
-        bodyBuilder.part("userId", 1);
+        bodyBuilder.part("writerId", 1);
         return bodyBuilder;
     }
 }

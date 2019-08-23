@@ -45,7 +45,7 @@ public class CommentServiceTest {
     void save() {
         given(commentRepository.save(COMMENT1)).willReturn(COMMENT1);
         given(modelMapper.map(COMMENT1, CommentResponseDto.class)).willReturn(COMMENT_RESPONSE1);
-        given(videoService.findVideo(EXIST_COMMENT_ID)).willReturn(VIDEO);
+        given(videoService.findById(EXIST_COMMENT_ID)).willReturn(VIDEO);
         given(userService.findByEmail(WRITER.getEmail())).willReturn(WRITER);
 
         commentService.save(COMMENT_REQUEST1, VIDEO.getId(), WRITER.getEmail());
@@ -58,7 +58,7 @@ public class CommentServiceTest {
     void update() {
         given(commentRepository.findById(EXIST_COMMENT_ID)).willReturn(Optional.of(updateComment));
         given(modelMapper.map(updateComment, CommentResponseDto.class)).willReturn(COMMENT_RESPONSE2);
-        given(videoService.findVideo(EXIST_COMMENT_ID)).willReturn(VIDEO);
+        given(videoService.findById(EXIST_COMMENT_ID)).willReturn(VIDEO);
         given(userService.findByEmail(WRITER.getEmail())).willReturn(WRITER);
 
         commentService.update(EXIST_COMMENT_ID, WRITER.getEmail(), EXIST_COMMENT_ID, COMMENT_REQUEST2);
@@ -77,7 +77,7 @@ public class CommentServiceTest {
     void delete() {
         given(commentRepository.findById(EXIST_COMMENT_ID)).willReturn(Optional.of(COMMENT1));
         given(userService.findByEmail(WRITER.getEmail())).willReturn(WRITER);
-        given(videoService.findVideo(EXIST_VIDEO_ID)).willReturn(VIDEO);
+        given(videoService.findById(EXIST_VIDEO_ID)).willReturn(VIDEO);
 
         commentService.delete(EXIST_COMMENT_ID, WRITER.getEmail(), EXIST_VIDEO_ID);
 

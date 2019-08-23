@@ -62,7 +62,7 @@ public class ReplyService {
     }
 
     private Comment findComment(Long commentId, Long videoId) {
-        Video video = videoService.findVideo(videoId);
+        Video video = videoService.findById(videoId);
         Comment comment = commentService.findById(commentId);
 
         comment.checkMatchVideo(video);
