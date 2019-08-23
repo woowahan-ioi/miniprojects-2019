@@ -2,6 +2,7 @@ package com.wootube.ioi.web.controller;
 
 import java.time.LocalDateTime;
 
+import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.service.dto.*;
 import com.wootube.ioi.web.config.TestConfig;
 import io.findify.s3mock.S3Mock;
@@ -38,18 +39,19 @@ public class CommonControllerTest {
     static final Long USER_B_VIDEO_USER_B_COMMENT = 4L;
     static final SignUpRequestDto SIGN_UP_COMMON_REQUEST_DTO = new SignUpRequestDto("루피", "luffy@luffy.com", "1234567a");
     static final LogInRequestDto LOG_IN_COMMON_REQUEST_DTO = new LogInRequestDto("luffy@luffy.com", "1234567a");
+    static final User SIGN_UP_USER = new User(SIGN_UP_COMMON_REQUEST_DTO.getName(), SIGN_UP_COMMON_REQUEST_DTO.getEmail(), SIGN_UP_COMMON_REQUEST_DTO.getPassword());
     static final CommentResponseDto SAVE_COMMENT_RESPONSE = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents",
-            LocalDateTime.now());
+            LocalDateTime.now(), SIGN_UP_USER);
     static final CommentResponseDto UPDATE_COMMENT_RESPONSE = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Update Contents",
-            LocalDateTime.now());
+            LocalDateTime.now(), SIGN_UP_USER);
     static final ReplyResponseDto SAVE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Reply Contents",
-            LocalDateTime.now());
+            LocalDateTime.now(), SIGN_UP_USER);
     static final ReplyResponseDto UPDATE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Update Contents",
-            LocalDateTime.now());
+            LocalDateTime.now(), SIGN_UP_USER);
     public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
     public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
     @LocalServerPort

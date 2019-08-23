@@ -172,6 +172,8 @@ const commentButton = (function () {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
                     target.closest("li").remove();
+                    let currentCommentCount = parseInt(commentCount.innerText)
+                    commentCount.innerText = String(currentCommentCount - 1);
                 } else {
                     throw response;
                 }
@@ -187,7 +189,7 @@ const commentButton = (function () {
                 <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                 <div class="comment-block">
                     <div class="font-size-13">
-                        <span class="user-name">${comment.authorName}</span>
+                        <span class="user-name">${comment.writer.name}</span>
                         <span class="update-date">${writtenTime}</span>
                     </div>
                     <div class="comment-more-box">

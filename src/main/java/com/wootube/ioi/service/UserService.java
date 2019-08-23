@@ -43,7 +43,7 @@ public class UserService {
 	}
 
 	private void checkInActive(User savedEmail) {
-		if (!savedEmail.getIsActive()) {
+		if (!savedEmail.isActive()) {
 			emailService.sendMessage(savedEmail.getEmail());
 			throw new InActivatedUserException();
 		}
@@ -67,7 +67,7 @@ public class UserService {
 	@Transactional
 	public User deleteUser(Long userId) {
 		User deleteTargetUser = findByIdAndIsActiveTrue(userId);
-		deleteTargetUser.softDelete();
+		deleteTargetUser.delete();
 		return deleteTargetUser;
 	}
 

@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
 import com.wootube.ioi.domain.exception.ActivatedException;
+import com.wootube.ioi.domain.exception.InactivatedException;
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.validator.Password;
 import lombok.Getter;
@@ -33,6 +34,11 @@ public class User extends BaseEntity {
     @Password(message = "비밀번호 양식 오류, 8-32자, 영문자 숫자 조합")
     private String password;
 
+
+    @Column(name = "is_active")
+    private boolean isActive = true;
+
+
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -51,8 +57,16 @@ public class User extends BaseEntity {
         return this;
     }
 
+    public void delete() {
+        if (!this.isActive) {
+            throw new InactivatedException();
+        }
+
+        this.isActive = false;
+    }
+
     public void activeUser() {
-        if(this.isActive) {
+        if (this.isActive) {
             throw new ActivatedException();
         }
         this.isActive = true;

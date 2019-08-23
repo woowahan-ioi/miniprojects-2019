@@ -4,7 +4,6 @@ import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
@@ -15,7 +14,6 @@ public class ReplyApiControllerTest extends CommonControllerTest {
     @DisplayName("답글을 생성한다.")
     void createReply() {
         String sessionValue = login(USER_A_LOGIN_REQUEST_DTO);
-
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionValue).
@@ -34,7 +32,6 @@ public class ReplyApiControllerTest extends CommonControllerTest {
     void updateReply() {
         String sessionId = login(USER_A_LOGIN_REQUEST_DTO);
         int replyId = getSavedReplyId(USER_A_VIDEO_ID, USER_A_VIDEO_USER_A_COMMENT, sessionId);
-
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
@@ -49,7 +46,6 @@ public class ReplyApiControllerTest extends CommonControllerTest {
     @DisplayName("답글이 존재하지 않는 경우 예외가 발생한다.")
     void notExistReplyUpdate() {
         String sessionId = login(USER_A_LOGIN_REQUEST_DTO);
-
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
@@ -65,7 +61,6 @@ public class ReplyApiControllerTest extends CommonControllerTest {
     void notExistCommentUpdate() {
         String sessionId = login(USER_A_LOGIN_REQUEST_DTO);
         int replyId = getSavedReplyId(USER_A_VIDEO_ID, USER_A_VIDEO_USER_A_COMMENT, sessionId);
-
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
@@ -81,7 +76,6 @@ public class ReplyApiControllerTest extends CommonControllerTest {
     void deleteReply() {
         String sessionId = login(USER_A_LOGIN_REQUEST_DTO);
         int replyId = getSavedReplyId(USER_A_VIDEO_ID, USER_A_VIDEO_USER_A_COMMENT, sessionId);
-
         given().
                 cookie("JSESSIONID", sessionId).
                 when().
@@ -94,7 +88,6 @@ public class ReplyApiControllerTest extends CommonControllerTest {
     @DisplayName("존재하지 않는 답글을 삭제하는 경우 예외가 발생한다.")
     void deleteReplyFail2() {
         String sessionId = login(USER_A_LOGIN_REQUEST_DTO);
-
         given().
                 cookie("JSESSIONID", sessionId).
                 when().
@@ -114,4 +107,5 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 jsonPath().
                 get("id");
     }
+
 }
