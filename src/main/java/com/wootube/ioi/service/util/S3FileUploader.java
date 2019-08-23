@@ -13,13 +13,13 @@ import java.io.File;
 public class S3FileUploader implements FileUploader {
     static final String DIRECTORY_NAME = "wootube";
 
-    @Qualifier(value = "amazonS3Client")
-    final AmazonS3 amazonS3Client;
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    private final AmazonS3 amazonS3Client;
+    private final String bucket;
 
-    public S3FileUploader(AmazonS3 amazonS3Client) {
+    public S3FileUploader(@Qualifier(value = "amazonS3Client") AmazonS3 amazonS3Client,
+                          @Value("${cloud.aws.s3.bucket}") String bucket) {
         this.amazonS3Client = amazonS3Client;
+        this.bucket = bucket;
     }
 
     public String uploadCloud(File uploadFile) {

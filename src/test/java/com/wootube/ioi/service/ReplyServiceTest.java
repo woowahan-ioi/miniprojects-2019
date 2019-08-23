@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.wootube.ioi.domain.model.Reply;
 import com.wootube.ioi.domain.repository.ReplyRepository;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
+import com.wootube.ioi.service.testutil.TestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(SpringExtension.class)
-public class ReplyServiceTest {
+public class ReplyServiceTest extends TestUtil {
 
     @Mock
     ReplyRepository replyRepository;

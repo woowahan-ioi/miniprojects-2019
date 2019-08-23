@@ -20,7 +20,6 @@ import java.util.List;
 
 @Service
 public class VideoService {
-    private static final Logger log = LoggerFactory.getLogger(VideoService.class);
     private final FileUploader fileUploader;
     private final ModelMapper modelMapper;
 
