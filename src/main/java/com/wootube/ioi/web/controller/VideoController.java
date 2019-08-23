@@ -47,7 +47,7 @@ public class VideoController {
 
     @GetMapping("/{id}")
     public String video(@PathVariable Long id, Model model) {
-        VideoResponseDto videoResponseDto = videoService.findById(id);
+        VideoResponseDto videoResponseDto = videoService.findVideo(id);
         model.addAttribute("video", videoResponseDto);
         return "video";
     }
