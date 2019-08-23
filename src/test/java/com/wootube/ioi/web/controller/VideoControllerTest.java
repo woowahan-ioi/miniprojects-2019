@@ -171,7 +171,7 @@ class VideoControllerTest extends CommonControllerTest {
 				.returnResult(String.class).getResponseHeaders().getFirst("Set-Cookie");
 	}
 
-	private MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
+	public MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
 		MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
 		multiValueMap.add("email", logInRequestDto.getEmail());
 		multiValueMap.add("password", logInRequestDto.getPassword());

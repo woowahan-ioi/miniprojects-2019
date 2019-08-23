@@ -216,7 +216,7 @@ const commentButton = (function () {
                     <button class="btn comment-btn comment-update-cancel-btn">취소</button>
                     <button class="btn comment-btn edit comment-update-btn">수정</button>
                 </div>
-                <div class="mrg-top-5">
+                <div class="mrg-top-5 reply-area">
                     <div class="reply-edit display-none">
                         <div class="mrg-btm-10">
                             <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
@@ -226,7 +226,7 @@ const commentButton = (function () {
                         <button class="btn comment-btn edit reply-save-btn disabled">답글</button>
                         <button class="btn comment-btn reply-cancel-btn">취소</button>
                     </div>
-                    <ul class="reply-area">
+                    <ul class="reply-list">
 
                     </ul>
                 </div>

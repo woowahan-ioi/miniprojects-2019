@@ -33,7 +33,6 @@ const replyButton = (function () {
             const id = event.target.closest("li").dataset.commentid;
             const inputComment = event.target.closest("div").querySelector("input");
 
-            console.log(inputComment)
             fetch('/api/videos/' + videoId + '/comments/' + id + '/replies', {
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8'
@@ -48,8 +47,9 @@ const replyButton = (function () {
                 }
                 throw response;
             }).then(comment => {
-                appendReply(comment, event);
+                appendReply(comment, event.target);
                 inputComment.value = "";
+                event.target.closest(".reply-edit").classList.add("display-none")
             }).catch(error => {
                 error.text().then(json => alert(json))
             });
@@ -75,7 +75,7 @@ const replyButton = (function () {
             event.target.parentElement.parentElement.querySelector(".edit").classList.add("disabled")
         }
 
-        function appendReply(reply, event) {
+        function appendReply(reply, target) {
             const writtenTime = calculateWrittenTime(reply.updateTime);
 
             const replyTemplate = `<li class="reply mrg-btm-30" data-commentid="${reply.id}">
@@ -112,7 +112,7 @@ const replyButton = (function () {
                             </div>
                         </li>`;
 
-            const replyList = event.target.closest("reply-area").querySelector(".reply-list");
+            const replyList = target.closest(".reply-area").querySelector(".reply-list");
 
             replyList.insertAdjacentHTML("beforeend", replyTemplate);
         }

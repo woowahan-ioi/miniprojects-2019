@@ -1,13 +1,14 @@
 package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.domain.exception.NotMatchCommentException;
-
 import javax.persistence.*;
 
+import com.wootube.ioi.domain.exception.NotMatchCommentException;
 import com.wootube.ioi.domain.exception.NotMatchWriterException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -19,6 +20,7 @@ public class Reply extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_comment"), nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment comment;
 
     @ManyToOne(fetch = FetchType.LAZY)

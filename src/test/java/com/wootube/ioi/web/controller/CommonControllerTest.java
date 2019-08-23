@@ -30,13 +30,14 @@ public class CommonControllerTest {
     static final Long NOT_EXIST_COMMENT_ID = 0L;
     static final Long NOT_EXIST_REPLY_ID = 0L;
     static final Long NOT_EXIST_VIDEO_ID = 0L;
-
+    static final Long USER_A_VIDEO_ID = 1L;
+    static final Long USER_B_VIDEO_ID = 2L;
+    static final Long USER_A_VIDEO_USER_A_COMMENT = 1L;
+    static final Long USER_A_VIDEO_USER_B_COMMENT = 2L;
+    static final Long USER_B_VIDEO_USER_A_COMMENT = 3L;
+    static final Long USER_B_VIDEO_USER_B_COMMENT = 4L;
     static final SignUpRequestDto SIGN_UP_COMMON_REQUEST_DTO = new SignUpRequestDto("루피", "luffy@luffy.com", "1234567a");
     static final LogInRequestDto LOG_IN_COMMON_REQUEST_DTO = new LogInRequestDto("luffy@luffy.com", "1234567a");
-    static final SignUpRequestDto SIGN_UP_SECOND_USER_DTO = new SignUpRequestDto("효오", "hyo@test.com", "1234qwer");
-    static final LogInRequestDto LOG_IN_SECOND_USER_DTO = new LogInRequestDto("hyo@test.com", "1234qwer");
-
-
     static final CommentResponseDto SAVE_COMMENT_RESPONSE = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents",
             LocalDateTime.now());
@@ -49,16 +50,12 @@ public class CommonControllerTest {
     static final ReplyResponseDto UPDATE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Update Contents",
             LocalDateTime.now());
-
     public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
     public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
-
     @LocalServerPort
     private int port;
-
     @Autowired
     private WebTestClient webTestClient;
-
     @Autowired
     private S3Mock s3Mock;
 
@@ -81,63 +78,19 @@ public class CommonControllerTest {
         return request(method, uri, new LinkedMultiValueMap<>());
     }
 
-    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, MultiValueMap<String, String> data, LogInRequestDto logInRequestDto) {
-        String sessionValue = login(logInRequestDto);
-
-        return webTestClient.method(method)
-                .uri(uri)
-                .cookie("JSESSIONID", sessionValue)
-                .body(BodyInserters.fromFormData(data))
-                .exchange();
-    }
-
-    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, LogInRequestDto logInRequestDto) {
-        return loginAndRequest(method, uri, new LinkedMultiValueMap<>(), logInRequestDto);
-    }
-
-    private MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {
-        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.add("name", signUpRequestDto.getName());
-        multiValueMap.add("email", signUpRequestDto.getEmail());
-        multiValueMap.add("password", signUpRequestDto.getPassword());
-        return multiValueMap;
-    }
-
-    private MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
+    public MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("email", logInRequestDto.getEmail());
         multiValueMap.add("password", logInRequestDto.getPassword());
         return multiValueMap;
     }
 
-    private WebTestClient.ResponseSpec requestWithBodyBuilder(MultipartBodyBuilder bodyBuilder, HttpMethod requestMethod, String requestUri, String sessionId) {
-        return webTestClient.method(requestMethod)
-                .uri(requestUri)
-                .cookie("JSESSIONID", sessionId)
-                .body(BodyInserters.fromObject(bodyBuilder.build()))
-                .exchange();
-    }
-
-
-    public MultipartBodyBuilder createMultipartBodyBuilder() {
-        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-        bodyBuilder.part("uploadFile", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
-            @Override
-            public String getFilename() {
-                return "test_file.mp4";
-            }
-        }, MediaType.parseMediaType("video/mp4"));
-        bodyBuilder.part("title", "video_title");
-        bodyBuilder.part("description", "video_description");
-        bodyBuilder.part("userId", 1);
-        return bodyBuilder;
-    }
-
-    void signup(SignUpRequestDto signUpRequestDto) {
-        webTestClient.post()
-                .uri("/user/signup")
-                .body(BodyInserters.fromFormData(parser(signUpRequestDto)))
-                .exchange();
+    public MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.add("name", signUpRequestDto.getName());
+        multiValueMap.add("email", signUpRequestDto.getEmail());
+        multiValueMap.add("password", signUpRequestDto.getPassword());
+        return multiValueMap;
     }
 
     String login(LogInRequestDto logInRequestDto) {
@@ -151,38 +104,42 @@ public class CommonControllerTest {
                 .getValue();
     }
 
-    String getSavedVideoId(String sessionId) {
-        String videoId = requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/videos/new", sessionId)
-                .returnResult(String.class)
-                .getResponseHeaders()
-                .getFirst("location");
-
-        stopS3Mock();
-        String[] urlValue = videoId.split("/");
-        return urlValue[urlValue.length - 1];
+    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, MultiValueMap<String, String> data, LogInRequestDto logInRequestDto) {
+        String sessionValue = login(logInRequestDto);
+        return webTestClient.method(method)
+                .uri(uri)
+                .cookie("JSESSIONID", sessionValue)
+                .body(BodyInserters.fromFormData(data))
+                .exchange();
     }
 
-    int getSavedCommentId(String sessionId, String videoId) {
-        return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    cookie("JSESSIONID", sessionId).
-                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/" + videoId + "/comments").
-                    getBody().
-                    jsonPath().
-                    get("id");
+    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, LogInRequestDto logInRequestDto) {
+        return loginAndRequest(method, uri, new LinkedMultiValueMap<>(), logInRequestDto);
     }
 
-    int getSavedReplyId(String videoId, int commentId, String sessionId) {
+    int getSavedReplyId(Long videoId, Long commentId, String sessionId) {
         return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    cookie("JSESSIONID", sessionId).
-                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                cookie("JSESSIONID", sessionId).
+                body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
                 when().
-                    post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
-                    getBody().
-                    jsonPath().
-                    get("id");
+                post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
+                getBody().
+                jsonPath().
+                get("id");
+    }
+
+    public MultipartBodyBuilder createMultipartBodyBuilder() {
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("uploadFile", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
+            @Override
+            public String getFilename() {
+                return "test_file.mp4";
+            }
+        }, MediaType.parseMediaType("video/mp4"));
+        bodyBuilder.part("title", "video_title");
+        bodyBuilder.part("description", "video_description");
+        bodyBuilder.part("userId", 1);
+        return bodyBuilder;
     }
 }
