@@ -31,10 +31,10 @@ public class VideoController {
     }
 
     @PostMapping("/new")
-    public String video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+    public RedirectView video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
         checkUserSession();
         VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto);
-        return "redirect:/videos/" + videoResponseDto.getId();
+        return new RedirectView("/videos/" + videoResponseDto.getId());
     }
 
     private Long checkUserSession() {
@@ -61,9 +61,9 @@ public class VideoController {
     }
 
     @PutMapping("/{id}")
-    public String updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+    public RedirectView updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
         checkUserSession();
         videoService.update(id, uploadFile, videoRequestDto);
-        return "redirect:/videos/" + id;
+        return new RedirectView("/videos/" + id);
     }
 }
