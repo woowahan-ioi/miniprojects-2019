@@ -1,5 +1,6 @@
 package com.wootube.ioi.web.controller;
 
+import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionValue).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 post(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies").
-        then().
+                then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_REPLY_RESPONSE.getContents())).
@@ -38,9 +39,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
                 body(ReplyRequestDto.of(UPDATE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(204);
     }
 
@@ -53,9 +54,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/" + NOT_EXIST_REPLY_ID).
-        then().
+                then().
                 statusCode(400);
     }
 
@@ -69,9 +70,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(400);
     }
 
@@ -83,9 +84,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
 
         given().
                 cookie("JSESSIONID", sessionId).
-        when().
+                when().
                 delete(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/" + replyId).
-        then().
+                then().
                 statusCode(204);
     }
 
@@ -96,9 +97,21 @@ public class ReplyApiControllerTest extends CommonControllerTest {
 
         given().
                 cookie("JSESSIONID", sessionId).
-        when().
-                delete(basicPath() + "/api/videos/"+ USER_A_VIDEO_ID +"/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/" + NOT_EXIST_REPLY_ID).
-        then().
+                when().
+                delete(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/" + NOT_EXIST_REPLY_ID).
+                then().
                 statusCode(400);
+    }
+
+    int getSavedReplyId(Long videoId, Long commentId, String sessionId) {
+        return given().
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                cookie("JSESSIONID", sessionId).
+                body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+                when().
+                post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
+                getBody().
+                jsonPath().
+                get("id");
     }
 }

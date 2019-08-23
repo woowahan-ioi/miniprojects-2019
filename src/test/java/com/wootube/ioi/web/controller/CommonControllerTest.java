@@ -104,7 +104,7 @@ public class CommonControllerTest {
                 .getValue();
     }
 
-    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, MultiValueMap<String, String> data, LogInRequestDto logInRequestDto) {
+    WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, MultiValueMap<String, String> data, LogInRequestDto logInRequestDto) {
         String sessionValue = login(logInRequestDto);
         return webTestClient.method(method)
                 .uri(uri)
@@ -113,33 +113,7 @@ public class CommonControllerTest {
                 .exchange();
     }
 
-    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, LogInRequestDto logInRequestDto) {
+    WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, LogInRequestDto logInRequestDto) {
         return loginAndRequest(method, uri, new LinkedMultiValueMap<>(), logInRequestDto);
-    }
-
-    int getSavedReplyId(Long videoId, Long commentId, String sessionId) {
-        return given().
-                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                cookie("JSESSIONID", sessionId).
-                body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-                when().
-                post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
-                getBody().
-                jsonPath().
-                get("id");
-    }
-
-    public MultipartBodyBuilder createMultipartBodyBuilder() {
-        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-        bodyBuilder.part("uploadFile", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
-            @Override
-            public String getFilename() {
-                return "test_file.mp4";
-            }
-        }, MediaType.parseMediaType("video/mp4"));
-        bodyBuilder.part("title", "video_title");
-        bodyBuilder.part("description", "video_description");
-        bodyBuilder.part("userId", 1);
-        return bodyBuilder;
     }
 }
