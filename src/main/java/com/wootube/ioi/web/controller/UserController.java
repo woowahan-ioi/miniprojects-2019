@@ -42,7 +42,7 @@ public class UserController {
     public String myPage(Model model) {
         UserSession userSession = userSessionManager.getUserSession();
         if (userSession.getId() != null) {
-            model.addAttribute("videos", videoService.findVideosByWriter(userSession.getId()));
+            model.addAttribute("videos", videoService.findAllByWriter(userSession.getId()));
         }
         return "mypage";
     }

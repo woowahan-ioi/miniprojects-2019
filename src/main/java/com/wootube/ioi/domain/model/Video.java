@@ -1,11 +1,11 @@
 package com.wootube.ioi.domain.model;
 
-import javax.persistence.*;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -56,6 +56,6 @@ public class Video extends BaseEntity {
     }
 
     public boolean matchWriter(Long userId) {
-        return userId.equals(writer.getId());
+        return writer.isSameUserAndWriter(userId);
     }
 }

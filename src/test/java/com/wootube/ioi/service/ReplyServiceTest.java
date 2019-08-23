@@ -47,7 +47,7 @@ public class ReplyServiceTest {
     @DisplayName("답글을 생성한다.")
     void save() {
         given(userService.findByEmail(WRITER.getEmail())).willReturn(WRITER);
-        given(videoService.findVideo(VIDEO.getId())).willReturn(VIDEO);
+        given(videoService.findById(VIDEO.getId())).willReturn(VIDEO);
         given(commentService.findById(COMMENT1.getId())).willReturn(COMMENT1);
         given(replyRepository.save(REPLY1)).willReturn(REPLY1);
         given(modelMapper.map(REPLY1, ReplyResponseDto.class)).willReturn(REPLY_RESPONSE_DTO1);
@@ -61,7 +61,7 @@ public class ReplyServiceTest {
     @DisplayName("답글을 수정한다.")
     void update() {
         given(userService.findByEmail(WRITER.getEmail())).willReturn(WRITER);
-        given(videoService.findVideo(VIDEO.getId())).willReturn(VIDEO);
+        given(videoService.findById(VIDEO.getId())).willReturn(VIDEO);
         given(commentService.findById(COMMENT1.getId())).willReturn(COMMENT1);
         given(replyRepository.findById(REPLY1.getId())).willReturn(Optional.of(updateReply));
         given(modelMapper.map(REPLY1, ReplyResponseDto.class)).willReturn(REPLY_RESPONSE_DTO1);
@@ -75,7 +75,7 @@ public class ReplyServiceTest {
     @DisplayName("답글을 삭제한다.")
     void delete() {
         given(userService.findByEmail(WRITER.getEmail())).willReturn(WRITER);
-        given(videoService.findVideo(VIDEO.getId())).willReturn(VIDEO);
+        given(videoService.findById(VIDEO.getId())).willReturn(VIDEO);
         given(commentService.findById(COMMENT1.getId())).willReturn(COMMENT1);
         given(replyRepository.findById(REPLY1.getId())).willReturn(Optional.of(REPLY1));
 

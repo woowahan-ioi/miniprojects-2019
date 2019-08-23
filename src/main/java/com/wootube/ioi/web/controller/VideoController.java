@@ -47,7 +47,7 @@ public class VideoController {
 
     @GetMapping("/{id}")
     public RedirectView video(@PathVariable Long id, Model model) {
-        VideoResponseDto videoResponseDto = videoService.findById(id);
+        VideoResponseDto videoResponseDto = videoService.findVideo(id);
         model.addAttribute("video", videoResponseDto);
         return new RedirectView("/videos/"+videoResponseDto.getId());
     }
@@ -56,7 +56,7 @@ public class VideoController {
     public String updateVideoPage(@PathVariable Long id, Model model) {
         Long userId = checkUserSession();
         videoService.matchWriter(userId, id);
-        model.addAttribute("video", videoService.findById(id));
+        model.addAttribute("video", videoService.findVideo(id));
         return "video-edit";
     }
 
