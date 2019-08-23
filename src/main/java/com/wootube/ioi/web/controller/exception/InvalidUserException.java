@@ -1,4 +1,4 @@
-package com.wootube.ioi.service.exception;
+package com.wootube.ioi.web.controller.exception;
 
 public class InvalidUserException extends RuntimeException {
     public InvalidUserException() {

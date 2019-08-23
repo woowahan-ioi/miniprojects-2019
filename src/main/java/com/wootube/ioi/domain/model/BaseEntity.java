@@ -34,4 +34,8 @@ public abstract class BaseEntity {
 
         this.isActive = false;
     }
+
+    public boolean isSameUserAndWriter(Long userId) {
+        return id.equals(userId);
+    }
 }

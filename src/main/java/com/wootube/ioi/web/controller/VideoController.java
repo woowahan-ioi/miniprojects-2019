@@ -3,7 +3,7 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
-import com.wootube.ioi.service.exception.InvalidUserException;
+import com.wootube.ioi.web.controller.exception.InvalidUserException;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
 import org.springframework.stereotype.Controller;

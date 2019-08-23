@@ -1,11 +1,9 @@
 package com.wootube.ioi.web.controller.api;
 
 import com.wootube.ioi.service.VideoService;
-import com.wootube.ioi.service.exception.InvalidUserException;
+import com.wootube.ioi.web.controller.exception.InvalidUserException;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
