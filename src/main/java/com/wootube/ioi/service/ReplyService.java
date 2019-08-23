@@ -8,58 +8,64 @@ import com.wootube.ioi.domain.repository.ReplyRepository;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.service.exception.NotFoundReplyException;
+import org.modelmapper.ModelMapper;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReplyService {
-//    private final ReplyRepository replyRepository;
-//    private final ValidatorService validatorService;
-//
-//    public ReplyService(ReplyRepository replyRepository, ValidatorService validatorService) {
-//        this.replyRepository = replyRepository;
-//        this.validatorService = validatorService;
-//    }
-//
-//    public ReplyResponseDto save(ReplyRequestDto replyRequestDto, Long commentId, String email, Long videoId) {
-//        User writer = validatorService.getUserService().findByEmail(email);
-//        Video video = validatorService.getVideoService().findVideo(videoId);
-//        Comment comment = validatorService.getCommentService().findVideo(commentId);
-//
-//        comment.checkMatchVideo(video);
-//
-//        Reply savedReply = replyRepository.save(Reply.of(replyRequestDto.getContents(), comment, writer));
-//        return ReplyResponseDto.of(savedReply.getId(),
-//                savedReply.getContents(),
-//                savedReply.getUpdateTime());
-//    }
-//
-//    @Transactional
-//    public ReplyResponseDto update(ReplyRequestDto replyRequestDto, String email, Long videoId, Long commentId, Long replyId) {
-//        User writer = validatorService.getUserService().findByEmail(email);
-//        Video video = validatorService.getVideoService().findVideo(videoId);
-//        Comment comment = validatorService.getCommentService().findVideo(commentId);
-//        Reply reply = replyRepository.findVideo(replyId)
-//                .orElseThrow(NotFoundReplyException::new);
-//
-//        comment.checkMatchVideo(video);
-//        reply.update(writer, comment, replyRequestDto.getContents());
-//        return ReplyResponseDto.of(reply.getId(),
-//                reply.getContents(),
-//                reply.getUpdateTime());
-//    }
-//
-//    public void delete(Long videoId, Long commentId, Long replyId, String email) {
-//        User writer = validatorService.getUserService().findByEmail(email);
-//        Video video = validatorService.getVideoService().findVideo(videoId);
-//        Comment comment = validatorService.getCommentService().findVideo(commentId);
-//        Reply reply = replyRepository.findVideo(replyId)
-//                .orElseThrow(NotFoundReplyException::new);
-//
-//        comment.checkMatchVideo(video);
-//        reply.checkMatchWriter(writer);
-//        reply.checkMatchComment(comment);
-//
-//        replyRepository.delete(reply);
-//    }
+    private final ReplyRepository replyRepository;
+    private final UserService userService;
+    private final VideoService videoService;
+    private final CommentService commentService;
+    private final ModelMapper modelMapper;
+
+    public ReplyService(ReplyRepository replyRepository, UserService userService, VideoService videoService, CommentService commentService, ModelMapper modelMapper) {
+        this.replyRepository = replyRepository;
+        this.userService = userService;
+        this.videoService = videoService;
+        this.commentService = commentService;
+        this.modelMapper = modelMapper;
+    }
+
+    public ReplyResponseDto save(ReplyRequestDto replyRequestDto, Long commentId, String email, Long videoId) {
+        User writer = userService.findByEmail(email);
+        Comment comment = findComment(commentId, videoId);
+
+        Reply savedReply = replyRepository.save(Reply.of(replyRequestDto.getContents(), comment, writer));
+        return modelMapper.map(savedReply, ReplyResponseDto.class);
+    }
+
+    @Transactional
+    public ReplyResponseDto update(ReplyRequestDto replyRequestDto, String email, Long videoId, Long commentId, Long replyId) {
+        User writer = userService.findByEmail(email);
+        Comment comment = findComment(commentId, videoId);
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(NotFoundReplyException::new);
+
+        reply.update(writer, comment, replyRequestDto.getContents());
+        return modelMapper.map(reply, ReplyResponseDto.class);
+
+    }
+
+    public void delete(Long videoId, Long commentId, Long replyId, String email) {
+        User writer = userService.findByEmail(email);
+        Comment comment = findComment(commentId, videoId);
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(NotFoundReplyException::new);
+
+        reply.checkMatchWriter(writer);
+        reply.checkMatchComment(comment);
+
+        replyRepository.delete(reply);
+    }
+
+    private Comment findComment(Long commentId, Long videoId) {
+        Video video = videoService.findVideo(videoId);
+        Comment comment = commentService.findById(commentId);
+
+        comment.checkMatchVideo(video);
+        return comment;
+    }
 }

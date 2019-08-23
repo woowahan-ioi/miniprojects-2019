@@ -6,6 +6,7 @@ import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.web.controller.exception.InvalidUserException;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,41 +26,44 @@ public class VideoController {
 
     @GetMapping("/new")
     public String createVideo() {
-        return "video-edit";
-    }
-
-    @GetMapping("/{id}")
-    public String video(@PathVariable Long id, Model model) {
-        model.addAttribute("video", videoService.findVideo(id));
-        return "video";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String updateVideoPage(@PathVariable Long id, Model model) {
         checkUserSession();
-        model.addAttribute("video", videoService.findById(id));
         return "video-edit";
     }
 
     @PostMapping("/new")
-    public RedirectView video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+    public String video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
         checkUserSession();
         VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto);
-        return new RedirectView("/videos/" + videoResponseDto.getId());
+        return "redirect:/videos/" + videoResponseDto.getId();
     }
 
-    @PutMapping("/{id}")
-    public RedirectView updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
-        checkUserSession();
-        videoService.update(id, uploadFile, videoRequestDto);
-        return new RedirectView("/videos/" + id);
-    }
-
-    private void checkUserSession() {
+    private Long checkUserSession() {
         UserSession userSession = userSessionManager.getUserSession();
         if (userSession == null) {
             throw new InvalidUserException();
         }
+        return userSession.getId();
     }
 
+    @GetMapping("/{id}")
+    public RedirectView video(@PathVariable Long id, Model model) {
+        VideoResponseDto videoResponseDto = videoService.findById(id);
+        model.addAttribute("video", videoResponseDto);
+        return new RedirectView("/videos/"+videoResponseDto.getId());
+    }
+
+    @GetMapping("/{id}/edit")
+    public String updateVideoPage(@PathVariable Long id, Model model) {
+        Long userId = checkUserSession();
+        videoService.matchWriter(userId, id);
+        model.addAttribute("video", videoService.findById(id));
+        return "video-edit";
+    }
+
+    @PutMapping("/{id}")
+    public String updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+        checkUserSession();
+        videoService.update(id, uploadFile, videoRequestDto);
+        return "redirect:/videos/" + id;
+    }
 }

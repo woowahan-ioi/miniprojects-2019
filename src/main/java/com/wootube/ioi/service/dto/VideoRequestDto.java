@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class VideoRequestDto {
+    private Long userId;
     private String title;
     private String description;
     private String contentPath;
