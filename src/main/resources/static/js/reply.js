@@ -33,26 +33,26 @@ const replyButton = (function () {
             const id = event.target.closest("li").dataset.commentid;
             const inputComment = event.target.closest("div").querySelector("input");
 
-            fetch('/api/videos/' + videoId + '/comments/' + id + '/replies', {
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                method: 'POST',
-                body: JSON.stringify({
-                    contents: inputComment.value
-                })
-            }).then(response => {
+            const requestUri = '/api/videos/' + videoId + '/comments/' + id + '/replies';
+            const requestBody = {
+                contents: inputComment.value
+            };
+            const callback = response => {
                 if (response.status === 201) {
-                    return response.json();
+                    response.json().then(comment => {
+                        appendReply(comment, event.target);
+                        inputComment.value = "";
+                        event.target.closest(".reply-edit").classList.add("display-none")
+                    });
+
+                    return;
                 }
                 throw response;
-            }).then(comment => {
-                appendReply(comment, event.target);
-                inputComment.value = "";
-                event.target.closest(".reply-edit").classList.add("display-none")
-            }).catch(error => {
-                error.text().then(json => alert(json))
-            });
+            }
+            const handleError = error => {
+                alert(error)
+            }
+            AjaxRequest.POST(requestUri, requestBody, callback, handleError)
         }
 
         function toggleReplyCancel(event) {
