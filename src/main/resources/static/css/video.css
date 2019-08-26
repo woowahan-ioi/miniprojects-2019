@@ -208,7 +208,7 @@ ul {
     color: white;
 }
 
-.comment-more-box {
+.comment-more-box, .reply-more-box {
     background: none;
     border-radius: 1px;
     color: #777777;
@@ -224,4 +224,21 @@ ul {
 .span-form {
     width: auto;
     word-break:break-all
+}
+
+.comment-more-button, .reply-more-button {
+    background: none;
+    border: none;
+    color: gray;
+    font-size: 1.0em;
+}
+
+.list-group-item {
+    border: none;
+    background: none;
+}
+
+.dropdown-menu {
+    width: 85px;
+    min-width: 0px;
 }

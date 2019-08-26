@@ -70,7 +70,7 @@ const commentButton = (function () {
 
         const toggleCommentEditButton = (event) => {
             let target = event.target;
-            if (target.tagName === "I") {
+            if (target.tagName === "I" || target.tagName === "SPAN") {
                 target = target.parentElement;
             }
             if (target.classList.contains("comment-update-cancel-btn")) {
@@ -80,7 +80,7 @@ const commentButton = (function () {
                 commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
             }
             if (target.classList.contains("comment-edit-button")) {
-                const commentButtonDiv = target.parentElement;
+                const commentButtonDiv = target.parentElement.parentElement;
                 commentButtonDiv.parentElement.classList.toggle("display-none");
                 commentButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
                 commentButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");

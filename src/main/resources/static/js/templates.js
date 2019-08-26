@@ -6,13 +6,21 @@ const Templates = {
                         <span class="user-name">${comment.writer.name}</span>
                         <span class="update-date">${writtenTime}</span>
                     </div>
-                    <div class="comment-more-box">
-                        <button class="comment-more-buttons comment-edit-button">
-                            <i class="ti-pencil"> 수정</i>
+                    <div class="comment-more-box dropdown">
+                        <button class="comment-more-button dropdown-toggle" data-toggle="dropdown">
+                            <i class="ti-more-alt"></i>
                         </button>
-                        <button class="comment-more-buttons comment-delete-button">
-                            <i class="ti-trash"> 삭제</i>
-                        </button>
+                    
+                        <div class="dropdown-menu" role="menu">
+                            <button class="list-group-item list-group-item-action comment-edit-button">
+                                <i class="fa fa-pencil"></i>
+                                <span>수정</span>
+                            </button>
+                            <button class="list-group-item list-group-item-action comment-delete-button">
+                                <i class="fa fa-trash"></i>
+                                <span>삭제</span>
+                            </button>
+                        </div>
                     </div>
                     <span class="comment-contents font-size-15">${comment.contents}</span>
                     <div>
