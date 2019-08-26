@@ -23,7 +23,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 public class UserServiceTest {
-
     @InjectMocks
     private UserService userService;
 

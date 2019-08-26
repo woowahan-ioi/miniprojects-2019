@@ -29,7 +29,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 class VideoServiceTest extends TestUtil {
-
     @Mock
     private VideoRepository videoRepository;
 
@@ -61,10 +60,10 @@ class VideoServiceTest extends TestUtil {
 
         testUploadFile = new MockMultipartFile(fileFullPath, FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
 
-        testVideoRequestDto = new VideoRequestDto();
-        testVideoRequestDto.setTitle(TITLE);
-        testVideoRequestDto.setDescription(DESCRIPTION);
-        testVideoRequestDto.setWriterId(USER_ID);
+        testVideoRequestDto = new VideoRequestDto(TITLE, DESCRIPTION, USER_ID);
+//        testVideoRequestDto.setTitle(TITLE);
+//        testVideoRequestDto.setDescription(DESCRIPTION);
+//        testVideoRequestDto.setWriterId(USER_ID);
     }
 
     @Test

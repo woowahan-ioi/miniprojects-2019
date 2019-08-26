@@ -1,19 +1,17 @@
 package com.wootube.ioi.service.dto;
 
-import lombok.EqualsAndHashCode;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EmailCheckResponseDto {
 
     private static final String POSSIBLE_RESPONSE_MESSAGE = "possible";
     private static final String IMPOSSIBLE_RESPONSE_MESSAGE = "impossible";
 
     private String message;
-
-    private EmailCheckResponseDto() {
-    }
 
     private EmailCheckResponseDto(String message) {
         this.message = message;

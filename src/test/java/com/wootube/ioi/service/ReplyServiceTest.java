@@ -22,7 +22,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 public class ReplyServiceTest extends TestUtil {
-
     @Mock
     ReplyRepository replyRepository;
 
