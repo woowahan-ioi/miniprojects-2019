@@ -8,12 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class VerifyKey {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class VerifyKey extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
