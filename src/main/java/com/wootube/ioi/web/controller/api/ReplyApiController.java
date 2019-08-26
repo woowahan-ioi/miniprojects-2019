@@ -22,7 +22,7 @@ public class ReplyApiController {
     }
 
     @PostMapping
-    public ResponseEntity createReply(@PathVariable Long videoId,
+    public ResponseEntity<ReplyResponseDto> createReply(@PathVariable Long videoId,
                                       @PathVariable Long commentId,
                                       @RequestBody ReplyRequestDto replyRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
