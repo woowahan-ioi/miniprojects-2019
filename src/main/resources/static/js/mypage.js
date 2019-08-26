@@ -10,7 +10,7 @@ function deleteVideo(event) {
 
     const id = target.dataset.videoid;
 
-    fetch('/api/videos/' + id, new deleteHeaderData())
+    fetch('/api/videos/' + id, deleteHeaderData)
         .then(response => {
             if(response.status !== 204) {
                 throw response.text();
@@ -23,9 +23,9 @@ function deleteVideo(event) {
         );
 }
 
-function deleteHeaderData() {
-    this.method = "DELETE",
-    this.headers = {
+const deleteHeaderData = {
+    method : "DELETE",
+    headers : {
         "Content-Type": "application/json;charset=UTF-8"
     }
-}
+};

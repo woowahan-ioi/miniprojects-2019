@@ -43,7 +43,7 @@ public class UserService {
 	}
 
 	private void checkInActive(User savedEmail) {
-		if (!savedEmail.getIsActive()) {
+		if (!savedEmail.isActive()) {
 			emailService.sendMessage(savedEmail.getEmail());
 			throw new InActivatedUserException();
 		}
@@ -59,8 +59,8 @@ public class UserService {
 		return findByIdAndIsActiveTrue(userId).updateName(editUserRequestDto.getName());
 	}
 
-	private User findByIdAndIsActiveTrue(Long userId) {
-		return userRepository.findByIdAndIsActiveTrue(userId)
+	public User findByIdAndIsActiveTrue(Long userId) {
+		return userRepository.findByIdAndActiveTrue(userId)
 				.orElseThrow(NotFoundUserException::new);
 	}
 
@@ -74,7 +74,7 @@ public class UserService {
 	@Transactional
 	public void activateUser(String email, String verifyKey) {
 		if (verifyKeyService.confirmKey(email, verifyKey)) {
-			findByEmail(email).activeUser();
+			findByEmail(email).activateUser();
 		}
 	}
 }
