@@ -6,15 +6,22 @@ const replyButton = (function () {
             document.querySelector("#comment-area").addEventListener("click", replyService.save);
         }
 
+        const updateReply = function () {
+            document.querySelector("#comment-area").addEventListener("click", replyService.update);
+
+        }
+
         const replyToggle = function () {
             document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyCancel);
             document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyWrite);
             document.querySelector("#comment-area").addEventListener("keyup", replyService.toggleReplySaveButton);
+            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyEditButton);
         }
 
         const init = function () {
             replyToggle();
             saveReply();
+            updateReply();
         };
 
         return {
@@ -75,6 +82,25 @@ const replyButton = (function () {
             event.target.parentElement.parentElement.querySelector(".edit").classList.add("disabled")
         }
 
+        function toggleReplyEditButton(event) {
+            let target = event.target;
+            if(target.tagName === "I" || target.tagName === "SPAN") {
+                target = target.parentElement;
+            }
+            if (target.classList.contains("reply-update-cancel-btn")) {
+                const replyButtonDiv = target.parentElement;
+                replyButtonDiv.classList.toggle("display-none");
+                replyButtonDiv.previousElementSibling.classList.toggle("display-none");
+                replyButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
+            }
+            if (target.classList.contains("reply-edit-button")) {
+                const replyButtonDiv = target.parentElement.parentElement;
+                replyButtonDiv.parentElement.classList.toggle("display-none");
+                replyButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
+                replyButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");
+            }
+        }
+
         function appendReply(reply, target) {
             const writtenTime = calculateWrittenTime(reply.updateTime);
 
@@ -87,6 +113,7 @@ const replyButton = (function () {
             toggleReplyCancel: toggleReplyCancel,
             toggleReplyWrite: toggleReplyWrite,
             toggleReplySaveButton: toggleReplySaveButton,
+            toggleReplyEditButton: toggleReplyEditButton,
             save: saveReply
         }
     };
