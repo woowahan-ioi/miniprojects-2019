@@ -10,7 +10,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
 public class JavaMailSenderConfig {
-
     @Value("${mail.sender.id}")
     private String senderEmail;
 

@@ -1,7 +1,7 @@
-INSERT INTO user(name, email, password, is_active)
+INSERT INTO user(name, email, password, active)
 VALUES ('회원에이', 'a@test.com', '1234qwer', true);
 
-INSERT INTO user(name, email, password, is_active)
+INSERT INTO user(name, email, password, active)
 VALUES ('회원비', 'b@test.com', '1234qwer', true);
 
 INSERT INTO video (title, description, content_path, origin_file_name, writer_id)
