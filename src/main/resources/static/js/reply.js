@@ -80,7 +80,7 @@ const replyButton = (function () {
 
             const replyList = target.closest(".reply-area").querySelector(".reply-list");
 
-            replyList.insertAdjacentHTML("beforeend", replyTemplate);
+            replyList.insertAdjacentHTML("beforeend", Templates.replyTemplate(reply, writtenTime));
         }
 
         return {

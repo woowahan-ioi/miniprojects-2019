@@ -185,7 +185,7 @@ const commentButton = (function () {
         const appendComment = (comment) => {
             const writtenTime = calculateWrittenTime(comment.updateTime);
             const commentList = document.querySelector("#comment-area");
-            commentList.insertAdjacentHTML("beforeend", commentTemplate);
+            commentList.insertAdjacentHTML("beforeend", Templates.commentTemplate(comment, writtenTime));
         };
 
         return {

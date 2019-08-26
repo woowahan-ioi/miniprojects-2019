@@ -1,4 +1,5 @@
-const commentTemplate = `<li class="comment mrg-btm-30" data-commentid="${comment.id}">
+const Templates = {
+    commentTemplate : (comment, writtenTime) => {return `<li class="comment mrg-btm-30" data-commentid="${comment.id}">
                 <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                 <div class="comment-block">
                     <div class="font-size-13">
@@ -45,14 +46,13 @@ const commentTemplate = `<li class="comment mrg-btm-30" data-commentid="${commen
 
                     </ul>
                 </div>
-            </li>`;
-
-
-const replyTemplate = `<li class="reply mrg-btm-30" data-commentid="${reply.id}">
+            </li>`
+    },
+    replyTemplate : (reply, writtenTime) => { return `<li class="reply mrg-btm-30" data-commentid="${reply.id}">
                             <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                             <div class="comment-block">
                                 <div class="font-size-13">
-                                    <span class="user-name">${reply.authorName}</span>
+                                    <span class="user-name">${reply.writer.name}</span>
                                     <span class="update-date">${writtenTime}</span>
                                 </div>
                                 <div class="comment-more-box">
@@ -80,4 +80,6 @@ const replyTemplate = `<li class="reply mrg-btm-30" data-commentid="${reply.id}"
                                 <button class="btn comment-btn reply-update-cancel-btn">취소</button>
                                 <button class="btn comment-btn edit reply-update-btn">수정</button>
                             </div>
-                        </li>`;
+                        </li>`
+    }
+}
