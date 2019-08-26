@@ -56,6 +56,6 @@ public class Video extends BaseEntity {
     }
 
     public boolean matchWriter(Long userId) {
-        return writer.isSameEntity(userId);
+        return writer.isSameUserAndWriter(userId);
     }
 }

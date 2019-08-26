@@ -13,6 +13,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserApiControllerTest {
+
     @LocalServerPort
     private int port;
 

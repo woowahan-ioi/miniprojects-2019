@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
 public class TestConfig {
+
     @Value("${woowa.ioi.wootube.region}")
     private String region;
 

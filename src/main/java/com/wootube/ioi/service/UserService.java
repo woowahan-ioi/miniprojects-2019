@@ -60,21 +60,21 @@ public class UserService {
 	}
 
 	public User findByIdAndIsActiveTrue(Long userId) {
-		return userRepository.findByIdAndActiveTrue(userId)
+		return userRepository.findByIdAndIsActiveTrue(userId)
 				.orElseThrow(NotFoundUserException::new);
 	}
 
 	@Transactional
 	public User deleteUser(Long userId) {
 		User deleteTargetUser = findByIdAndIsActiveTrue(userId);
-		deleteTargetUser.softDelete();
+		deleteTargetUser.delete();
 		return deleteTargetUser;
 	}
 
 	@Transactional
 	public void activateUser(String email, String verifyKey) {
 		if (verifyKeyService.confirmKey(email, verifyKey)) {
-			findByEmail(email).activateUser();
+			findByEmail(email).activeUser();
 		}
 	}
 }

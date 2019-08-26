@@ -11,15 +11,15 @@ import java.io.File;
 
 @Component
 public class S3FileUploader implements FileUploader {
-    private static final String DIRECTORY_NAME = "wootube";
+    static final String DIRECTORY_NAME = "wootube";
 
-    private final AmazonS3 amazonS3Client;
-    private final String bucket;
+    @Qualifier(value = "amazonS3Client")
+    final AmazonS3 amazonS3Client;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
-    public S3FileUploader(@Qualifier(value = "amazonS3Client") AmazonS3 amazonS3Client,
-                          @Value("${cloud.aws.s3.bucket}") String bucket) {
+    public S3FileUploader(AmazonS3 amazonS3Client) {
         this.amazonS3Client = amazonS3Client;
-        this.bucket = bucket;
     }
 
     public String uploadCloud(File uploadFile) {
