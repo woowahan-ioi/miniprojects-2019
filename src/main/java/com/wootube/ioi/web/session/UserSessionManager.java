@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserSessionManager extends SessionManagerGenerator {
-
     private final ModelMapper modelMapper;
 
     public UserSessionManager(HttpServletRequest request, ModelMapper modelMapper) {

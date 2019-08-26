@@ -11,7 +11,7 @@ import java.io.File;
 
 @Component
 public class S3FileUploader implements FileUploader {
-    static final String DIRECTORY_NAME = "wootube";
+    private static final String DIRECTORY_NAME = "wootube";
 
     private final AmazonS3 amazonS3Client;
     private final String bucket;
