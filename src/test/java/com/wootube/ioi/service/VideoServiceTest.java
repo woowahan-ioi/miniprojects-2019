@@ -61,9 +61,6 @@ class VideoServiceTest extends TestUtil {
         testUploadFile = new MockMultipartFile(fileFullPath, FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
 
         testVideoRequestDto = new VideoRequestDto(TITLE, DESCRIPTION, USER_ID);
-//        testVideoRequestDto.setTitle(TITLE);
-//        testVideoRequestDto.setDescription(DESCRIPTION);
-//        testVideoRequestDto.setWriterId(USER_ID);
     }
 
     @Test
