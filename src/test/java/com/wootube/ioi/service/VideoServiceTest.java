@@ -56,7 +56,7 @@ class VideoServiceTest extends TestUtil {
     @BeforeEach
     void setUp() {
         writer = new User();
-        fileFullPath = String.format("%s/%s",DIRECTORY, FILE_NAME);
+        fileFullPath = String.format("%s/%s", DIRECTORY, FILE_NAME);
 
         testUploadFile = new MockMultipartFile(fileFullPath, FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
 

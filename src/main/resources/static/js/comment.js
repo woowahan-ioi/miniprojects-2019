@@ -89,28 +89,27 @@ const commentButton = (function () {
 
         const saveComment = (event) => {
             const inputComment = event.target.parentElement.parentElement.querySelector("INPUT");
-
-            fetch('/api/videos/' + videoId + '/comments', {
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                method: 'POST',
-                body: JSON.stringify({
-                    contents: inputComment.value
-                })
-            }).then(response => {
+            const requestUri = '/api/videos/' + videoId + '/comments';
+            const requestBody = {
+                contents: inputComment.value
+            };
+            const callback = (response) => {
                 if (response.status === 201) {
-                    return response.json();
+                    response.json().then(comment => {
+                        appendComment(comment);
+                        let currentCommentCount = parseInt(commentCount.innerText)
+                        commentCount.innerText = String(currentCommentCount + 1);
+                        inputComment.value = "";
+                    })
+                    return;
                 }
                 throw response;
-            }).then(comment => {
-                appendComment(comment);
-                let currentCommentCount = parseInt(commentCount.innerText)
-                commentCount.innerText = String(currentCommentCount + 1);
-                inputComment.value = "";
-            }).catch(error => {
-                error.text().then(json => alert(json))
-            });
+            };
+            const handleError = (error) => {
+                alert(error);
+            }
+
+            AjaxRequest.POST(requestUri, requestBody, callback, handleError);
         };
 
         const updateComment = (event) => {
@@ -125,19 +124,15 @@ const commentButton = (function () {
             }
 
             const commentId = target.closest("li").dataset.commentid;
-
             const contents = target.parentElement.querySelector("INPUT").value;
 
-            fetch('/api/videos/' + videoId + '/comments/' + commentId, {
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                method: 'PUT',
-                body: JSON.stringify({
-                    contents: contents
-                })
-            }).then(response => {
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId;
+            const requestBody = {
+                contents: contents
+            };
+            const callback = (response) => {
                 if (response.status === 204) {
+
                     toggleCommentMoreButton(event);
                     target.parentElement.previousElementSibling.querySelector(".comment-contents").innerText = contents;
 
@@ -145,12 +140,16 @@ const commentButton = (function () {
                     commentButtonDiv.classList.toggle("display-none");
                     commentButtonDiv.previousElementSibling.classList.toggle("display-none");
                     commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
-                } else {
-                    throw response;
+
+                    return;
                 }
-            }).catch(error => {
-                error.text().then(json => alert(json))
-            });
+                throw response;
+            };
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.PUT(requestUri, requestBody, callback, handleError);
         }
 
         const deleteComment = (event) => {
@@ -166,76 +165,29 @@ const commentButton = (function () {
 
             const commentId = target.closest("li").dataset.commentid;
 
-            fetch('/api/videos/' + videoId + '/comments/' + commentId, {
-                method: 'DELETE'
-            }).then(response => {
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId;
+            const callback = (response) => {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
                     target.closest("li").remove();
                     let currentCommentCount = parseInt(commentCount.innerText)
                     commentCount.innerText = String(currentCommentCount - 1);
-                } else {
-                    throw response;
+
+                    return;
                 }
-            }).catch(error => {
-                error.text().then(json => alert(json))
-            });
+                throw response;
+            };
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.DELETE(requestUri, callback, handleError);
         }
 
         const appendComment = (comment) => {
             const writtenTime = calculateWrittenTime(comment.updateTime);
-
-            const commentTemplate = `<li class="comment mrg-btm-30" data-commentid="${comment.id}">
-                <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
-                <div class="comment-block">
-                    <div class="font-size-13">
-                        <span class="user-name">${comment.writer.name}</span>
-                        <span class="update-date">${writtenTime}</span>
-                    </div>
-                    <div class="comment-more-box">
-                        <button class="comment-more-buttons comment-edit-button">
-                            <i class="ti-pencil"> 수정</i>
-                        </button>
-                        <button class="comment-more-buttons comment-delete-button">
-                            <i class="ti-trash"> 삭제</i>
-                        </button>
-                    </div>
-                    <span class="comment-contents font-size-15">${comment.contents}</span>
-                    <div>
-                        <button class="like-btn">
-                            <i class="ti-thumb-up"></i>
-                        </button>
-                        <span>3.5천</span>
-                        <button class="reply-toggle-btn">답글</button>
-                    </div>
-                </div>
-                <div class="comment-update-area display-none mrg-btm-50">
-                    <div>
-                        <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
-                             alt="">
-                        <input class="comment-input" type="text" value="${comment.contents}">
-                    </div>
-                    <button class="btn comment-btn comment-update-cancel-btn">취소</button>
-                    <button class="btn comment-btn edit comment-update-btn">수정</button>
-                </div>
-                <div class="mrg-top-5 reply-area">
-                    <div class="reply-edit display-none">
-                        <div class="mrg-btm-10">
-                            <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
-                                 alt="">
-                            <input class="comment-input" type="text" placeholder="공개 답글 추가...">
-                        </div>
-                        <button class="btn comment-btn edit reply-save-btn disabled">답글</button>
-                        <button class="btn comment-btn reply-cancel-btn">취소</button>
-                    </div>
-                    <ul class="reply-list">
-
-                    </ul>
-                </div>
-            </li>`;
-
             const commentList = document.querySelector("#comment-area");
-            commentList.insertAdjacentHTML("beforeend", commentTemplate);
+            commentList.insertAdjacentHTML("beforeend", Templates.commentTemplate(comment, writtenTime));
         };
 
         return {
