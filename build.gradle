@@ -51,6 +51,8 @@ dependencies {
     implementation 'io.rest-assured:xml-path:4.0.0'
     implementation 'org.modelmapper:modelmapper:0.7.8'
     implementation 'org.imgscalr:imgscalr-lib:4.2'
+    implementation 'org.jcodec:jcodec:0.1.9'
+    implementation 'org.jcodec:jcodec-javase:0.1.9'
 
 
     runtimeOnly 'mysql:mysql-connector-java'
