@@ -70,8 +70,8 @@ class VideoControllerTest extends CommonControllerTest {
     @DisplayName("비디오를 조회한다.")
     void get() {
         LogInRequestDto logInRequestDto = new LogInRequestDto("a@test.com", "1234qwer");
-        loginAndRequest(GET, "/videos/1", logInRequestDto)
-                .expectStatus().isFound();
+        loginAndRequest(GET, "/videos/2", logInRequestDto)
+                .expectStatus().isOk();
         stopS3Mock();
     }
 
