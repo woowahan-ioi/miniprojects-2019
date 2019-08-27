@@ -226,7 +226,7 @@ ul {
     word-break:break-all
 }
 
-.comment-more-button, .reply-more-button {
+.comment-more-button, .comment-sort-button, .reply-more-button {
     background: none;
     border: none;
     color: gray;
@@ -241,4 +241,8 @@ ul {
 .dropdown-menu {
     width: 85px;
     min-width: 0px;
+}
+
+.comment-sort-bropdown {
+    width: 110px;
 }

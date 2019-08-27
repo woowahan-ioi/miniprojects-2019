@@ -56,7 +56,7 @@ const Templates = {
                 </div>
             </li>`
     },
-    replyTemplate : (reply, writtenTime) => { return `<li class="reply mrg-btm-30" data-commentid="${reply.id}">
+    replyTemplate : (reply, writtenTime) => { return `<li class="reply mrg-btm-30" data-replyid="${reply.id}">
                             <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                             <div class="comment-block">
                                 <div class="font-size-13">
@@ -87,7 +87,7 @@ const Templates = {
                                     <span>3.5천</span>
                                 </div>
                             </div>
-                            <div class="comment-update-area display-none mrg-btm-50">
+                            <div class="reply-update-area display-none mrg-btm-50">
                                 <div>
                                     <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
                                          alt="">

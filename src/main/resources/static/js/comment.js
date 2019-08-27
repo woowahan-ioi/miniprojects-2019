@@ -29,8 +29,8 @@ const commentButton = (function () {
         const init = function () {
             saveComment();
             updateComment();
-            commentToggle();
             deleteComment();
+            commentToggle();
         };
 
         return {
