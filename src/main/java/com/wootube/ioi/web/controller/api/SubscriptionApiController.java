@@ -2,6 +2,7 @@ package com.wootube.ioi.web.controller.api;
 
 import com.wootube.ioi.service.SubscriptionService;
 import com.wootube.ioi.service.dto.SubscriberResponseDto;
+import com.wootube.ioi.service.dto.SubscriptionCheckResponseDto;
 import com.wootube.ioi.service.dto.SubscriptionCountResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
@@ -38,11 +39,19 @@ public class SubscriptionApiController {
                 .body(subscriberResponseDtos);
     }
 
-    @GetMapping("/{subscribedUserId}")
-    public ResponseEntity countSubscription(@PathVariable Long subscribedUserId) {
-        long subscriptionCount = subscriptionService.countSubscription(subscribedUserId);
+    @GetMapping("/{subscribedUserId}/checks")
+    public ResponseEntity<SubscriptionCheckResponseDto> checkSubscription(@PathVariable Long subscribedUserId) {
+        UserSession userSession = userSessionManager.getUserSession();
+
         return ResponseEntity.ok()
-                .body(new SubscriptionCountResponseDto(subscriptionCount));
+                .body(subscriptionService.checkSubscription(userSession.getId(), subscribedUserId));
+    }
+
+
+    @GetMapping("/{subscribedUserId}")
+    public ResponseEntity<SubscriptionCountResponseDto> countSubscription(@PathVariable Long subscribedUserId) {
+        return ResponseEntity.ok()
+                .body(subscriptionService.countSubscription(subscribedUserId));
     }
 
     @PostMapping("/{subscribedUserId}")

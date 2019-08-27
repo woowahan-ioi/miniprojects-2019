@@ -4,6 +4,8 @@ import com.wootube.ioi.domain.model.Subscription;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.SubscriptionRepository;
 import com.wootube.ioi.service.dto.SubscriberResponseDto;
+import com.wootube.ioi.service.dto.SubscriptionCheckResponseDto;
+import com.wootube.ioi.service.dto.SubscriptionCountResponseDto;
 import com.wootube.ioi.service.exception.AlreadySubscribedException;
 import com.wootube.ioi.service.exception.IllegalUnsubscriptionException;
 import com.wootube.ioi.service.exception.NotFoundSubscriptionException;
@@ -37,8 +39,8 @@ public class SubscriptionService {
                 .collect(Collectors.toList());
     }
 
-    public long countSubscription(Long subscribedUserId) {
-        return subscriptionRepository.countBySubscribedUserId(subscribedUserId);
+    public SubscriptionCountResponseDto countSubscription(Long subscribedUserId) {
+        return new SubscriptionCountResponseDto(subscriptionRepository.countBySubscribedUserId(subscribedUserId));
     }
 
     public void subscribe(Long subscriberId, Long subscribedUserId) {
@@ -71,5 +73,9 @@ public class SubscriptionService {
     private Subscription findSubscription(Long subscriberId, Long subscribedUserId) {
         return subscriptionRepository.findBySubscriberIdAndSubscribedUserId(subscriberId, subscribedUserId)
                 .orElseThrow(NotFoundSubscriptionException::new);
+    }
+
+    public SubscriptionCheckResponseDto checkSubscription(Long subscriberId, Long subscribedUserId) {
+        return new SubscriptionCheckResponseDto(contains(subscriberId, subscribedUserId));
     }
 }
