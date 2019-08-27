@@ -1,13 +1,9 @@
 package com.wootube.ioi.web.controller;
 
-import com.wootube.ioi.domain.model.User;
-import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.service.dto.EmailCheckRequestDto;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
@@ -17,10 +13,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserApiControllerTest {
-
-    @Autowired
-    private UserRepository userRepository;
-
     @LocalServerPort
     private int port;
 
@@ -28,24 +20,17 @@ public class UserApiControllerTest {
         return "http://localhost:" + port;
     }
 
-    private final static User SAVED_USER = new User("루피", "luffy@milzipmoza.com", "1234567a");
-
-    @BeforeEach
-    void setUp() {
-        userRepository.save(SAVED_USER);
-    }
-
     @DisplayName("중복된 이메일로 중복 요청시 message: impossible 반환")
     @Test
     void checkDuplicateDuplicatedEmail() {
-        EmailCheckRequestDto requestDto = new EmailCheckRequestDto("luffy@milzipmoza.com");
+        EmailCheckRequestDto requestDto = new EmailCheckRequestDto("a@test.com");
 
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(requestDto).
-                when().
+        when().
                 post(baseUrl() + "/api/users").
-                then().
+        then().
                 statusCode(200).
                 body("message", equalTo("impossible"));
     }
@@ -58,9 +43,9 @@ public class UserApiControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(requestDto).
-                when().
+        when().
                 post(baseUrl() + "/api/users").
-                then().
+        then().
                 statusCode(200).
                 body("message", equalTo("possible"));
     }

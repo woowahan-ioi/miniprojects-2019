@@ -19,14 +19,13 @@ public class EmailService {
 	private static final String EMAIL_CONTENTS = "현재 귀하의 계정은 비활성화 상태입니다. %s를 클릭할 시 활성화 상태로 변경됩니다. <br>";
 	private static final String EMAIL_SUBJECT = "계정 비활성화 관련 안내 메일입니다.";
 
-	@Autowired
-	private Environment environment;
-
+	private final Environment environment;
 	private final VerifyKeyService verifyKeyService;
 	private final JavaMailSender emailSender;
 
 	@Autowired
-	public EmailService(VerifyKeyService verifyKeyService, JavaMailSender emailSender) {
+	public EmailService(Environment environment, VerifyKeyService verifyKeyService, JavaMailSender emailSender) {
+		this.environment = environment;
 		this.verifyKeyService = verifyKeyService;
 		this.emailSender = emailSender;
 	}
