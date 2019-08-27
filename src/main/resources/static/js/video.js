@@ -2,7 +2,7 @@ function readMoreTag() {
     const desc = document.getElementById("description");
     const descStorage = document.querySelector("#description-storage");
 
-    if(descStorage.innerText.length > 30) {
+    if (descStorage.innerText.length > 30) {
         desc.innerText = descStorage.innerText.substr(0, 50) + " ...";
         document.querySelector("#readMoreSpan").addEventListener("click", readMoreTagEvent);
         return;
@@ -15,7 +15,7 @@ function readMoreTagEvent() {
     const desc = document.getElementById("description");
     const readMoreSpan = document.querySelector("#readMoreSpan");
 
-    if(readMoreSpan.classList.contains("clicked")) {
+    if (readMoreSpan.classList.contains("clicked")) {
         readMoreSpan.innerText = "간략히";
         readMoreSpan.classList.remove("clicked");
 
