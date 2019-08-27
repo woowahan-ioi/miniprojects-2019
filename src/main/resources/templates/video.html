@@ -54,8 +54,8 @@
                     <span class="left-30 bottom-35 font-size-17 text-bold" th:if="${video.writer.name}" th:text="${video.writer.name}"></span><br>
                     <span class="left-30 bottom-35 font-size-17 text-bold" th:unless="${video.writer.name}">UserName</span><br>
 
-                    게시일 <span class="left-30 bottom-35 font-size-13" th:id="videoUpdateTime" th:if="${video.updateTime}" th:text="${video.updateTime}"></span>
-                    <span class="left-30 bottom-35 font-size-13" th:unless="${video.updateTime}">DateTime</span>
+                    게시일 <span class="left-30 bottom-35 font-size-13" th:id="videoCreateTime" th:if="${video.createTime}" th:text="${video.createTime}"></span>
+                    <span class="left-30 bottom-35 font-size-13" th:unless="${video.createTime}">DateTime</span>
 
                     <div class="left-30 mrg-vertical-10">
                         <span class="span-form" id="description" th:if="${video.description}"></span>

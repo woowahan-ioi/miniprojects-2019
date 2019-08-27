@@ -35,6 +35,6 @@ window.onload = function() {
 }
 
 function videoUpdateTime() {
-    const date = (new Date(/*[[${video.updateTime}]]*/).toLocaleDateString());
-    document.getElementById("videoUpdateTime").innerHTML = date;
+    const date = (new Date(/*[[${video.createTime}]]*/).toLocaleDateString());
+    document.getElementById("videoCreateTime").innerHTML = date;
 }
