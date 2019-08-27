@@ -152,4 +152,14 @@ class VideoServiceTest extends TestUtil {
 
         return new MockMultipartFile(updateFileFullPath, UPDATE_FILE_NAME, null, UPDATE_CONTENTS.getBytes(StandardCharsets.UTF_8));
     }
+
+    @Test
+    @DisplayName("비디오의 조회수를 높인다.")
+    void increaseVideo() {
+        given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
+        videoService.findVideo(ID);
+
+        verify(videoRepository).findById(ID);
+        verify(testVideo).increaseViews();
+    }
 }
