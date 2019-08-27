@@ -6,12 +6,16 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @DynamicUpdate
 public class Video extends BaseEntity {
+    private static final int CONTENT_PATH = 0;
+    private static final int THUMBNAIL_PATH = 1;
+
     @Column(nullable = false,
             length = 50)
     private String title;
@@ -52,13 +56,14 @@ public class Video extends BaseEntity {
         this.description = updateVideo.description;
     }
 
-    public void updateContentPath(String contentPath) {
-        this.contentPath = contentPath;
+    public void updateContentPath(List<String> urls) {
+        this.contentPath = urls.get(CONTENT_PATH);
+        this.thumbnailPath = urls.get(THUMBNAIL_PATH);
     }
 
-    public void initialize(String contentPath, String thumbnailPath, String originFileName, User writer) {
-        this.contentPath = contentPath;
-        this.thumbnailPath = thumbnailPath;
+    public void initialize(List<String> urls, String originFileName, User writer) {
+        this.contentPath = urls.get(CONTENT_PATH);
+        this.thumbnailPath = urls.get(THUMBNAIL_PATH);
         this.originFileName = originFileName;
         this.writer = writer;
     }

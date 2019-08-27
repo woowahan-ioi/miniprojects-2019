@@ -34,7 +34,8 @@ public class S3FileUploader implements FileUploader {
 		return DIRECTORY_NAME + "/" + uploadType.getUploadType() + "/";
 	}
 
-	public void deleteFile(String originFileName, UploadType uploadType) {
-		amazonS3Client.deleteObject(bucket, basePath(uploadType) + originFileName);
+	public void deleteFile(String originFileName, UploadType videoUploadType, UploadType thumbnailUploadType) {
+		amazonS3Client.deleteObject(bucket, basePath(videoUploadType) + originFileName);
+		amazonS3Client.deleteObject(bucket, basePath(thumbnailUploadType) + originFileName.split(".")[0]);
 	}
 }

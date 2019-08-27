@@ -37,16 +37,16 @@ public class VideoService {
         this.userService = userService;
     }
 
-	public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
-		String videoUrl = fileUploader.uploadFile(uploadFile, UploadType.VIDEO);
-		String originFileName = uploadFile.getOriginalFilename();
+    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+        List<String> urls = fileUploader.uploadFile(uploadFile, UploadType.VIDEO, UploadType.THUMBNAIL);
+        String originFileName = uploadFile.getOriginalFilename();
 
-		Video video = modelMapper.map(videoRequestDto, Video.class);
-		User writer = userService.findByIdAndIsActiveTrue(videoRequestDto.getWriterId());
+        Video video = modelMapper.map(videoRequestDto, Video.class);
+        User writer = userService.findByIdAndIsActiveTrue(videoRequestDto.getWriterId());
 
-		video.initialize(videoUrl, originFileName, writer);
-		return modelMapper.map(videoRepository.save(video), VideoResponseDto.class);
-	}
+        video.initialize(urls, originFileName, writer);
+        return modelMapper.map(videoRepository.save(video), VideoResponseDto.class);
+    }
 
     @Transactional
     public VideoResponseDto findVideo(Long id) {
@@ -64,29 +64,29 @@ public class VideoService {
                 .orElseThrow(NotFoundVideoIdException::new);
     }
 
-	@Transactional
-	public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
-		Video video = findById(id);
-		matchWriter(videoRequestDto.getWriterId(), id);
+    @Transactional
+    public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+        Video video = findById(id);
+        matchWriter(videoRequestDto.getWriterId(), id);
 
-		if (!uploadFile.isEmpty()) {
-			fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
-			String videoUrl = fileUploader.uploadFile(uploadFile, UploadType.VIDEO);
-			video.updateContentPath(videoUrl);
-		}
-		video.update(modelMapper.map(videoRequestDto, Video.class));
-		videoRepository.save(video);
-	}
+        if (!uploadFile.isEmpty()) {
+            fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO, UploadType.THUMBNAIL);
+            List<String> videoUrl = fileUploader.uploadFile(uploadFile, UploadType.VIDEO, UploadType.VIDEO);
+            video.updateContentPath(videoUrl);
+        }
+        video.update(modelMapper.map(videoRequestDto, Video.class));
+        videoRepository.save(video);
+    }
 
-	@Transactional
-	public void deleteById(Long videoId, Long userId) {
-		Video video = findById(videoId);
-		if (!video.matchWriter(userId)) {
-			throw new UserAndWriterMisMatchException();
-		}
-		fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
-		videoRepository.deleteById(video.getId());
-	}
+    @Transactional
+    public void deleteById(Long videoId, Long userId) {
+        Video video = findById(videoId);
+        if (!video.matchWriter(userId)) {
+            throw new UserAndWriterMisMatchException();
+        }
+        fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO, UploadType.THUMBNAIL);
+        videoRepository.deleteById(video.getId());
+    }
 
     public List<Video> findAllByWriter(Long writerId) {
         User writer = userService.findByIdAndIsActiveTrue(writerId);
