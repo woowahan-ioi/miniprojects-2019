@@ -155,7 +155,7 @@ const commentButton = (function () {
         const deleteComment = (event) => {
             let target = event.target;
 
-            if (target.tagName === "I") {
+            if (target.tagName === "I" || target.tagName === "SPAN") {
                 target = target.parentElement;
             }
 
