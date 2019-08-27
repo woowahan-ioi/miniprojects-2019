@@ -89,7 +89,7 @@ class VideoServiceTest extends TestUtil {
         MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
 
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
-        given(fileUploader.uploadFile2(testUpdateChangeUploadFile, UploadType.VIDEO)).willReturn(updateFileFullPath);
+        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO)).willReturn(updateFileFullPath);
         given(testVideo.matchWriter(USER_ID)).willReturn(true);
         videoService.update(ID, testUpdateChangeUploadFile, testVideoRequestDto);
 
@@ -105,7 +105,7 @@ class VideoServiceTest extends TestUtil {
         MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
 
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
-        given(fileUploader.uploadFile2(testUpdateChangeUploadFile, UploadType.VIDEO)).willReturn(updateFileFullPath);
+        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO)).willReturn(updateFileFullPath);
 
         given(testVideo.matchWriter(USER_ID)).willReturn(false);
 
@@ -119,7 +119,7 @@ class VideoServiceTest extends TestUtil {
         deleteMockVideo();
         videoService.deleteById(ID, USER_ID);
 
-        verify(fileUploader, atLeast(1)).deleteFile2(testVideo.getOriginFileName(), UploadType.VIDEO);
+        verify(fileUploader, atLeast(1)).deleteFile(testVideo.getOriginFileName(), UploadType.VIDEO);
         verify(videoRepository, atLeast(1)).deleteById(ID);
     }
 
@@ -133,7 +133,7 @@ class VideoServiceTest extends TestUtil {
     }
 
     private void createMockVideo() {
-        given(fileUploader.uploadFile2(testUploadFile, UploadType.VIDEO)).willReturn(fileFullPath);
+        given(fileUploader.uploadFile(testUploadFile, UploadType.VIDEO)).willReturn(fileFullPath);
         given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
         given(userService.findByIdAndIsActiveTrue(USER_ID)).willReturn(writer);
 
