@@ -10,6 +10,10 @@ const replyButton = (function () {
             document.querySelector("#comment-area").addEventListener("click", replyService.update);
         }
 
+        const deleteReply = function () {
+            document.querySelector("#comment-area").addEventListener("click", replyService.delete);
+        }
+
         const replyToggle = function () {
             document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyCancel);
             document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyWrite);
@@ -21,6 +25,7 @@ const replyButton = (function () {
             replyToggle();
             saveReply();
             updateReply();
+            deleteReply();
         };
 
         return {
@@ -72,13 +77,6 @@ const replyButton = (function () {
             const inputEditReply = target.closest("div").querySelector("input");
             const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + '/replies/' + replyId;
 
-            console.log("start!");
-            console.log("replyId : " + replyId);
-            console.log("commentId : " + commentId);
-            console.log("inputDiv : " + inputEditReply);
-            console.log("input value : " + inputEditReply.value);
-            console.log("request uri : " + requestUri);
-            console.log("end!");
             const requestBody = {
                 contents : inputEditReply.value
             }
@@ -103,6 +101,36 @@ const replyButton = (function () {
             };
 
             AjaxRequest.PUT(requestUri, requestBody, callback, handleError);
+        }
+
+        function deleteReply(event) {
+            let target = event.target;
+
+            if (target.tagName === "I" || target.tagName === "SPAN") {
+                target = target.parentElement;
+            }
+
+            if (!target.classList.contains("reply-delete-button")) {
+                return;
+            }
+
+            const replyId = target.closest("li").dataset.replyid;
+            const commentId = target.closest("ul").closest("li").dataset.commentid;
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + '/replies/' + replyId;
+
+            const callback = (response) => {
+                if (response.status === 204) {
+                    target.closest("li").remove();
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.DELETE(requestUri, callback, handleError);
         }
 
         function toggleReplyCancel(event) {
@@ -158,7 +186,8 @@ const replyButton = (function () {
             toggleReplySaveButton: toggleReplySaveButton,
             toggleReplyEditButton: toggleReplyEditButton,
             save: saveReply,
-            update: updateReply
+            update: updateReply,
+            delete: deleteReply
         }
     };
 
