@@ -29,3 +29,12 @@ function readMoreTagEvent() {
 }
 
 readMoreTag();
+
+window.onload = function() {
+    videoUpdateTime();
+}
+
+function videoUpdateTime() {
+    const date = (new Date(/*[[${video.updateTime}]]*/).toLocaleDateString());
+    document.getElementById("videoUpdateTime").innerHTML = date;
+}
