@@ -1,5 +1,8 @@
 package com.wootube.ioi.service;
 
+import java.util.List;
+import javax.transaction.Transactional;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
@@ -9,14 +12,11 @@ import com.wootube.ioi.service.exception.NotFoundVideoIdException;
 import com.wootube.ioi.service.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
 import com.wootube.ioi.service.util.FileUploader;
-
+import com.wootube.ioi.service.util.UploadType;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-
-import javax.transaction.Transactional;
 
 @Service
 public class VideoService {
@@ -35,7 +35,7 @@ public class VideoService {
     }
 
     public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
-        String videoUrl = fileUploader.uploadFile(uploadFile);
+        String videoUrl = fileUploader.uploadFile(uploadFile, UploadType.VIDEO);
         String originFileName = uploadFile.getOriginalFilename();
 
         Video video = modelMapper.map(videoRequestDto, Video.class);
@@ -60,8 +60,8 @@ public class VideoService {
         matchWriter(videoRequestDto.getWriterId(), id);
 
         if (!uploadFile.isEmpty()) {
-            fileUploader.deleteFile(video.getOriginFileName());
-            String videoUrl = fileUploader.uploadFile(uploadFile);
+            fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
+            String videoUrl = fileUploader.uploadFile(uploadFile, UploadType.VIDEO);
             video.updateContentPath(videoUrl);
         }
         video.update(modelMapper.map(videoRequestDto, Video.class));
@@ -74,7 +74,7 @@ public class VideoService {
         if (!video.matchWriter(userId)) {
             throw new UserAndWriterMisMatchException();
         }
-        fileUploader.deleteFile(video.getOriginFileName());
+        fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
         videoRepository.deleteById(video.getId());
     }
 

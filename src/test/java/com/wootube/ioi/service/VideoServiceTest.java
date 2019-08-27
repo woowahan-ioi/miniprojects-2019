@@ -1,5 +1,8 @@
 package com.wootube.ioi.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
@@ -8,6 +11,7 @@ import com.wootube.ioi.service.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
 import com.wootube.ioi.service.testutil.TestUtil;
 import com.wootube.ioi.service.util.FileUploader;
+import com.wootube.ioi.service.util.UploadType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,12 +19,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -87,7 +89,7 @@ class VideoServiceTest extends TestUtil {
         MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
 
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
-        given(fileUploader.uploadFile(testUpdateChangeUploadFile)).willReturn(updateFileFullPath);
+        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO)).willReturn(updateFileFullPath);
         given(testVideo.matchWriter(USER_ID)).willReturn(true);
         videoService.update(ID, testUpdateChangeUploadFile, testVideoRequestDto);
 
@@ -103,7 +105,8 @@ class VideoServiceTest extends TestUtil {
         MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
 
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
-        given(fileUploader.uploadFile(testUpdateChangeUploadFile)).willReturn(updateFileFullPath);
+        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO)).willReturn(updateFileFullPath);
+
         given(testVideo.matchWriter(USER_ID)).willReturn(false);
 
         assertThrows(NotMatchUserIdException.class, ()
@@ -116,7 +119,7 @@ class VideoServiceTest extends TestUtil {
         deleteMockVideo();
         videoService.deleteById(ID, USER_ID);
 
-        verify(fileUploader, atLeast(1)).deleteFile(testVideo.getOriginFileName());
+        verify(fileUploader, atLeast(1)).deleteFile(testVideo.getOriginFileName(), UploadType.VIDEO);
         verify(videoRepository, atLeast(1)).deleteById(ID);
     }
 
@@ -130,7 +133,7 @@ class VideoServiceTest extends TestUtil {
     }
 
     private void createMockVideo() {
-        given(fileUploader.uploadFile(testUploadFile)).willReturn(fileFullPath);
+        given(fileUploader.uploadFile(testUploadFile, UploadType.VIDEO)).willReturn(fileFullPath);
         given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
         given(userService.findByIdAndIsActiveTrue(USER_ID)).willReturn(writer);
 
