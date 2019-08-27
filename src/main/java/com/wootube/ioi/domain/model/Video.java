@@ -1,12 +1,11 @@
 package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -28,6 +27,9 @@ public class Video extends BaseEntity {
     @Lob
     @Column(nullable = false)
     private String originFileName;
+
+	@Column(columnDefinition = "long default 1")
+    private long views = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_to_user"), nullable = false)
@@ -56,11 +58,11 @@ public class Video extends BaseEntity {
         this.writer = writer;
     }
 
-    public Video matchWriter(Long userId) {
-        if (!userId.equals(writer.getId())) {
-            throw new UserAndWriterMisMatchException();
-        }
+    public boolean matchWriter(Long userId) {
+        return writer.isSameEntity(userId);
+    }
 
-        return this;
+    public void increaseViews() {
+        this.views++;
     }
 }

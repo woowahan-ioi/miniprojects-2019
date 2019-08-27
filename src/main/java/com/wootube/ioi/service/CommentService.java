@@ -8,6 +8,7 @@ import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.exception.NotFoundCommentException;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +29,8 @@ public class CommentService {
     }
 
     public CommentResponseDto save(CommentRequestDto commentRequestDto, Long videoId, String email) {
-        Video video = videoService.findVideo(videoId);
         User writer = userService.findByEmail(email);
+        Video video = videoService.findById(videoId);
         Comment comment = commentRepository.save(Comment.of(commentRequestDto.getContents(), video, writer));
         return modelMapper.map(comment, CommentResponseDto.class);
     }
@@ -37,7 +38,7 @@ public class CommentService {
     @Transactional
     public CommentResponseDto update(Long commentId, String email, Long videoId, CommentRequestDto commentRequestDto) {
         User writer = userService.findByEmail(email);
-        Video video = videoService.findVideo(videoId);
+        Video video = videoService.findById(videoId);
         Comment comment = findById(commentId);
 
         comment.update(writer, video, commentRequestDto.getContents());
@@ -46,7 +47,7 @@ public class CommentService {
 
     public void delete(Long commentId, String email, Long videoId) {
         User writer = userService.findByEmail(email);
-        Video video = videoService.findVideo(videoId);
+        Video video = videoService.findById(videoId);
         Comment comment = findById(commentId);
 
         comment.checkMatchVideo(video);

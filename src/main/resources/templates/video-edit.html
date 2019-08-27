@@ -14,7 +14,7 @@
               method="post"
               th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
             <input name="_method" th:if="not ${#strings.isEmpty(video)}" type="hidden" value="PUT">
-
+            <input type="hidden" name="writerId" th:value="${session.user.id}">
             <div class="row">
                 <div class="video-enroll-div col-md-8">
                     <div class="video-contents">
@@ -56,11 +56,11 @@
                         <div class="form-group">
                             <label for="title" class="font-size-12">제목 :</label>
                             <input class="form-control" id="title" name="title"
-                                   th:placeholder="${#strings.isEmpty(video)? '' : video.title}"
+                                   th:value="${#strings.isEmpty(video)? '' : video.title}"
                                    type="text">
                             <label for="description">설명 :</label>
                             <textarea class="form-control" id="description" rows="10" name="description"
-                                      th:placeholder="${#strings.isEmpty(video)? '' : video.description}"></textarea>
+                                      th:text="${#strings.isEmpty(video)? '' : video.description}"></textarea>
                         </div>
                         <div class="form-group text-center">
                             <button class="font-size-13 confirm-btn" type="submit">등록</button>
