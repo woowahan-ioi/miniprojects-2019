@@ -56,11 +56,11 @@
                         <div class="form-group">
                             <label for="title" class="font-size-12">제목 :</label>
                             <input class="form-control" id="title" name="title"
-                                   th:placeholder="${#strings.isEmpty(video)? '' : video.title}"
+                                   th:value="${#strings.isEmpty(video)? '' : video.title}"
                                    type="text">
                             <label for="description">설명 :</label>
                             <textarea class="form-control" id="description" rows="10" name="description"
-                                      th:placeholder="${#strings.isEmpty(video)? '' : video.description}"></textarea>
+                                      th:text="${#strings.isEmpty(video)? '' : video.description}"></textarea>
                         </div>
                         <div class="form-group text-center">
                             <button class="font-size-13 confirm-btn" type="submit">등록</button>
