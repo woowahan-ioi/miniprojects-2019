@@ -1,5 +1,7 @@
 package com.wootube.ioi.service;
 
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.repository.CommentRepository;
 import com.wootube.ioi.service.dto.CommentResponseDto;
@@ -11,9 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Optional;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;

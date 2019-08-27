@@ -15,7 +15,6 @@ import org.modelmapper.ModelMapper;
 
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static com.wootube.ioi.service.testutil.TestUtil.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
