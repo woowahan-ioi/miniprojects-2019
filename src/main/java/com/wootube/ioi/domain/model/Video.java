@@ -12,50 +12,57 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @DynamicUpdate
 public class Video extends BaseEntity {
-    @Column(nullable = false,
-            length = 50)
-    private String title;
+	@Column(nullable = false,
+			length = 50)
+	private String title;
 
-    @Lob
-    @Column(nullable = false)
-    private String description;
+	@Lob
+	@Column(nullable = false)
+	private String description;
 
-    @Lob
-    @Column(nullable = false)
-    private String contentPath;
+	@Lob
+	@Column(nullable = false)
+	private String contentPath;
 
-    @Lob
-    @Column(nullable = false)
-    private String originFileName;
+	@Lob
+	@Column(nullable = false)
+	private String originFileName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_to_user"), nullable = false)
-    private User writer;
+	@Column
+	private long views;
 
-    public Video(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_video_to_user"), nullable = false)
+	private User writer;
 
-    public void update(Video updateVideo) {
-        if (updateVideo.contentPath != null) {
-            this.contentPath = updateVideo.contentPath;
-        }
-        this.title = updateVideo.title;
-        this.description = updateVideo.description;
-    }
+	public Video(String title, String description) {
+		this.title = title;
+		this.description = description;
+	}
 
-    public void updateContentPath(String contentPath) {
-        this.contentPath = contentPath;
-    }
+	public void update(Video updateVideo) {
+		if (updateVideo.contentPath != null) {
+			this.contentPath = updateVideo.contentPath;
+		}
+		this.title = updateVideo.title;
+		this.description = updateVideo.description;
+	}
 
-    public void initialize(String contentPath, String originFileName, User writer) {
-        this.contentPath = contentPath;
-        this.originFileName = originFileName;
-        this.writer = writer;
-    }
+	public void updateContentPath(String contentPath) {
+		this.contentPath = contentPath;
+	}
 
-    public boolean matchWriter(Long userId) {
-        return writer.isSameEntity(userId);
-    }
+	public void initialize(String contentPath, String originFileName, User writer) {
+		this.contentPath = contentPath;
+		this.originFileName = originFileName;
+		this.writer = writer;
+	}
+
+	public boolean matchWriter(Long userId) {
+		return writer.isSameEntity(userId);
+	}
+
+	public void increaseViews() {
+		this.views++;
+	}
 }

@@ -44,8 +44,15 @@ public class VideoService {
         return modelMapper.map(videoRepository.save(video), VideoResponseDto.class);
     }
 
+    @Transactional
     public VideoResponseDto findVideo(Long id) {
-        return modelMapper.map(findById(id), VideoResponseDto.class);
+        Video video = findById(id);
+        increaseViews(video);
+        return modelMapper.map(video, VideoResponseDto.class);
+    }
+
+    private void increaseViews(Video video) {
+        video.increaseViews();
     }
 
     public Video findById(Long id) {

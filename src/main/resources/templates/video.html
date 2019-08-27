@@ -22,7 +22,7 @@
                 <span class="comment-contents font-size-20 text-bold" th:unless="${video.title}" th:text="${video.title}">title</span>
                 <div class="mrg-top-10">
                     <div class="title-views">
-                        <span>조회수 132,323회</span>
+                       조회수 <span th:text="${video.views}"></span>
                     </div>
                     <div class="title-btn">
                         <button class="title-like-btn">
