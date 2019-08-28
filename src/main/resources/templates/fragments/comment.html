@@ -2,7 +2,18 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="commentFragment">
     <div>
-        <div>댓글 <span id="comment-count">0</span>개</div>
+        <div class="dropdown" id="comment-sort-button">
+            <span>댓글 <span id="comment-count">0</span>개</span>
+            <button class="comment-sort-button dropdown-toggle" data-toggle="dropdown">
+                <i class="ti-align-left"></i>
+                <span>정렬 기준</span>
+            </button>
+
+            <div class="dropdown-menu comment-sort-bropdown" role="menu">
+                <button class="comment-like-sort-btn list-group-item list-group-item-action">인기 댓글순</button>
+                <button class="comment-recent-sort-btn list-group-item list-group-item-action">최신 댓글순</button>
+            </div>
+        </div>
         <div class="comment mrg-btm-50">
             <div class="mrg-top-5">
                 <div class="reply-area">
@@ -24,7 +35,6 @@
             </div>
         </div>
         <ul id="comment-area">
-
         </ul>
     </div>
 </th:block>

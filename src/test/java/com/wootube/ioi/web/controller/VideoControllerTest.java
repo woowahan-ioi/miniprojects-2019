@@ -1,17 +1,10 @@
 package com.wootube.ioi.web.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.time.Duration;
-
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.web.config.TestConfig;
 import io.findify.s3mock.S3Mock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,10 +13,15 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.test.annotation.Timed;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.reactive.function.BodyInserters;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.time.Duration;
 
 import static org.springframework.http.HttpMethod.*;
 
@@ -115,7 +113,8 @@ class VideoControllerTest extends CommonControllerTest {
             @Override
             public String getFilename() {
                 return "update_test_file.mp4";
-            }}, MediaType.parseMediaType("video/mp4"));
+            }
+        }, MediaType.parseMediaType("video/mp4"));
         updateBodyBuilder.part("title", "update_video_title");
         updateBodyBuilder.part("description", "update_video_description");
         updateBodyBuilder.part("userId", 1);
@@ -180,7 +179,8 @@ class VideoControllerTest extends CommonControllerTest {
             @Override
             public String getFilename() {
                 return "test_file.mp4";
-            }}, MediaType.parseMediaType("video/mp4"));
+            }
+        }, MediaType.parseMediaType("video/mp4"));
         bodyBuilder.part("title", "video_title");
         bodyBuilder.part("description", "video_description");
         bodyBuilder.part("writerId", 1);

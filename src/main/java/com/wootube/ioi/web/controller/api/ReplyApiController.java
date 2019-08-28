@@ -5,14 +5,18 @@ import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/videos/{videoId}/comments/{commentId}/replies")
 @RestController
 public class ReplyApiController {
+    private static final Sort DESC_SORT_BY_UPDATE_TIME = new Sort(Sort.Direction.DESC, "updateTime");
+
     private final ReplyService replyService;
     private final UserSessionManager userSessionManager;
 
@@ -21,8 +25,17 @@ public class ReplyApiController {
         this.userSessionManager = userSessionManager;
     }
 
+    @GetMapping("/sort/updatetime")
+    public ResponseEntity<List<ReplyResponseDto>> sortReplyByUpdateTime(@PathVariable Long videoId,
+                                                                          @PathVariable Long commentId) {
+        List<ReplyResponseDto> replies = replyService.sortReply(DESC_SORT_BY_UPDATE_TIME, videoId, commentId);
+
+        return ResponseEntity.ok(replies);
+    }
+
+
     @PostMapping
-    public ResponseEntity createReply(@PathVariable Long videoId,
+    public ResponseEntity<ReplyResponseDto> createReply(@PathVariable Long videoId,
                                       @PathVariable Long commentId,
                                       @RequestBody ReplyRequestDto replyRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
