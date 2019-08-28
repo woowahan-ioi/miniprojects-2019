@@ -107,9 +107,12 @@ const commentButton = (function () {
                 $(commentListDiv).empty();
                 if (response.status === 200) {
                     response.json().then(data => {
+                        let count = 0;
                         for (const comment of data) {
                             appendComment(comment);
+                            count++;
                         }
+                        commentCount.innerText = count;
                     });
                     return;
                 }
