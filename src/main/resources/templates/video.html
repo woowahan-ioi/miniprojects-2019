@@ -51,8 +51,8 @@
                          src="/images/default/eastjun_big.jpg">
                 </div>
                 <div class="relative banner-info d-inline-block col-sm-8">
-                    <span class="left-30 bottom-35 font-size-17 text-bold" th:if="${video.writer.name}" th:text="${video.writer.name}"></span><br>
-                    <span class="left-30 bottom-35 font-size-17 text-bold" th:unless="${video.writer.name}">UserName</span><br>
+                    <span class="left-30 bottom-35 font-size-17 text-bold" th:if="${video.writerName}" th:text="${video.writerName}"></span><br>
+                    <span class="left-30 bottom-35 font-size-17 text-bold" th:unless="${video.writerName}">UserName</span><br>
 
                     게시일 <span class="left-30 bottom-35 font-size-13" th:id="videoCreateTime" th:if="${video.createTime}" th:text="${video.createTime}"></span>
                     <span class="left-30 bottom-35 font-size-13" th:unless="${video.createTime}">DateTime</span>
@@ -64,7 +64,7 @@
                     <button class="title-more-btn left-30 clicked" id="readMoreSpan">더보기</button>
                 </div>
                 <div class="col-sm-2" th:if="${session.user}">
-                    <button id="subscription-btn" class="subscribe-btn font-size-13" style="float: right" th:data-writerid="${video.writer.id}">
+                    <button id="subscription-btn" class="subscribe-btn font-size-13" style="float: right" th:data-writerid="${video.writerId}">
                         구독 <span id="subscription-count">0</span>명
                     </button>
                 </div>
@@ -171,7 +171,7 @@
                                     [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
                                 <span class="font-size-11">우아한Tech</span>
                                 <div class="font-size-11">
-                                    조회수 <span th:text="${video.views}"></span>
+                                    <span>조회수 952회</span>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 package com.wootube.ioi.domain.model;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
@@ -12,11 +13,11 @@ import com.wootube.ioi.domain.validator.Password;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Getter
 @NoArgsConstructor
 public class User extends BaseEntity {
-
     @Pattern(regexp = "[^ \\-!@#$%^&*(),.?\":{}|<>0-9]{2,10}",
             message = "이름은 2~10자, 숫자나 특수문자가 포함될 수 없습니다.")
     @Column(nullable = false,

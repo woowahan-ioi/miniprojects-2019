@@ -3,16 +3,24 @@ const Templates = {
                 <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                 <div class="comment-block">
                     <div class="font-size-13">
-                        <span class="user-name">${comment.writer.name}</span>
+                        <span class="user-name">${comment.writerName}</span>
                         <span class="update-date">${writtenTime}</span>
                     </div>
-                    <div class="comment-more-box">
-                        <button class="comment-more-buttons comment-edit-button">
-                            <i class="ti-pencil"> 수정</i>
+                    <div class="comment-more-box dropdown">
+                        <button class="comment-more-button dropdown-toggle" data-toggle="dropdown">
+                            <i class="ti-more-alt"></i>
                         </button>
-                        <button class="comment-more-buttons comment-delete-button">
-                            <i class="ti-trash"> 삭제</i>
-                        </button>
+                    
+                        <div class="dropdown-menu" role="menu">
+                            <button class="list-group-item list-group-item-action comment-edit-button">
+                                <i class="fa fa-pencil"></i>
+                                <span>수정</span>
+                            </button>
+                            <button class="list-group-item list-group-item-action comment-delete-button">
+                                <i class="fa fa-trash"></i>
+                                <span>삭제</span>
+                            </button>
+                        </div>
                     </div>
                     <span class="comment-contents font-size-15">${comment.contents}</span>
                     <div>
@@ -42,26 +50,44 @@ const Templates = {
                         <button class="btn comment-btn edit reply-save-btn disabled">답글</button>
                         <button class="btn comment-btn reply-cancel-btn">취소</button>
                     </div>
+                    <div id="reply-list-more-area" class="mrg-btm-10">
+                        <button class="reply-list-open-button">
+                            <span>답글 더보기</span>
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <button class="reply-list-close-button display-none">
+                            <span>답글 숨기기</span>
+                            <i class="fa fa-angle-up"></i>
+                        </button>
+                    </div>
                     <ul class="reply-list">
 
                     </ul>
                 </div>
             </li>`
     },
-    replyTemplate : (reply, writtenTime) => { return `<li class="reply mrg-btm-30" data-commentid="${reply.id}">
+    replyTemplate : (reply, writtenTime) => { return `<li class="reply mrg-btm-30" data-replyid="${reply.id}">
                             <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                             <div class="comment-block">
                                 <div class="font-size-13">
-                                    <span class="user-name">${reply.writer.name}</span>
+                                    <span class="user-name">${reply.writerName}</span>
                                     <span class="update-date">${writtenTime}</span>
                                 </div>
-                                <div class="comment-more-box">
-                                    <button class="comment-more-buttons reply-edit-button">
-                                        <i class="ti-pencil"> 수정</i>
+                                <div class="reply-more-box dropdown">
+                                    <button class="reply-more-button dropdown-toggle" data-toggle="dropdown">
+                                        <i class="ti-more-alt"></i>
                                     </button>
-                                    <button class="comment-more-buttons reply-delete-button">
-                                        <i class="ti-trash"> 삭제</i>
-                                    </button>
+                                
+                                    <div class="dropdown-menu" role="menu">
+                                        <button class="list-group-item list-group-item-action reply-edit-button">
+                                            <i class="fa fa-pencil"></i>
+                                            <span>수정</span>
+                                        </button>
+                                        <button class="list-group-item list-group-item-action reply-delete-button">
+                                            <i class="fa fa-trash"></i>
+                                            <span>삭제</span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <span class="reply-contents font-size-15">${reply.contents}</span>
                                 <div>
@@ -71,7 +97,7 @@ const Templates = {
                                     <span>3.5천</span>
                                 </div>
                             </div>
-                            <div class="comment-update-area display-none mrg-btm-50">
+                            <div class="reply-update-area display-none mrg-btm-50">
                                 <div>
                                     <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
                                          alt="">
