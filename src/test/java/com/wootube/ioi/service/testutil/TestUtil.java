@@ -57,6 +57,6 @@ public class TestUtil {
 
     protected static final Reply REPLY1 = Reply.of(REPLY1_CONTENTS, COMMENT1, WRITER);
 
-    protected static final ReplyResponseDto REPLY_RESPONSE_DTO1 = ReplyResponseDto.of(REPLY1.getId(), REPLY1.getContents(), REPLY1.getUpdateTime(), WRITER);
+    protected static final ReplyResponseDto REPLY_RESPONSE_DTO1 = ReplyResponseDto.of(REPLY1.getId(), REPLY1.getContents(), REPLY1.getUpdateTime(), WRITER.getName());
 
 }
