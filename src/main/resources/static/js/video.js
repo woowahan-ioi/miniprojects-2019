@@ -32,9 +32,100 @@ readMoreTag();
 
 window.onload = function() {
     videoUpdateTime();
+    getLikeCount();
 }
 
 function videoUpdateTime() {
     const date = (new Date(/*[[${video.createTime}]]*/).toLocaleDateString());
-    document.getElementById("videoCreateTime").innerHTML = date;
+    document.getElementById("videoCreateTime").innerText = date;
 }
+
+function getLikeCount() {
+    const videoId = document.querySelector("#video-contents").dataset.videoid;
+    const requestUri = '/api/videos/' + videoId + '/likes/counts';
+
+    const callback = (response) => {
+        if(response.status === 200) {
+            response.json()
+                .then(data => {
+                    const count = data.count;
+                    document.querySelector("#likeCount").innerText = count;
+                });
+        }
+    }
+
+    const requestBody = {
+    };
+
+    const handleError = (error) => {
+        alert(error);
+    }
+
+    AjaxRequest.POST(requestUri, requestBody, callback, handleError)
+}
+
+const videoButton = (function() {
+    const VideoController = function () {
+        const videoService = new VideoService();
+
+        const increaseLike = function () {
+            const videoLikeButton = document.querySelector('#title-like-btn');
+            videoLikeButton.addEventListener('click', videoService.increase);
+        }
+
+        const videoToggle = function () {
+            document.querySelector('#title-like-btn').addEventListener('click', videoService.toggleVideoLike);
+        }
+
+        const init = function () {
+            increaseLike();
+            videoToggle();
+        }
+
+        return {
+            init: init,
+        }
+    };
+
+    const VideoService = function () {
+        function toggleVideoLike(count) {
+            document.querySelector("#likeCount").innerText = count;
+        };
+
+        const increaseLike = () => {
+            const videoId = document.querySelector("#video-contents").dataset.videoid;
+            const requestUri = '/api/videos/' + videoId + '/likes';
+
+            const callback = (response) => {
+                if(response.status === 200) {
+                    response.json().then(data => { const count = data.count;
+                        document.querySelector("#likeCount").innerText = count;});
+                }
+            }
+
+            const requestBody = {
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            }
+
+            AjaxRequest.POST(requestUri, requestBody, callback, handleError)
+        }
+
+        return {
+            increase: increaseLike,
+            toggleVideoLike: toggleVideoLike
+        }
+    }
+
+    const init = function() {
+        const videoButtonController = new VideoController();
+        videoButtonController.init();
+    };
+
+    return {
+        init: init
+    }
+})();
+videoButton.init();
