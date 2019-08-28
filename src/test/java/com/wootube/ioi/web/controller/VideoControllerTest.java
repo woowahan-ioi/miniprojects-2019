@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.time.Duration;
 
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.web.config.TestConfig;
@@ -19,6 +20,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.test.annotation.Timed;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -57,7 +59,12 @@ class VideoControllerTest extends CommonControllerTest {
         byte[] fileContent = Files.readAllBytes(file.toPath());
 
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-        bodyBuilder.part("uploadFile", new ByteArrayResource(fileContent), MediaType.parseMediaType("video/mp4"));
+        bodyBuilder.part("uploadFile", new ByteArrayResource(fileContent) {
+            @Override
+            public String getFilename() {
+                return "test_file.mp4";
+            }
+        }, MediaType.parseMediaType("video/mp4"));
         bodyBuilder.part("title", "video_title");
         bodyBuilder.part("description", "video_description");
         bodyBuilder.part("writerId", 1);
@@ -71,7 +78,7 @@ class VideoControllerTest extends CommonControllerTest {
     @DisplayName("비디오를 조회한다.")
     void get() {
         LogInRequestDto logInRequestDto = new LogInRequestDto("a@test.com", "1234qwer");
-        loginAndRequest(GET, "/videos/1", logInRequestDto)
+        loginAndRequest(GET, "/videos/2", logInRequestDto)
                 .expectStatus().isOk();
         stopS3Mock();
     }
@@ -98,20 +105,24 @@ class VideoControllerTest extends CommonControllerTest {
     @DisplayName("등록 된 비디오를 수정한다.")
     void update() throws IOException {
         MultipartBodyBuilder bodyBuilder = createMultipartBodyBuilder();
-
         requestWithBodyBuilder(bodyBuilder, POST, "/videos/new");
 
         File file = ResourceUtils.getFile("classpath:update_test_file.mp4");
         byte[] fileContent = Files.readAllBytes(file.toPath());
 
         MultipartBodyBuilder updateBodyBuilder = new MultipartBodyBuilder();
-        updateBodyBuilder.part("uploadFile", new ByteArrayResource(fileContent), MediaType.parseMediaType("video/mp4"));
+        updateBodyBuilder.part("uploadFile", new ByteArrayResource(fileContent) {
+            @Override
+            public String getFilename() {
+                return "update_test_file.mp4";
+            }}, MediaType.parseMediaType("video/mp4"));
         updateBodyBuilder.part("title", "update_video_title");
         updateBodyBuilder.part("description", "update_video_description");
         updateBodyBuilder.part("userId", 1);
 
         requestWithBodyBuilder(updateBodyBuilder, PUT, "/videos/4")
                 .expectStatus().isFound();
+
         stopS3Mock();
     }
 
@@ -135,7 +146,11 @@ class VideoControllerTest extends CommonControllerTest {
     }
 
     private WebTestClient.ResponseSpec requestWithBodyBuilder(MultipartBodyBuilder bodyBuilder, HttpMethod requestMethod, String requestUri) {
-        return webTestClient.method(requestMethod)
+        return webTestClient
+                .mutate()
+                .responseTimeout(Duration.ofMillis(15000))
+                .build()
+                .method(requestMethod)
                 .uri(requestUri)
                 .header("Cookie", getLoginCookie(webTestClient, new LogInRequestDto("a@test.com", "1234qwer")))
                 .body(BodyInserters.fromObject(bodyBuilder.build()))
@@ -161,8 +176,11 @@ class VideoControllerTest extends CommonControllerTest {
         byte[] fileContent = Files.readAllBytes(file.toPath());
 
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-        //        updateBodyBuilder.part("uploadFile", new ByteArrayResource(fileContent), MediaType.parseMediaType("video/mp4"));
-        bodyBuilder.part("uploadFile", new ByteArrayResource(fileContent), MediaType.parseMediaType("video/mp4"));
+        bodyBuilder.part("uploadFile", new ByteArrayResource(fileContent) {
+            @Override
+            public String getFilename() {
+                return "test_file.mp4";
+            }}, MediaType.parseMediaType("video/mp4"));
         bodyBuilder.part("title", "video_title");
         bodyBuilder.part("description", "video_description");
         bodyBuilder.part("writerId", 1);

@@ -34,7 +34,6 @@ public class VideoController {
     @PostMapping("/new")
     public RedirectView video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
         checkUserSession();
-        System.out.println("우아ㅣ 씨");
         VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto);
         return new RedirectView("/videos/" + videoResponseDto.getId());
     }
