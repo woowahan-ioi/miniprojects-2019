@@ -1,21 +1,17 @@
 package com.wootube.ioi.domain.model;
 
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @DynamicUpdate
 public class Video extends BaseEntity {
-    private static final int CONTENT_PATH = 0;
-    private static final int THUMBNAIL_PATH = 1;
-
     @Column(nullable = false,
             length = 50)
     private String title;
@@ -30,14 +26,10 @@ public class Video extends BaseEntity {
 
     @Lob
     @Column(nullable = false)
-    private String thumbnailPath;
-
-    @Lob
-    @Column(nullable = false)
     private String originFileName;
 
-    @Column(columnDefinition = "long default 0")
-    private long views;
+	@Column(columnDefinition = "long default 1")
+    private long views = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_to_user"), nullable = false)
@@ -56,14 +48,12 @@ public class Video extends BaseEntity {
         this.description = updateVideo.description;
     }
 
-    public void updateContentPath(List<String> urls) {
-        this.contentPath = urls.get(CONTENT_PATH);
-        this.thumbnailPath = urls.get(THUMBNAIL_PATH);
+    public void updateContentPath(String contentPath) {
+        this.contentPath = contentPath;
     }
 
-    public void initialize(List<String> urls, String originFileName, User writer) {
-        this.contentPath = urls.get(CONTENT_PATH);
-        this.thumbnailPath = urls.get(THUMBNAIL_PATH);
+    public void initialize(String contentPath, String originFileName, User writer) {
+        this.contentPath = contentPath;
         this.originFileName = originFileName;
         this.writer = writer;
     }
@@ -75,8 +65,4 @@ public class Video extends BaseEntity {
     public void increaseViews() {
         this.views++;
     }
-
-//    public void verifyOriginFileName(String originFileName) {
-//        originFileName.mat
-//    }
 }
