@@ -8,6 +8,7 @@ import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.web.config.TestConfig;
+
 import io.findify.s3mock.S3Mock;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,10 @@ import org.springframework.web.reactive.function.BodyInserters;
 @Import(TestConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommonControllerTest {
+    static final Long USER_A_ID = 1L;
+    static final Long USER_B_ID = 2L;
+    static final Long USER_C_ID = 3L;
+    static final Long USER_D_ID = 4L;
     static final Long EXIST_COMMENT_ID = 1L;
     static final Long NOT_EXIST_COMMENT_ID = 0L;
     static final Long NOT_EXIST_REPLY_ID = 0L;
@@ -52,10 +57,14 @@ public class CommonControllerTest {
             LocalDateTime.now(), SIGN_UP_USER);
     public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
     public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
+    public static final LogInRequestDto USER_D_LOGIN_REQUEST_DTO = new LogInRequestDto("d@test.com", "1234qwer");
+
     @LocalServerPort
     private int port;
+
     @Autowired
     private WebTestClient webTestClient;
+
     @Autowired
     private S3Mock s3Mock;
 
