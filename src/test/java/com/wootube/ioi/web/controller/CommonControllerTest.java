@@ -8,7 +8,6 @@ import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.web.config.TestConfig;
-
 import io.findify.s3mock.S3Mock;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,7 @@ public class CommonControllerTest {
     static final Long NOT_EXIST_VIDEO_ID = 0L;
     static final Long USER_A_VIDEO_ID = 1L;
     static final Long USER_B_VIDEO_ID = 2L;
+    static final Long USER_C_VIDEO_ID = 3L;
     static final Long USER_A_VIDEO_USER_A_COMMENT = 1L;
     static final Long USER_A_VIDEO_USER_B_COMMENT = 2L;
     static final Long USER_B_VIDEO_USER_A_COMMENT = 3L;

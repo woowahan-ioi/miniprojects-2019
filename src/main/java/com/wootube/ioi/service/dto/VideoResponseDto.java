@@ -14,16 +14,16 @@ public class VideoResponseDto {
     private String description;
     private String contentPath;
     private long views;
-    private LocalDateTime updateTime;
+    private LocalDateTime createTime;
     private User writer;
 
-    public VideoResponseDto(Long id, String title, String description, String contentPath, long views, LocalDateTime updateTime, User writer) {
+    public VideoResponseDto(Long id, String title, String description, String contentPath, long views, LocalDateTime createTime, User writer) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.contentPath = contentPath;
         this.views = views;
-        this.updateTime = updateTime;
+        this.createTime = createTime;
         this.writer = writer;
     }
 }

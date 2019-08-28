@@ -28,8 +28,8 @@ public class Video extends BaseEntity {
     @Column(nullable = false)
     private String originFileName;
 
-	@Column(columnDefinition = "long default 1")
-    private long views = 0;
+    @Column(columnDefinition = "long default 0")
+    private long views;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_to_user"), nullable = false)
