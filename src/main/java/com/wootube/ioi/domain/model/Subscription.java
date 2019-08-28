@@ -1,13 +1,8 @@
 package com.wootube.ioi.domain.model;
 
+import javax.persistence.*;
+
 import com.wootube.ioi.domain.exception.IllegalSubscriptionException;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

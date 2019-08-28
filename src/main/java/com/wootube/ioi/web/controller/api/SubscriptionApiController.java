@@ -1,5 +1,7 @@
 package com.wootube.ioi.web.controller.api;
 
+import java.util.List;
+
 import com.wootube.ioi.service.SubscriptionService;
 import com.wootube.ioi.service.dto.SubscriberResponseDto;
 import com.wootube.ioi.service.dto.SubscriptionCheckResponseDto;
@@ -9,14 +11,7 @@ import com.wootube.ioi.web.session.UserSessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/subscriptions")
 @RestController

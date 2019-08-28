@@ -150,7 +150,3 @@ const subscriptionButton = (function () {
         init: init
     }
 })();
-
-window.onload = () => {
-    subscriptionButton.init();
-}
