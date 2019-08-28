@@ -1,9 +1,5 @@
 package com.wootube.ioi.domain.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
 
 import com.wootube.ioi.domain.exception.ActivatedException;
 import com.wootube.ioi.domain.exception.InactivatedException;
@@ -11,6 +7,12 @@ import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.validator.Password;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+
 
 @Entity
 @Getter

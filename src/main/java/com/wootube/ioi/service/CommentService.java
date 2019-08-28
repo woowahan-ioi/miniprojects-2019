@@ -8,9 +8,12 @@ import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.exception.NotFoundCommentException;
 import org.modelmapper.ModelMapper;
-
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -59,5 +62,17 @@ public class CommentService {
     public Comment findById(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(NotFoundCommentException::new);
+    }
+
+    public List<CommentResponseDto> sortComment(Sort sort, Long videoId) {
+        Video video = videoService.findById(videoId);
+        List<Comment> comments =  commentRepository.findAllByVideo(sort, video);
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+
+        comments.forEach(comment -> {
+            CommentResponseDto commentResponseDto = modelMapper.map(comment, CommentResponseDto.class);
+            commentResponseDtos.add(commentResponseDto);
+        });
+        return commentResponseDtos;
     }
 }

@@ -45,16 +45,16 @@ public class CommonControllerTest {
     static final User SIGN_UP_USER = new User(SIGN_UP_COMMON_REQUEST_DTO.getName(), SIGN_UP_COMMON_REQUEST_DTO.getEmail(), SIGN_UP_COMMON_REQUEST_DTO.getPassword());
     static final CommentResponseDto SAVE_COMMENT_RESPONSE = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents",
-            LocalDateTime.now(), SIGN_UP_USER);
+            LocalDateTime.now(), SIGN_UP_USER.getName());
     static final CommentResponseDto UPDATE_COMMENT_RESPONSE = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Update Contents",
-            LocalDateTime.now(), SIGN_UP_USER);
+            LocalDateTime.now(), SIGN_UP_USER.getName());
     static final ReplyResponseDto SAVE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Reply Contents",
-            LocalDateTime.now(), SIGN_UP_USER);
+            LocalDateTime.now(), SIGN_UP_USER.getName());
     static final ReplyResponseDto UPDATE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Update Contents",
-            LocalDateTime.now(), SIGN_UP_USER);
+            LocalDateTime.now(), SIGN_UP_USER.getName());
     public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
     public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
     public static final LogInRequestDto USER_D_LOGIN_REQUEST_DTO = new LogInRequestDto("d@test.com", "1234qwer");

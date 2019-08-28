@@ -46,10 +46,10 @@ public class TestUtil {
 
     protected static final CommentResponseDto COMMENT_RESPONSE1 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 1",
-            LocalDateTime.now(), WRITER);
+            LocalDateTime.now(), WRITER.getName());
     protected static final CommentResponseDto COMMENT_RESPONSE2 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 2",
-            LocalDateTime.now(), WRITER);
+            LocalDateTime.now(), WRITER.getName());
 
     private static final String REPLY1_CONTENTS = "Reply Contents 1";
 
@@ -57,6 +57,6 @@ public class TestUtil {
 
     protected static final Reply REPLY1 = Reply.of(REPLY1_CONTENTS, COMMENT1, WRITER);
 
-    protected static final ReplyResponseDto REPLY_RESPONSE_DTO1 = ReplyResponseDto.of(REPLY1.getId(), REPLY1.getContents(), REPLY1.getUpdateTime(), WRITER);
+    protected static final ReplyResponseDto REPLY_RESPONSE_DTO1 = ReplyResponseDto.of(REPLY1.getId(), REPLY1.getContents(), REPLY1.getUpdateTime(), WRITER.getName());
 
 }
