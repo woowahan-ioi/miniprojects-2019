@@ -46,10 +46,10 @@ public class TestUtil {
 
     protected static final CommentResponseDto COMMENT_RESPONSE1 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 1",
-            LocalDateTime.now(), WRITER);
+            LocalDateTime.now(), WRITER.getName());
     protected static final CommentResponseDto COMMENT_RESPONSE2 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 2",
-            LocalDateTime.now(), WRITER);
+            LocalDateTime.now(), WRITER.getName());
 
     private static final String REPLY1_CONTENTS = "Reply Contents 1";
 
