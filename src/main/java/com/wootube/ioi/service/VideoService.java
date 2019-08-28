@@ -40,10 +40,9 @@ public class VideoService {
     public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
         List<String> urls = fileUploader.uploadFile(uploadFile, UploadType.VIDEO, UploadType.THUMBNAIL);
         String originFileName = uploadFile.getOriginalFilename();
-
-        Video video = modelMapper.map(videoRequestDto, Video.class);
         User writer = userService.findByIdAndIsActiveTrue(videoRequestDto.getWriterId());
 
+        Video video = modelMapper.map(videoRequestDto, Video.class);
         video.initialize(urls, originFileName, writer);
         return modelMapper.map(videoRepository.save(video), VideoResponseDto.class);
     }

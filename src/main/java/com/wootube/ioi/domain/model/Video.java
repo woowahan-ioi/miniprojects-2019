@@ -75,4 +75,8 @@ public class Video extends BaseEntity {
     public void increaseViews() {
         this.views++;
     }
+
+//    public void verifyOriginFileName(String originFileName) {
+//        originFileName.mat
+//    }
 }

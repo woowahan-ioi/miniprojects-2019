@@ -32,10 +32,11 @@ public interface FileUploader {
         try {
             File uploadFile = convert(multipartFile)
                     .orElseThrow(FileUploadException::new);
-            String videoUrl = uploadCloud(uploadFile, videoUploadType);
 
             File thumbnailUploadFile = convert(uploadFile)
                     .orElseThrow(FileUploadException::new);
+
+            String videoUrl = uploadCloud(uploadFile, videoUploadType);
             String thumbnailUrl = uploadCloud(thumbnailUploadFile, thumbnailUploadType);
 
             uploadFile.delete();
@@ -74,6 +75,7 @@ public interface FileUploader {
             DemuxerTrack track = demuxer.getVideoTrack();
             return track.getMeta().getTotalDuration() / 5.0;
         } catch (IOException e) {
+            videoFile.delete();
             throw new FileUploadException();
         }
 
