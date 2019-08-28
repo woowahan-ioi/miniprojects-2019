@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="commentFragment">
     <div>
-        <div class="dropdown">
+        <div class="dropdown" id="comment-sort-button">
             <span>댓글 <span id="comment-count">0</span>개</span>
             <button class="comment-sort-button dropdown-toggle" data-toggle="dropdown">
                 <i class="ti-filter"></i>
@@ -35,7 +35,6 @@
             </div>
         </div>
         <ul id="comment-area">
-
         </ul>
     </div>
 </th:block>

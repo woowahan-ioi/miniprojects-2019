@@ -3,7 +3,7 @@ const Templates = {
                 <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                 <div class="comment-block">
                     <div class="font-size-13">
-                        <span class="user-name">${comment.writer.name}</span>
+                        <span class="user-name">${comment.writerName}</span>
                         <span class="update-date">${writtenTime}</span>
                     </div>
                     <div class="comment-more-box dropdown">
@@ -60,7 +60,7 @@ const Templates = {
                             <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                             <div class="comment-block">
                                 <div class="font-size-13">
-                                    <span class="user-name">${reply.writer.name}</span>
+                                    <span class="user-name">${reply.writerName}</span>
                                     <span class="update-date">${writtenTime}</span>
                                 </div>
                                 <div class="reply-more-box dropdown">

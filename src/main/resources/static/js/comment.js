@@ -26,11 +26,17 @@ const commentButton = (function () {
             document.querySelector("#comment-area").addEventListener("click", commentService.toggleCommentEditButton);
         }
 
+        const sortCommentByUpdateTime = function () {
+            const commentAddButton = document.querySelector('#comment-sort-button');
+            commentAddButton.addEventListener('click', commentService.sortCommentByUpdateTime);
+        };
+
         const init = function () {
             saveComment();
             updateComment();
             deleteComment();
             commentToggle();
+            sortCommentByUpdateTime();
         };
 
         return {
@@ -87,6 +93,34 @@ const commentButton = (function () {
             }
         }
 
+        const sortCommentByUpdateTime = (event) => {
+            let target = event.target;
+
+            if (!target.classList.contains("comment-recent-sort-btn")) {
+                return;
+            }
+
+            const requestUri = '/api/videos/' + videoId + '/comments/sort/updatetime';
+
+            const callback = (response) => {
+                const commentListDiv = target.parentElement.parentElement.nextElementSibling.nextElementSibling;
+                $(commentListDiv).empty();
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        for (const comment of data) {
+                            appendComment(comment);
+                        }
+                    });
+                    return;
+                }
+                throw response;
+            };
+            const handleError = (error) => {
+                alert(error);
+            };
+            AjaxRequest.GET(requestUri, callback, handleError);
+        }
+
         const saveComment = (event) => {
             const inputComment = event.target.parentElement.parentElement.querySelector("INPUT");
             const requestUri = '/api/videos/' + videoId + '/comments';
@@ -107,7 +141,7 @@ const commentButton = (function () {
             };
             const handleError = (error) => {
                 alert(error);
-            }
+            };
 
             AjaxRequest.POST(requestUri, requestBody, callback, handleError);
         };
@@ -198,7 +232,8 @@ const commentButton = (function () {
             toggleCommentWrite: toggleCommentWrite,
             toggleCommentSaveButton: toggleCommentSaveButton,
             toggleCommentMoreButton: toggleCommentMoreButton,
-            toggleCommentEditButton: toggleCommentEditButton
+            toggleCommentEditButton: toggleCommentEditButton,
+            sortCommentByUpdateTime: sortCommentByUpdateTime
         }
     };
 
