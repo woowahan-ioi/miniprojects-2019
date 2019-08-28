@@ -5,8 +5,7 @@ import lombok.Getter;
 @Getter
 public enum UploadType {
     VIDEO("video"),
-    PROFILE("profile"),
-    THUMBNAIL("thumbnail");
+    PROFILE("profile");
 
     private final String uploadType;
 
