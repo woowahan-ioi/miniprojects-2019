@@ -65,5 +65,15 @@
 </div>
 <script type="text/javascript" src="/js/video-edit.js"></script>
 <th:block th:replace="fragments/script :: scriptFragment"/>
+
+<script th:if="${errors}" th:inline="javascript">
+    /* <![CDATA[ */
+    const initValue = [[ ${errors}]];
+    /* ]]> */
+
+    alert(initValue);
+
+</script>
+
 </body>
 </html>
