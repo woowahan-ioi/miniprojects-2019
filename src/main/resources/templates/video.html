@@ -63,10 +63,9 @@
                     </div>
                     <button class="title-more-btn left-30 clicked" id="readMoreSpan">더보기</button>
                 </div>
-                <div class="col-sm-2">
-
-                    <button class="subscribe-btn font-size-13" style="float: right">구독 <span
-                            id="subscribe_number"> 00명</span>
+                <div class="col-sm-2" th:if="${session.user}">
+                    <button id="subscription-btn" class="subscribe-btn font-size-13" style="float: right" th:data-writerid="${video.writer.id}">
+                        구독 <span id="subscription-count">0</span>명
                     </button>
                 </div>
             </div>
@@ -188,6 +187,7 @@
 <script src="/js/reply.js" type="text/javascript"></script>
 <script src="/js/video.js" type="text/javascript"></script>
 <th:block th:replace="fragments/script :: scriptFragment"/>
+<script src="/js/subscribe.js" type="text/javascript"></script>
 
 </body>
 </html>
