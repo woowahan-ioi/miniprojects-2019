@@ -22,18 +22,23 @@
             <v-app>
                 <v-col style="padding-top: 0; background-color: #FFFFFF;">
                     <v-row style="height: 150px; padding: 16px 107px 4px; background-color: #FAFAFA;">
+                                <form id="profile-image-form" enctype="multipart/form-data"
+                                      method="post"
+                                      action="/user/images">
+                                    <input name="_method" type="hidden" value="PUT">
+                                    <input id="file-input" name="uploadFile" type="file" hidden/>
+                                    <label for="file-input">
                         <v-row style="width: 5vw; align-content: center;">
                             <v-avatar
                                     color="white"
                                     size="100"
                                     style="margin-right: 24px;"
                             >
-                                <img
-                                        alt="avatar"
-                                        th:src="${session.user.profileImageUrl}"
-                                >
+                                        <img id="profile-image" alt="avatar" th:src="${session.user.profileImageUrl}">
                             </v-avatar>
                         </v-row>
+                                    </label>
+                                </form>
                         <v-row style="width: 50vw; align-content: center;">
                             <div style="font-size: 28px; font-weight: 500; margin-left: 12px; height: 45px;"
                                  th:text="${session.user.name}">유저 아이디
@@ -180,6 +185,10 @@
     });
 
     document.querySelector("#video-area").addEventListener("click", deleteVideo);
+
+    document.querySelector("#file-input").addEventListener("change", (event) => {
+        document.querySelector("#profile-image-form").submit();
+    });
 </script>
 </body>
 </html>
