@@ -4,6 +4,12 @@ VALUES ('회원에이', 'a@test.com', '1234qwer', true);
 INSERT INTO user(name, email, password, active)
 VALUES ('회원비', 'b@test.com', '1234qwer', true);
 
+INSERT INTO user(name, email, password, active)
+VALUES ('회원씨', 'c@test.com', '1234qwer', true);
+
+INSERT INTO user(name, email, password, active)
+VALUES ('회원디', 'd@test.com', '1234qwer', true);
+
 INSERT INTO video (title, description, content_path, origin_file_name, writer_id)
 VALUES ('video_a', '비디오 에이 입니다.', 'pathA', 'video_a.mp4', 1);
 
@@ -33,3 +39,9 @@ VALUES (1, 3);
 
 INSERT INTO video_like (like_user_id, video_id)
 VALUES (2, 3);
+
+INSERT INTO subscription (subscriber_id, subscribed_user_id)
+VALUES (1, 2);
+
+INSERT INTO subscription (subscriber_id, subscribed_user_id)
+VALUES (4, 1);
