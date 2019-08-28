@@ -15,10 +15,8 @@ public class AmazonS3Config {
 
     @Bean
     public AmazonS3 amazonS3() {
-		final AmazonS3 build = AmazonS3ClientBuilder.standard()
+		return AmazonS3ClientBuilder.standard()
 				.withRegion(Regions.fromName(region))
 				.build();
-		System.out.println("build = " + build);
-		return build;
 	}
 }

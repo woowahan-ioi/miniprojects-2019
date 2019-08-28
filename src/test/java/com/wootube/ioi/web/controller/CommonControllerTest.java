@@ -7,10 +7,14 @@ import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
+import com.wootube.ioi.web.config.TestConfig;
+import io.findify.s3mock.S3Mock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
@@ -18,7 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 
 @AutoConfigureWebTestClient
-//@Import(TestConfig.class)
+@Import(TestConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommonControllerTest {
     static final Long USER_A_ID = 1L;
@@ -55,22 +59,22 @@ public class CommonControllerTest {
     public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
     public static final LogInRequestDto USER_D_LOGIN_REQUEST_DTO = new LogInRequestDto("d@test.com", "1234qwer");
 
-//    @LocalServerPort
-//    private int port;
+    @LocalServerPort
+    private int port;
 
     @Autowired
     private WebTestClient webTestClient;
 
-//    @Autowired
-//    private S3Mock s3Mock;
-//
-//    private void stopS3Mock() {
-//        s3Mock.stop();
-//    }
+    @Autowired
+    private S3Mock s3Mock;
 
-//    String basicPath() {
-//        return "http://localhost:" + port;
-//    }
+    private void stopS3Mock() {
+        s3Mock.stop();
+    }
+
+    String basicPath() {
+        return "http://localhost:" + port;
+    }
 
     public WebTestClient.ResponseSpec request(HttpMethod method, String uri, MultiValueMap<String, String> data) {
         return webTestClient.method(method)

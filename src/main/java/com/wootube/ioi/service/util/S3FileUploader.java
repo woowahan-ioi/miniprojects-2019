@@ -1,7 +1,6 @@
 package com.wootube.ioi.service.util;
 
 import java.io.File;
-import java.util.List;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -17,17 +16,8 @@ public class S3FileUploader implements FileUploader {
 	private final AmazonS3 amazonS3;
 	private final String bucket;
 
-	//tiber = com.amazonaws.services.s3.AmazonS3Client@3cdc5155
-	//생성자com.amazonaws.services.s3.AmazonS3Client@5ae16aa
-	public S3FileUploader(List<AmazonS3> amazonS3,
-						  @Value("${cloud.aws.s3.bucket}") String bucket) {
-		System.out.println("생성자"+ amazonS3);
-		for (final AmazonS3 s3 : amazonS3) {
-			final String name = s3.getClass().getName();
-			System.out.println("s3 = " + s3);
-			System.out.println("name = " + name);
-		}
-		this.amazonS3 = amazonS3.get(0);
+	public S3FileUploader(AmazonS3 amazonS3, @Value("${cloud.aws.s3.bucket}") String bucket) {
+		this.amazonS3 = amazonS3;
 		this.bucket = bucket;
 	}
 
