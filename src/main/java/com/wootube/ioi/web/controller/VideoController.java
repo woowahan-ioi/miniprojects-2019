@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.IOException;
+
 @RequestMapping("/videos")
 @Controller
 public class VideoController {
@@ -32,7 +34,7 @@ public class VideoController {
     }
 
     @PostMapping("/new")
-    public RedirectView video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+    public RedirectView video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) throws IOException {
         checkUserSession();
         VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto);
         return new RedirectView("/videos/" + videoResponseDto.getId());
@@ -56,7 +58,7 @@ public class VideoController {
     }
 
     @PutMapping("/{id}")
-    public RedirectView updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+    public RedirectView updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) throws IOException {
         checkUserSession();
         videoService.update(id, uploadFile, videoRequestDto);
         return new RedirectView("/videos/" + id);

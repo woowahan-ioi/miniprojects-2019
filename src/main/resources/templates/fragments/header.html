@@ -39,7 +39,7 @@
                            data-toggle="dropdown">
                             <img alt="Brown"
                                  class="profile-img img-fluid"
-                                 src="/images/default/eastjun_profile.jpg">
+                                 th:src="${session.user.profileImageUrl}">
                             <div class="user-info text-white">
                                 <span class="name pdd-right-5"
                                       th:text="${session.user.name}"></span>
