@@ -91,14 +91,13 @@
                         </v-row>
                     </v-row>
                     <div class="padding-20">
-                        <!-- 동영상 리스트 -->
                         <div class="row" id="video-area">
                             <div class="video col-lg-2 padding-2" th:each="video : ${videos}">
                                 <div class="card bg-transparent no-border">
                                     <a th:href="@{'/videos/' + ${video.id} + '/edit'}" style="text-decoration: none; color: #000;">
                                         <div class="card-media">
                                             <img alt="" class="img-responsive"
-                                                 src="/images/default/thumb_001.jpeg">
+                                                 th:src="${video.thumbnailPath}">
                                         </div>
                                     </a>
                                     <div class="card-block padding-10">
@@ -123,7 +122,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                     </div>
                 </v-col>

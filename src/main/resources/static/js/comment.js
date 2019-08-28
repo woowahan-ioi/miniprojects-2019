@@ -15,7 +15,7 @@ const commentButton = (function () {
         const deleteComment = function () {
             const commentArea = document.querySelector('#comment-area');
             commentArea.addEventListener('click', commentService.delete);
-        }
+        };
 
         const commentToggle = function () {
             document.querySelector("#comment-cancel-button").addEventListener("click", commentService.toggleCommentCancel);
@@ -24,7 +24,7 @@ const commentButton = (function () {
             document.querySelector("#comment-area").addEventListener("mouseover", commentService.toggleCommentMoreButton);
 
             document.querySelector("#comment-area").addEventListener("click", commentService.toggleCommentEditButton);
-        }
+        };
 
         const sortCommentByUpdateTime = function () {
             const commentAddButton = document.querySelector('#comment-sort-button');

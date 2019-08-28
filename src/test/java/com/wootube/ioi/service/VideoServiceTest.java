@@ -1,6 +1,8 @@
 package com.wootube.ioi.service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.wootube.ioi.domain.model.User;
@@ -12,6 +14,7 @@ import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
 import com.wootube.ioi.service.testutil.TestUtil;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,13 +55,15 @@ class VideoServiceTest extends TestUtil {
     private VideoRequestDto testVideoRequestDto;
 
     private MultipartFile testUploadFile;
-    private String fileFullPath;
+    private List<String> files = new ArrayList<>();
     private User writer;
 
     @BeforeEach
     void setUp() {
         writer = new User();
-        fileFullPath = String.format("%s/%s",DIRECTORY, FILE_NAME);
+        String fileFullPath = String.format("%s/%s",DIRECTORY, FILE_NAME);
+        files.add(fileFullPath);
+        files.add(String.format("%s/%s",DIRECTORY, FILE_THUMB_NAIL_NAME));
 
         testUploadFile = new MockMultipartFile(fileFullPath, FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
 
@@ -89,7 +94,7 @@ class VideoServiceTest extends TestUtil {
         MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
 
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
-        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO)).willReturn(updateFileFullPath);
+        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO, UploadType.THUMBNAIL)).willReturn(files);
         given(testVideo.matchWriter(USER_ID)).willReturn(true);
         videoService.update(ID, testUpdateChangeUploadFile, testVideoRequestDto);
 
@@ -105,7 +110,7 @@ class VideoServiceTest extends TestUtil {
         MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
 
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
-        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO)).willReturn(updateFileFullPath);
+        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO, UploadType.THUMBNAIL)).willReturn(files);
 
         given(testVideo.matchWriter(USER_ID)).willReturn(false);
 
@@ -119,7 +124,7 @@ class VideoServiceTest extends TestUtil {
         deleteMockVideo();
         videoService.deleteById(ID, USER_ID);
 
-        verify(fileUploader, atLeast(1)).deleteFile(testVideo.getOriginFileName(), UploadType.VIDEO);
+        verify(fileUploader, atLeast(1)).deleteFile(testVideo.getOriginFileName(), UploadType.VIDEO, UploadType.THUMBNAIL);
         verify(videoRepository, atLeast(1)).deleteById(ID);
     }
 
@@ -133,7 +138,7 @@ class VideoServiceTest extends TestUtil {
     }
 
     private void createMockVideo() {
-        given(fileUploader.uploadFile(testUploadFile, UploadType.VIDEO)).willReturn(fileFullPath);
+        given(fileUploader.uploadFile(testUploadFile, UploadType.VIDEO, UploadType.THUMBNAIL)).willReturn(files);
         given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
         given(userService.findByIdAndIsActiveTrue(USER_ID)).willReturn(writer);
 
@@ -161,5 +166,10 @@ class VideoServiceTest extends TestUtil {
 
         verify(videoRepository).findById(ID);
         verify(testVideo).increaseViews();
+    }
+
+    @AfterEach
+    void tearDown() {
+        files.clear();
     }
 }
