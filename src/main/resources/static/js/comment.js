@@ -26,11 +26,17 @@ const commentButton = (function () {
             document.querySelector("#comment-area").addEventListener("click", commentService.toggleCommentEditButton);
         }
 
+        const sortCommentByUpdateTime = function () {
+            const commentAddButton = document.querySelector('#comment-sort-button');
+            commentAddButton.addEventListener('click', commentService.sortCommentByUpdateTime);
+        };
+
         const init = function () {
             saveComment();
             updateComment();
-            commentToggle();
             deleteComment();
+            commentToggle();
+            sortCommentByUpdateTime();
         };
 
         return {
@@ -70,21 +76,54 @@ const commentButton = (function () {
 
         const toggleCommentEditButton = (event) => {
             let target = event.target;
-            if (target.tagName === "I") {
+            if (target.tagName === "I" || target.tagName === "SPAN") {
                 target = target.parentElement;
             }
             if (target.classList.contains("comment-update-cancel-btn")) {
                 const commentButtonDiv = target.parentElement;
+                commentButtonDiv.nextElementSibling.classList.toggle("display-none");
                 commentButtonDiv.classList.toggle("display-none");
                 commentButtonDiv.previousElementSibling.classList.toggle("display-none");
                 commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
             }
             if (target.classList.contains("comment-edit-button")) {
-                const commentButtonDiv = target.parentElement;
+                const commentButtonDiv = target.parentElement.parentElement;
+                commentButtonDiv.parentElement.nextElementSibling.nextElementSibling.classList.toggle("display-none");
                 commentButtonDiv.parentElement.classList.toggle("display-none");
                 commentButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
                 commentButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");
             }
+        }
+
+        const sortCommentByUpdateTime = (event) => {
+            let target = event.target;
+
+            if (!target.classList.contains("comment-recent-sort-btn")) {
+                return;
+            }
+
+            const requestUri = '/api/videos/' + videoId + '/comments/sort/updatetime';
+
+            const callback = (response) => {
+                const commentListDiv = target.parentElement.parentElement.nextElementSibling.nextElementSibling;
+                $(commentListDiv).empty();
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        let count = 0;
+                        for (const comment of data) {
+                            appendComment(comment);
+                            count++;
+                        }
+                        commentCount.innerText = count;
+                    });
+                    return;
+                }
+                throw response;
+            };
+            const handleError = (error) => {
+                alert(error);
+            };
+            AjaxRequest.GET(requestUri, callback, handleError);
         }
 
         const saveComment = (event) => {
@@ -107,7 +146,7 @@ const commentButton = (function () {
             };
             const handleError = (error) => {
                 alert(error);
-            }
+            };
 
             AjaxRequest.POST(requestUri, requestBody, callback, handleError);
         };
@@ -137,6 +176,7 @@ const commentButton = (function () {
                     target.parentElement.previousElementSibling.querySelector(".comment-contents").innerText = contents;
 
                     const commentButtonDiv = event.target.parentElement;
+                    commentButtonDiv.nextElementSibling.classList.toggle("display-none");
                     commentButtonDiv.classList.toggle("display-none");
                     commentButtonDiv.previousElementSibling.classList.toggle("display-none");
                     commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
@@ -155,7 +195,7 @@ const commentButton = (function () {
         const deleteComment = (event) => {
             let target = event.target;
 
-            if (target.tagName === "I") {
+            if (target.tagName === "I" || target.tagName === "SPAN") {
                 target = target.parentElement;
             }
 
@@ -198,7 +238,8 @@ const commentButton = (function () {
             toggleCommentWrite: toggleCommentWrite,
             toggleCommentSaveButton: toggleCommentSaveButton,
             toggleCommentMoreButton: toggleCommentMoreButton,
-            toggleCommentEditButton: toggleCommentEditButton
+            toggleCommentEditButton: toggleCommentEditButton,
+            sortCommentByUpdateTime: sortCommentByUpdateTime
         }
     };
 
