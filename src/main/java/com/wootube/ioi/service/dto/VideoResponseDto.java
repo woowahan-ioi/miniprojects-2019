@@ -15,15 +15,17 @@ public class VideoResponseDto {
     private String contentPath;
     private long views;
     private LocalDateTime createTime;
-    private User writer;
+    private String writerName;
+    private Long writerId;
 
-    public VideoResponseDto(Long id, String title, String description, String contentPath, long views, LocalDateTime createTime, User writer) {
+    public VideoResponseDto(Long id, String title, String description, String contentPath, long views, LocalDateTime createTime, String writerName, Long writerId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.contentPath = contentPath;
         this.views = views;
         this.createTime = createTime;
-        this.writer = writer;
+        this.writerName = writerName;
+        this.writerId = writerId;
     }
 }

@@ -1,5 +1,6 @@
 package com.wootube.ioi.web.controller;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import com.wootube.ioi.domain.model.User;
@@ -115,7 +116,10 @@ public class CommonControllerTest {
 
     WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, MultiValueMap<String, String> data, LogInRequestDto logInRequestDto) {
         String sessionValue = login(logInRequestDto);
-        return webTestClient.method(method)
+        return webTestClient
+                .mutate()
+                .responseTimeout(Duration.ofMillis(15000))
+                .build().method(method)
                 .uri(uri)
                 .cookie("JSESSIONID", sessionValue)
                 .body(BodyInserters.fromFormData(data))

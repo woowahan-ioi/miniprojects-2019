@@ -45,15 +45,8 @@ header {
     margin: 5px;
 }
 
-.video-supplement-img-div{
-    height: 150px;
-    background-color: #FFFFFF;
-    margin: 5px;
-    padding: 10px;
-}
-
 .video-supplement-div {
-    height: 450px;
+    height: 600px;
     background-color: #FFFFFF;
     margin: 5px;
     padding: 10px;
