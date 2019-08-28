@@ -36,14 +36,20 @@ const subscriptionButton = (function () {
         const writerId = document.querySelector("#subscription-btn").dataset.writerid;
 
         const subscribe = (event) => {
-            if (event.target.classList.contains("subscribed")) {
+            let target = event.target;
+
+            if(event.target.tagName === "SPAN") {
+                target = event.target.parentElement;
+            }
+
+            if (target.classList.contains("subscribed")) {
                 return;
             }
             const uri = `/api/subscriptions/${writerId}`;
             const callback = (response) => {
                 if (response.ok) {
                     countSubscription();
-                    event.target.classList.add("subscribed");
+                    target.classList.add("subscribed");
                     return;
                 }
 
@@ -57,14 +63,20 @@ const subscriptionButton = (function () {
         };
 
         const unsubscribe = (event) => {
-            if (!event.target.classList.contains("subscribed")) {
+            let target = event.target;
+
+            if(event.target.tagName === "SPAN") {
+                target = event.target.parentElement;
+            }
+
+            if (!target.classList.contains("subscribed")) {
                 return;
             }
             const uri = `/api/subscriptions/${writerId}`;
             const callback = (response) => {
                 if (response.status === 204) {
                     countSubscription();
-                    event.target.classList.remove("subscribed");
+                    target.classList.remove("subscribed");
                     return;
                 }
 
