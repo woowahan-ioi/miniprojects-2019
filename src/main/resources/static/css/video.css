@@ -226,7 +226,15 @@ ul {
     word-break:break-all
 }
 
-.comment-more-button, .comment-sort-button, .reply-more-button {
+.comment-more-button, .reply-more-button {
+    background: none;
+    border: none;
+    color: gray;
+    font-size: 1.0em;
+    transform: rotate(90deg);
+}
+
+.comment-sort-button {
     background: none;
     border: none;
     color: gray;
