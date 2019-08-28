@@ -31,13 +31,13 @@ function readMoreTagEvent() {
 readMoreTag();
 
 window.onload = function() {
-    videoUpdateTime();
+    videoCreateTime();
     getLikeCount();
 }
 
-function videoUpdateTime() {
-    const date = (new Date(/*[[${video.createTime}]]*/).toLocaleDateString());
-    document.getElementById("videoCreateTime").innerText = date;
+function videoCreateTime() {
+    const date = (new Date(/*[[${video.updateTime}]]*/).toLocaleDateString());
+    document.getElementById("videoCreateTime").innerHTML = date;
 }
 
 function getLikeCount() {
@@ -47,10 +47,7 @@ function getLikeCount() {
     const callback = (response) => {
         if(response.status === 200) {
             response.json()
-                .then(data => {
-                    const count = data.count;
-                    document.querySelector("#likeCount").innerText = count;
-                });
+                .then(data => document.querySelector("#likeCount").innerHTML = data.count);
         }
     }
 
@@ -73,13 +70,8 @@ const videoButton = (function() {
             videoLikeButton.addEventListener('click', videoService.increase);
         }
 
-        const videoToggle = function () {
-            document.querySelector('#title-like-btn').addEventListener('click', videoService.toggleVideoLike);
-        }
-
         const init = function () {
             increaseLike();
-            videoToggle();
         }
 
         return {
@@ -89,7 +81,7 @@ const videoButton = (function() {
 
     const VideoService = function () {
         function toggleVideoLike(count) {
-            document.querySelector("#likeCount").innerText = count;
+            document.querySelector("#likeCount").innerHTML = count;
         };
 
         const increaseLike = () => {
@@ -98,8 +90,7 @@ const videoButton = (function() {
 
             const callback = (response) => {
                 if(response.status === 200) {
-                    response.json().then(data => { const count = data.count;
-                        document.querySelector("#likeCount").innerText = count;});
+                    response.json().then(data => toggleVideoLike(data.count));
                 }
             }
 
@@ -115,7 +106,6 @@ const videoButton = (function() {
 
         return {
             increase: increaseLike,
-            toggleVideoLike: toggleVideoLike
         }
     }
 
