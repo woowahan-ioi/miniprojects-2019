@@ -31,6 +31,15 @@ VALUES ('비디오 B의 회원 A의 댓글', 2, 1);
 INSERT INTO comment (contents, video_id, writer_id)
 VALUES ('비디오 B의 회원 B의 댓글', 2, 2);
 
+INSERT INTO video_like (like_user_id, video_id)
+VALUES (1, 2);
+
+INSERT INTO video_like (like_user_id, video_id)
+VALUES (1, 3);
+
+INSERT INTO video_like (like_user_id, video_id)
+VALUES (2, 3);
+
 INSERT INTO subscription (subscriber_id, subscribed_user_id)
 VALUES (1, 2);
 
