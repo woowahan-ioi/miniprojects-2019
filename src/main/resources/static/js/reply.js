@@ -19,6 +19,7 @@ const replyButton = (function () {
             document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyWrite);
             document.querySelector("#comment-area").addEventListener("keyup", replyService.toggleReplySaveButton);
             document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyEditButton);
+            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyListButton);
         }
 
         const init = function () {
@@ -153,6 +154,25 @@ const replyButton = (function () {
             event.target.parentElement.parentElement.querySelector(".edit").classList.add("disabled")
         }
 
+        function toggleReplyListButton(event) {
+            let replyListButton = event.target;
+
+            if (replyListButton.tagName === "I" || replyListButton.tagName === "SPAN") {
+                replyListButton = replyListButton.parentElement;
+            }
+
+            console.log(replyListButton);
+            if (replyListButton.classList.contains("reply-list-open-button")) {
+                replyListButton.classList.toggle("display-none");
+                replyListButton.nextElementSibling.classList.toggle("display-none");
+            }
+
+            if (replyListButton.classList.contains("reply-list-close-button")) {
+                replyListButton.classList.toggle("display-none");
+                replyListButton.previousElementSibling.classList.toggle("display-none");
+            }
+        }
+
         function toggleReplyEditButton(event) {
             let target = event.target;
             if(target.tagName === "I" || target.tagName === "SPAN") {
@@ -185,6 +205,7 @@ const replyButton = (function () {
             toggleReplyWrite: toggleReplyWrite,
             toggleReplySaveButton: toggleReplySaveButton,
             toggleReplyEditButton: toggleReplyEditButton,
+            toggleReplyListButton: toggleReplyListButton,
             save: saveReply,
             update: updateReply,
             delete: deleteReply

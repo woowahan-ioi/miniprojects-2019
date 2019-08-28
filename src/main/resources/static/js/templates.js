@@ -50,6 +50,16 @@ const Templates = {
                         <button class="btn comment-btn edit reply-save-btn disabled">답글</button>
                         <button class="btn comment-btn reply-cancel-btn">취소</button>
                     </div>
+                    <div id="reply-list-more-area">
+                        <button class="reply-list-open-button">
+                            <span>답글 더보기</span>
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <button class="reply-list-close-button display-none">
+                            <span>답글 숨기기</span>
+                            <i class="fa fa-angle-up"></i>
+                        </button>
+                    </div>
                     <ul class="reply-list">
 
                     </ul>

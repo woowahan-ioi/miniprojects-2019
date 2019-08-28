@@ -246,3 +246,11 @@ ul {
 .comment-sort-bropdown {
     width: 110px;
 }
+
+.reply-list-open-button, .reply-list-close-button {
+    background: none;
+    border: none;
+    color: gray;
+    position: relative;
+    left: 35px;
+}
