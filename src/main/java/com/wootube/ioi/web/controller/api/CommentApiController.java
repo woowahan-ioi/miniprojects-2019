@@ -5,20 +5,31 @@ import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/videos/{videoId}/comments")
 @RestController
 public class CommentApiController {
+    private static final Sort DESC_SORT_BY_UPDATE_TIME = new Sort(Sort.Direction.DESC, "updateTime");
+
     private final CommentService commentService;
     private final UserSessionManager userSessionManager;
 
     public CommentApiController(CommentService commentService, UserSessionManager userSessionManager) {
         this.commentService = commentService;
         this.userSessionManager = userSessionManager;
+    }
+
+    @GetMapping("/sort/updatetime")
+    public ResponseEntity<List<CommentResponseDto>> sortCommentByUpdateTime(@PathVariable Long videoId) {
+        List<CommentResponseDto> comments = commentService.sortComment(DESC_SORT_BY_UPDATE_TIME, videoId);
+
+        return ResponseEntity.ok(comments);
     }
 
     @PostMapping
