@@ -22,6 +22,7 @@ public class TestUtil {
 
     protected static final String DIRECTORY = "wootube";
     protected static final String FILE_NAME = "testVideo.mp4";
+    protected static final String FILE_THUMB_NAIL_NAME = "testVideo.png";
     protected static final String UPDATE_FILE_NAME = "changeTestVideo.mp4";
 
     protected static final Long USER_ID = 1L;

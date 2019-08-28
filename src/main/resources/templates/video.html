@@ -51,8 +51,8 @@
                          src="/images/default/eastjun_big.jpg">
                 </div>
                 <div class="relative banner-info d-inline-block col-sm-8">
-                    <span class="left-30 bottom-35 font-size-17 text-bold" th:if="${video.writer.name}" th:text="${video.writer.name}"></span><br>
-                    <span class="left-30 bottom-35 font-size-17 text-bold" th:unless="${video.writer.name}">UserName</span><br>
+                    <span class="left-30 bottom-35 font-size-17 text-bold" th:if="${video.writerName}" th:text="${video.writerName}"></span><br>
+                    <span class="left-30 bottom-35 font-size-17 text-bold" th:unless="${video.writerName}">UserName</span><br>
 
                     <span class="left-30 bottom-35 font-size-13" th:if="${video.updateTime}" th:text="${video.updateTime}"></span>
                     <span class="left-30 bottom-35 font-size-13" th:unless="${video.updateTime}">DateTime</span>
