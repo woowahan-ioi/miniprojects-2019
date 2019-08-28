@@ -81,12 +81,14 @@ const commentButton = (function () {
             }
             if (target.classList.contains("comment-update-cancel-btn")) {
                 const commentButtonDiv = target.parentElement;
+                commentButtonDiv.nextElementSibling.classList.toggle("display-none");
                 commentButtonDiv.classList.toggle("display-none");
                 commentButtonDiv.previousElementSibling.classList.toggle("display-none");
                 commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
             }
             if (target.classList.contains("comment-edit-button")) {
                 const commentButtonDiv = target.parentElement.parentElement;
+                commentButtonDiv.parentElement.nextElementSibling.nextElementSibling.classList.toggle("display-none");
                 commentButtonDiv.parentElement.classList.toggle("display-none");
                 commentButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
                 commentButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");
@@ -174,6 +176,7 @@ const commentButton = (function () {
                     target.parentElement.previousElementSibling.querySelector(".comment-contents").innerText = contents;
 
                     const commentButtonDiv = event.target.parentElement;
+                    commentButtonDiv.nextElementSibling.classList.toggle("display-none");
                     commentButtonDiv.classList.toggle("display-none");
                     commentButtonDiv.previousElementSibling.classList.toggle("display-none");
                     commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
