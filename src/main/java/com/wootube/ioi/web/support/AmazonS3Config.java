@@ -13,10 +13,12 @@ public class AmazonS3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    @Bean(value = "amazonS3Client")
-    public AmazonS3 awsS3Client() {
-            return AmazonS3ClientBuilder.standard()
-					.withRegion(Regions.fromName(region))
-					.build();
-        }
+    @Bean
+    public AmazonS3 amazonS3() {
+		final AmazonS3 build = AmazonS3ClientBuilder.standard()
+				.withRegion(Regions.fromName(region))
+				.build();
+		System.out.println("build = " + build);
+		return build;
+	}
 }
