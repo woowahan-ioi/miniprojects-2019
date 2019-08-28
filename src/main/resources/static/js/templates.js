@@ -50,7 +50,7 @@ const Templates = {
                         <button class="btn comment-btn edit reply-save-btn disabled">답글</button>
                         <button class="btn comment-btn reply-cancel-btn">취소</button>
                     </div>
-                    <div id="reply-list-more-area">
+                    <div id="reply-list-more-area" class="mrg-btm-10">
                         <button class="reply-list-open-button">
                             <span>답글 더보기</span>
                             <i class="fa fa-angle-down"></i>

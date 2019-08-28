@@ -22,11 +22,16 @@ const replyButton = (function () {
             document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyListButton);
         }
 
+        const sortReplyByUpdateTime = function () {
+            document.querySelector("#comment-area").addEventListener("click", replyService.sortReplyByUpdateTime)
+        }
+
         const init = function () {
             replyToggle();
             saveReply();
             updateReply();
             deleteReply();
+            sortReplyByUpdateTime();
         };
 
         return {
@@ -36,6 +41,46 @@ const replyButton = (function () {
 
     const ReplyService = function () {
         const videoId = document.querySelector("#video-contents").dataset.videoid;
+
+        const sortReplyByUpdateTime = (event) => {
+            let target = event.target;
+
+            if (target.tagName === "I" || target.tagName === "SPAN") {
+                target = target.parentElement;
+            }
+
+            if(!target.classList.contains("reply-list-open-button")) {
+                return;
+            }
+            const commentId = target.parentElement.closest("li").dataset.commentid;
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId +'/replies/sort/updatetime';
+
+            const callback = (response) => {
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        const replyListDiv = target.parentElement.nextElementSibling;
+                        $(replyListDiv).empty();
+
+                        console.log(data);
+                        for (const reply of data) {
+                            appendReply(reply, target);
+                        }
+
+                        target.classList.toggle("display-none");
+                        target.nextElementSibling.classList.toggle("display-none");
+                        target.parentElement.nextElementSibling.classList.remove("display-none");
+                    });
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.GET(requestUri, callback, handleError);
+        }
 
         function saveReply(event) {
             if(!event.target.classList.contains("reply-save-btn")) {
@@ -161,16 +206,13 @@ const replyButton = (function () {
                 replyListButton = replyListButton.parentElement;
             }
 
-            console.log(replyListButton);
-            if (replyListButton.classList.contains("reply-list-open-button")) {
-                replyListButton.classList.toggle("display-none");
-                replyListButton.nextElementSibling.classList.toggle("display-none");
+            if (!replyListButton.classList.contains("reply-list-close-button")) {
+                return;
             }
 
-            if (replyListButton.classList.contains("reply-list-close-button")) {
-                replyListButton.classList.toggle("display-none");
-                replyListButton.previousElementSibling.classList.toggle("display-none");
-            }
+            replyListButton.classList.toggle("display-none");
+            replyListButton.parentElement.nextElementSibling.classList.add("display-none");
+            replyListButton.previousElementSibling.classList.toggle("display-none");
         }
 
         function toggleReplyEditButton(event) {
@@ -208,7 +250,8 @@ const replyButton = (function () {
             toggleReplyListButton: toggleReplyListButton,
             save: saveReply,
             update: updateReply,
-            delete: deleteReply
+            delete: deleteReply,
+            sortReplyByUpdateTime: sortReplyByUpdateTime
         }
     };
 
