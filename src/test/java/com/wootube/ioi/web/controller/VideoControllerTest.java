@@ -1,36 +1,18 @@
 package com.wootube.ioi.web.controller;
 
-import java.net.URI;
-
 import com.wootube.ioi.service.dto.LogInRequestDto;
-import com.wootube.ioi.web.config.TestConfig;
-import io.findify.s3mock.S3Mock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
+
+import java.net.URI;
 
 import static org.springframework.http.HttpMethod.*;
 
-@AutoConfigureWebTestClient
-@Import(TestConfig.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class VideoControllerTest extends CommonControllerTest {
-    @Autowired
-    private WebTestClient webTestClient;
-
-    @Autowired
-    private S3Mock s3Mock;
-
     @Test
     @DisplayName("비디오 등록 페이지로 이동한다.")
     void moveCreateVideoPage() {
@@ -128,21 +110,9 @@ class VideoControllerTest extends CommonControllerTest {
         stopS3Mock();
     }
 
-    private void stopS3Mock() {
-        s3Mock.stop();
-    }
-
     private String getVideoId(MultipartBodyBuilder bodyBuilder) {
         String uri = saveVideo(bodyBuilder).toString();
         return uri.substring(uri.lastIndexOf("/") + 1);
-    }
-
-    private WebTestClient.ResponseSpec requestWithBodyBuilder(MultipartBodyBuilder bodyBuilder, HttpMethod requestMethod, String requestUri) {
-        return webTestClient.method(requestMethod)
-                .uri(requestUri)
-                .header("Cookie", getLoginCookie(webTestClient, new LogInRequestDto("a@test.com", "1234qwer")))
-                .body(BodyInserters.fromObject(bodyBuilder.build()))
-                .exchange();
     }
 
     private URI saveVideo(MultipartBodyBuilder bodyBuilder) {
@@ -151,13 +121,6 @@ class VideoControllerTest extends CommonControllerTest {
                 .getResponseHeaders()
                 .getLocation();
         return uri;
-    }
-
-    private String getLoginCookie(WebTestClient webTestClient, LogInRequestDto logInRequestDto) {
-        return webTestClient.post().uri("/user/login")
-                .body(BodyInserters.fromFormData(parser(logInRequestDto)))
-                .exchange()
-                .returnResult(String.class).getResponseHeaders().getFirst("Set-Cookie");
     }
 
     MultipartBodyBuilder createMultipartBodyBuilder() {
