@@ -12,7 +12,10 @@ import com.wootube.ioi.web.session.UserSessionManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.io.IOException;
 
 @RequestMapping("/user")
 @Controller
@@ -85,5 +88,13 @@ public class UserController {
     public RedirectView user(@RequestParam String email, @RequestParam String verifyKey) {
         userService.activateUser(email, verifyKey);
         return new RedirectView("/user/login");
+    }
+
+    @PutMapping("/images")
+    public RedirectView editProfileImage(MultipartFile uploadFile) throws IOException {
+        UserSession userSession = userSessionManager.getUserSession();
+        User updatedUser = userService.updateProfileImage(userSession.getId(), uploadFile);
+        userSessionManager.setUserSession(updatedUser);
+        return new RedirectView("/user/mypage");
     }
 }
