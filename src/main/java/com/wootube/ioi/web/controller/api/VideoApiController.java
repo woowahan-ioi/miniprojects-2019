@@ -26,7 +26,7 @@ public class VideoApiController {
     public ResponseEntity delete(@PathVariable Long videoId) {
         checkUserSession();
         UserSession userSession = userSessionManager.getUserSession();
-        videoService.deleteById(videoId, userSession.getId());
+        videoService.deleteById(videoId);
 
         return ResponseEntity.noContent()
                 .build();

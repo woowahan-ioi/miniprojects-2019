@@ -7,6 +7,7 @@ import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.service.exception.FileConvertException;
 import com.wootube.ioi.service.exception.NotFoundVideoIdException;
+import com.wootube.ioi.service.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
@@ -86,7 +87,7 @@ public class VideoService {
     @Transactional
     public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) throws IOException {
         Video video = findById(id);
-//        matchWriter(videoRequestDto.getWriterId(), id);
+        matchWriter(videoRequestDto.getWriterId(), id);
 
         if (!uploadFile.isEmpty()) {
             fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
@@ -116,13 +117,20 @@ public class VideoService {
     }
 
     @Transactional
-    public void deleteById(Long videoId/*, Long userId*/) {
+    public void deleteById(Long videoId) {
         Video video = findById(videoId);
 
         fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
         fileUploader.deleteFile(video.getThumbnailFileName(), UploadType.THUMBNAIL);
 
         videoRepository.deleteById(video.getId());
+    }
+
+    public void matchWriter(Long userId, Long videoId) {
+        Video video = findById(videoId);
+        if (!video.matchWriter(userId)) {
+            throw new NotMatchUserIdException();
+        }
     }
 
     public List<Video> findAllByWriter(Long writerId) {
