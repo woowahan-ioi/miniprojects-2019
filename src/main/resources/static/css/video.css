@@ -208,7 +208,7 @@ ul {
     color: white;
 }
 
-.comment-more-box {
+.comment-more-box, .reply-more-box {
     background: none;
     border-radius: 1px;
     color: #777777;
@@ -224,4 +224,41 @@ ul {
 .span-form {
     width: auto;
     word-break:break-all
+}
+
+.comment-more-button, .reply-more-button {
+    background: none;
+    border: none;
+    color: gray;
+    font-size: 1.0em;
+    transform: rotate(90deg);
+}
+
+.comment-sort-button {
+    background: none;
+    border: none;
+    color: gray;
+    font-size: 1.0em;
+}
+
+.list-group-item {
+    border: none;
+    background: none;
+}
+
+.comment-dropdown-menu {
+    width: 85px;
+    min-width: 0px;
+}
+
+.comment-sort-bropdown {
+    width: 110px;
+}
+
+.reply-list-open-button, .reply-list-close-button {
+    background: none;
+    border: none;
+    color: gray;
+    position: relative;
+    left: 35px;
 }

@@ -8,6 +8,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
+
 @Configuration
 public class NotLoginInterceptorConfig implements WebMvcConfigurer {
     @Qualifier(value = "notLoginInterceptor")
@@ -21,7 +23,18 @@ public class NotLoginInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(handlerInterceptor)
-                .addPathPatterns("/user/mypage")
-                .addPathPatterns("/user/logout");
+                .addPathPatterns("/user/**")
+                .addPathPatterns("/videos/**")
+                .addPathPatterns("/api/videos/**")
+                .addPathPatterns("/api/videos/**/comments/**")
+                .addPathPatterns("/api/subscriptions/**")
+                .addPathPatterns("/api/videos/**/comments/**/replies/**")
+                .excludePathPatterns(Arrays.asList(
+                        "/api/videos/**/comments/sort/updatetime",
+                        "/api/videos/**/comments/**/replies/sort/updatetime",
+                        "/api/videos/**/likes/counts",
+                        "/user/signup",
+                        "/user/login"
+                ));
     }
 }

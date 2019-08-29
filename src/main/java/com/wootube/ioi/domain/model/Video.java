@@ -12,6 +12,9 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @DynamicUpdate
 public class Video extends BaseEntity {
+    private static final int CONTENT_PATH = 0;
+    private static final int THUMBNAIL_PATH = 1;
+
     @Column(nullable = false,
             length = 50)
     private String title;
@@ -26,7 +29,18 @@ public class Video extends BaseEntity {
 
     @Lob
     @Column(nullable = false)
+    private String thumbnailPath;
+
+    @Lob
+    @Column(nullable = false)
     private String originFileName;
+
+    @Lob
+    @Column(nullable = false)
+    private String thumbnailFileName;
+
+    @Column(columnDefinition = "long default 0")
+    private long views;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_to_user"), nullable = false)
@@ -38,24 +52,39 @@ public class Video extends BaseEntity {
     }
 
     public void update(Video updateVideo) {
-        if (updateVideo.contentPath != null) {
-            this.contentPath = updateVideo.contentPath;
-        }
         this.title = updateVideo.title;
         this.description = updateVideo.description;
     }
 
-    public void updateContentPath(String contentPath) {
-        this.contentPath = contentPath;
+    public void updateTitle(String title) {
+        this.title = title;
     }
 
-    public void initialize(String contentPath, String originFileName, User writer) {
+    public void updateDescription(String description) {
+        this.description = description;
+    }
+
+    public void updateVideo(String contentPath, String originFileName, String thumbnailPath, String thumbnailFileName) {
         this.contentPath = contentPath;
         this.originFileName = originFileName;
+        this.thumbnailPath = thumbnailPath;
+        this.thumbnailFileName = thumbnailFileName;
+    }
+
+    public void initialize(String contentPath, String thumbnailPath, String originFileName, String thumbnailFileName, User writer) {
+        this.contentPath = contentPath;
+        this.thumbnailPath = thumbnailPath;
+        this.originFileName = originFileName;
+        this.thumbnailFileName = thumbnailFileName;
         this.writer = writer;
     }
 
     public boolean matchWriter(Long userId) {
-        return writer.isSameUserAndWriter(userId);
+        return writer.isSameEntity(userId);
     }
+
+    public void increaseViews() {
+        this.views++;
+    }
+
 }

@@ -6,15 +6,32 @@ const replyButton = (function () {
             document.querySelector("#comment-area").addEventListener("click", replyService.save);
         }
 
+        const updateReply = function () {
+            document.querySelector("#comment-area").addEventListener("click", replyService.update);
+        }
+
+        const deleteReply = function () {
+            document.querySelector("#comment-area").addEventListener("click", replyService.delete);
+        }
+
         const replyToggle = function () {
             document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyCancel);
             document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyWrite);
             document.querySelector("#comment-area").addEventListener("keyup", replyService.toggleReplySaveButton);
+            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyEditButton);
+            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyListButton);
+        }
+
+        const sortReplyByUpdateTime = function () {
+            document.querySelector("#comment-area").addEventListener("click", replyService.sortReplyByUpdateTime)
         }
 
         const init = function () {
             replyToggle();
             saveReply();
+            updateReply();
+            deleteReply();
+            sortReplyByUpdateTime();
         };
 
         return {
@@ -25,6 +42,46 @@ const replyButton = (function () {
     const ReplyService = function () {
         const videoId = document.querySelector("#video-contents").dataset.videoid;
 
+        const sortReplyByUpdateTime = (event) => {
+            let target = event.target;
+
+            if (target.tagName === "I" || target.tagName === "SPAN") {
+                target = target.parentElement;
+            }
+
+            if(!target.classList.contains("reply-list-open-button")) {
+                return;
+            }
+            const commentId = target.parentElement.closest("li").dataset.commentid;
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId +'/replies/sort/updatetime';
+
+            const callback = (response) => {
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        const replyListDiv = target.parentElement.nextElementSibling;
+                        $(replyListDiv).empty();
+
+                        console.log(data);
+                        for (const reply of data) {
+                            appendReply(reply, target);
+                        }
+
+                        target.classList.toggle("display-none");
+                        target.nextElementSibling.classList.toggle("display-none");
+                        target.parentElement.nextElementSibling.classList.remove("display-none");
+                    });
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.GET(requestUri, callback, handleError);
+        }
+
         function saveReply(event) {
             if(!event.target.classList.contains("reply-save-btn")) {
                 return;
@@ -33,26 +90,93 @@ const replyButton = (function () {
             const id = event.target.closest("li").dataset.commentid;
             const inputComment = event.target.closest("div").querySelector("input");
 
-            fetch('/api/videos/' + videoId + '/comments/' + id + '/replies', {
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                method: 'POST',
-                body: JSON.stringify({
-                    contents: inputComment.value
-                })
-            }).then(response => {
+            const requestUri = '/api/videos/' + videoId + '/comments/' + id + '/replies';
+            const requestBody = {
+                contents: inputComment.value
+            };
+            const callback = response => {
                 if (response.status === 201) {
-                    return response.json();
+                    response.json().then(comment => {
+                        appendReply(comment, event.target);
+                        inputComment.value = "";
+                        event.target.closest(".reply-edit").classList.add("display-none")
+                    });
+
+                    return;
                 }
                 throw response;
-            }).then(comment => {
-                appendReply(comment, event.target);
-                inputComment.value = "";
-                event.target.closest(".reply-edit").classList.add("display-none")
-            }).catch(error => {
-                error.text().then(json => alert(json))
-            });
+            }
+            const handleError = error => {
+                alert(error)
+            }
+            AjaxRequest.POST(requestUri, requestBody, callback, handleError)
+        }
+
+        function updateReply(event) {
+            let target = event.target;
+
+            if(!target.classList.contains("reply-update-btn")) {
+                return;
+            }
+            const replyId = target.closest("li").dataset.replyid;
+            const commentId = target.closest("ul").parentElement.parentElement.dataset.commentid;
+            const inputEditReply = target.closest("div").querySelector("input");
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + '/replies/' + replyId;
+
+            const requestBody = {
+                contents : inputEditReply.value
+            }
+
+            const callback = (response) => {
+                if (response.status === 204) {
+
+                    target.parentElement.previousElementSibling.querySelector(".reply-contents").innerText = inputEditReply.value;
+
+                    const replyButtonDiv = target.parentElement;
+                    replyButtonDiv.classList.toggle("display-none");
+                    replyButtonDiv.previousElementSibling.classList.toggle("display-none");
+                    replyButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
+
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = error => {
+                alert(error)
+            };
+
+            AjaxRequest.PUT(requestUri, requestBody, callback, handleError);
+        }
+
+        function deleteReply(event) {
+            let target = event.target;
+
+            if (target.tagName === "I" || target.tagName === "SPAN") {
+                target = target.parentElement;
+            }
+
+            if (!target.classList.contains("reply-delete-button")) {
+                return;
+            }
+
+            const replyId = target.closest("li").dataset.replyid;
+            const commentId = target.closest("ul").closest("li").dataset.commentid;
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + '/replies/' + replyId;
+
+            const callback = (response) => {
+                if (response.status === 204) {
+                    target.closest("li").remove();
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.DELETE(requestUri, callback, handleError);
         }
 
         function toggleReplyCancel(event) {
@@ -75,53 +199,59 @@ const replyButton = (function () {
             event.target.parentElement.parentElement.querySelector(".edit").classList.add("disabled")
         }
 
+        function toggleReplyListButton(event) {
+            let replyListButton = event.target;
+
+            if (replyListButton.tagName === "I" || replyListButton.tagName === "SPAN") {
+                replyListButton = replyListButton.parentElement;
+            }
+
+            if (!replyListButton.classList.contains("reply-list-close-button")) {
+                return;
+            }
+
+            replyListButton.classList.toggle("display-none");
+            replyListButton.parentElement.nextElementSibling.classList.add("display-none");
+            replyListButton.previousElementSibling.classList.toggle("display-none");
+        }
+
+        function toggleReplyEditButton(event) {
+            let target = event.target;
+            if(target.tagName === "I" || target.tagName === "SPAN") {
+                target = target.parentElement;
+            }
+            if (target.classList.contains("reply-update-cancel-btn")) {
+                const replyButtonDiv = target.parentElement;
+                replyButtonDiv.classList.toggle("display-none");
+                replyButtonDiv.previousElementSibling.classList.toggle("display-none");
+                replyButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
+            }
+            if (target.classList.contains("reply-edit-button")) {
+                const replyButtonDiv = target.parentElement.parentElement;
+                replyButtonDiv.parentElement.classList.toggle("display-none");
+                replyButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
+                replyButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");
+            }
+        }
+
         function appendReply(reply, target) {
             const writtenTime = calculateWrittenTime(reply.updateTime);
 
-            const replyTemplate = `<li class="reply mrg-btm-30" data-commentid="${reply.id}">
-                            <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
-                            <div class="comment-block">
-                                <div class="font-size-13">
-                                    <span class="user-name">${reply.authorName}</span>
-                                    <span class="update-date">${writtenTime}</span>
-                                </div>
-                                <div class="comment-more-box">
-                                    <button class="comment-more-buttons reply-edit-button">
-                                        <i class="ti-pencil"> 수정</i>
-                                    </button>
-                                    <button class="comment-more-buttons reply-delete-button">
-                                        <i class="ti-trash"> 삭제</i>
-                                    </button>
-                                </div>
-                                <span class="reply-contents font-size-15">${reply.contents}</span>
-                                <div>
-                                    <button class="like-btn">
-                                        <i class="ti-thumb-up"></i>
-                                    </button>
-                                    <span>3.5천</span>
-                                </div>
-                            </div>
-                            <div class="comment-update-area display-none mrg-btm-50">
-                                <div>
-                                    <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
-                                         alt="">
-                                    <input class="comment-input" type="text" value="${reply.contents}">
-                                </div>
-                                <button class="btn comment-btn reply-update-cancel-btn">취소</button>
-                                <button class="btn comment-btn edit reply-update-btn">수정</button>
-                            </div>
-                        </li>`;
-
             const replyList = target.closest(".reply-area").querySelector(".reply-list");
 
-            replyList.insertAdjacentHTML("beforeend", replyTemplate);
+            replyList.insertAdjacentHTML("beforeend", Templates.replyTemplate(reply, writtenTime));
         }
 
         return {
             toggleReplyCancel: toggleReplyCancel,
             toggleReplyWrite: toggleReplyWrite,
             toggleReplySaveButton: toggleReplySaveButton,
-            save: saveReply
+            toggleReplyEditButton: toggleReplyEditButton,
+            toggleReplyListButton: toggleReplyListButton,
+            save: saveReply,
+            update: updateReply,
+            delete: deleteReply,
+            sortReplyByUpdateTime: sortReplyByUpdateTime
         }
     };
 

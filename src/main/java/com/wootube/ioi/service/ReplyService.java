@@ -9,9 +9,12 @@ import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.service.exception.NotFoundReplyException;
 import org.modelmapper.ModelMapper;
-
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ReplyService {
@@ -67,5 +70,17 @@ public class ReplyService {
 
         comment.checkMatchVideo(video);
         return comment;
+    }
+
+    public List<ReplyResponseDto> sortReply(Sort sort, Long videoId, Long commentId) {
+        Comment comment = findComment(commentId, videoId);
+        List<Reply> replies = replyRepository.findAllByComment(sort, comment);
+        List<ReplyResponseDto> replyResponseDtos = new ArrayList<>();
+
+        replies.forEach(reply -> {
+            ReplyResponseDto replyResponseDto = modelMapper.map(reply, ReplyResponseDto.class);
+            replyResponseDtos.add(replyResponseDto);
+        });
+        return replyResponseDtos;
     }
 }

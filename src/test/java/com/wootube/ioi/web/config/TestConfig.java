@@ -6,28 +6,21 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import io.findify.s3mock.S3Mock;
-
-import io.findify.s3mock.S3Mock;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
 public class TestConfig {
-
-    @Value("${woowa.ioi.wootube.region}")
-    private String region;
-
-    @Value("${woowa.ioi.wootube.bucket}")
-    private String bucket;
+    private String region = "ap-northeast-2";
+    private String bucket = "woowa-ioi";
 
     @Bean
     public S3Mock s3Mock() {
         return new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
     }
 
-    @Bean
+    @Bean(value = "s3mock")
     @Primary
     public AmazonS3 amazonS3(S3Mock s3Mock) {
         s3Mock.start();

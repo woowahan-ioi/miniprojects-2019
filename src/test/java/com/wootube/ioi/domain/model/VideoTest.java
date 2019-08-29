@@ -26,9 +26,9 @@ class VideoTest {
 
     @Test
     @DisplayName("비디오 컨텐트 경로 및 오리지널 파일 이름 초기화 테스트")
-    void initalizeVideo() {
+    void initializeVideo() {
         Video testVideo = new Video("title", "description");
-        testVideo.initialize("contentPath", "originFileName", new User());
+        testVideo.initialize("contentPath", "thumbnailPath","originFileName.mp4", "thumbnailFileName.png", new User());
         assertNoViolation(testVideo).isTrue();
     }
 
@@ -41,7 +41,7 @@ class VideoTest {
     @DisplayName("비디오 업데이트 테스트")
     void update() {
         Video testVideo = new Video("title", "description");
-        testVideo.initialize("contentPath", "originFileName", new User());
+        testVideo.initialize("contentPath", "thumbnailPath","originFileName.mp4", "thumbnailFileName.png", new User());
 
         Video updateTestVideo= new Video("update_title", "update_desc");
         testVideo.update(updateTestVideo);

@@ -14,278 +14,92 @@
         <div class="main-content pdd-right-50 pdd-left-50">
             <div class="container-fluid max-width-lg-2">
 
-                <div>
-                    <h3 class="text-bold height-40px">맞춤 동영상</h3>
+                <div th:if="${session}">
+                    <div>
+                        <h3 class="text-bold height-40px">최근 동영상</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2 padding-2" th:each="subscribeVideo : ${subscribeVideos}">
+                            <a th:href="@{'/videos/' + ${subscribeVideo.id}}" style="text-decoration: none; color: #000;">
+                                <div class="card bg-transparent no-border">
+                                    <div class="card-media">
+                                        <img alt="" class="img-responsive"
+                                             th:src="${subscribeVideo.thumbnailPath}">
+                                    </div>
+                                    <div class="card-block padding-10">
+                                        <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0"
+                                            th:text="${subscribeVideo.title}">title</h5>
+                                        <span class="font-size-13" th:text="${subscribeVideo.writerName}">userName</span>
+                                        <div class="font-size-11">
+                                            <span>조회수 <span th:text="${subscribeVideo.views}"></span>회</span>
+                                            <span> · </span>
+                                            <span class="createTimeSpan" th:text="${subscribeVideo.createTime}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <div class="row">
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_001.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크] 🦊🦆닉&러너덕의
-                                        점심봇</h5>
-                                    <span class="font-size-13">우아한Tech</span>
-                                    <div class="font-size-13">
-                                        <span>조회수 952회</span>
-                                        <span> · </span>
-                                        <span>3일 전</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_002.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크] 👾베디의 OCP와
-                                        전략패턴</h5>
-                                    <span>우아한Tech</span>
-                                    <span class="d-block">조회수 952회 | 3일 전</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_001.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크] 🦊🦆닉&러너덕의
-                                        점심봇</h5>
-                                    <span class="font-size-13">우아한Tech</span>
-                                    <div class="font-size-13">
-                                        <span>조회수 952회</span>
-                                        <span> · </span>
-                                        <span>3일 전</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_003.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크] 🤠루피의 우아한테크코스
-                                        도서관리시스템</h5>
-                                    <span>우아한Tech</span>
-                                    <span class="d-block">조회수 952회 | 3일 전</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_004.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크]
-                                        👩🏻‍💻👨🏻‍💻해리&션의 MVC 패턴</h5>
-                                    <span>우아한Tech</span>
-                                    <span class="d-block">조회수 952회 | 3일 전</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_005.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크]
-                                        👨🏻‍💻👨🏻‍💻지노&비모의 DTO vs VO</h5>
-                                    <span>우아한Tech</span>
-                                    <span class="d-block">조회수 952회 | 3일 전</span>
-                                </div>
-                            </div>
-                        </div>
+                <div th:unless="${session}">
+                    <div>
+                        <h3 class="text-bold height-40px">맞춤 동영상</h3>
                     </div>
                     <div class="row">
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_001.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크] 🦊🦆닉&러너덕의
-                                        점심봇</h5>
-                                    <span class="font-size-13">우아한Tech</span>
-                                    <div class="font-size-13">
-                                        <span>조회수 952회</span>
-                                        <span> · </span>
-                                        <span>3일 전</span>
+                        <div class="col-lg-2 padding-2" th:each="latestVideo : ${latestVideos}">
+                            <a th:href="@{'/videos/' + ${latestVideo.id}}" style="text-decoration: none; color: #000;">
+                                <div class="card bg-transparent no-border">
+                                    <div class="card-media">
+                                        <img alt="" class="img-responsive"
+                                             th:src="${latestVideo.thumbnailPath}">
+                                    </div>
+                                    <div class="card-block padding-10">
+                                        <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0"
+                                            th:text="${latestVideo.title}">title</h5>
+                                        <span class="font-size-13" th:text="${latestVideo.writerName}">userName</span>
+                                        <div class="font-size-11">
+                                            <span>조회수 <span th:text="${latestVideo.views}"></span>회</span>
+                                            <span> · </span>
+                                            <span class="createTimeSpan" th:text="${latestVideo.createTime}"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_002.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크] 👾베디의 OCP와
-                                        전략패턴</h5>
-                                    <span>우아한Tech</span>
-                                    <span class="d-block">조회수 952회 | 3일 전</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_003.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크] 🤠루피의 우아한테크코스
-                                        도서관리시스템</h5>
-                                    <span>우아한Tech</span>
-                                    <span class="d-block">조회수 952회 | 3일 전</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_004.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크]
-                                        👩🏻‍💻👨🏻‍💻해리&션의 MVC 패턴</h5>
-                                    <span>우아한Tech</span>
-                                    <span class="d-block">조회수 952회 | 3일 전</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 padding-2">
-                            <div class="card bg-transparent no-border">
-                                <div class="card-media">
-                                    <img alt="" class="img-responsive"
-                                         src="/images/default/thumb_005.jpeg">
-                                </div>
-                                <div class="card-block padding-10">
-                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                        테크토크]
-                                        👨🏻‍💻👨🏻‍💻지노&비모의 DTO vs VO</h5>
-                                    <span>우아한Tech</span>
-                                    <span class="d-block">조회수 952회 | 3일 전</span>
-                                </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
-
                 </div>
 
                 <hr class="video-line">
 
                 <div>
-                    <h3 class="text-bold height-40px">추천 영상</h3>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-2 padding-2">
-                        <div class="card bg-transparent no-border">
-                            <div class="card-media">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_002.jpeg">
-                            </div>
-                            <div class="card-block padding-10">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                    테크토크] 👾베디의 OCP와
-                                    전략패턴</h5>
-                                <span>우아한Tech</span>
-                                <span class="d-block">조회수 952회 | 3일 전</span>
-                            </div>
+                    <div>
+                        <h3 class="text-bold height-40px">추천 영상</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2 padding-2" th:each="recommendVideo : ${recommendVideos}">
+                            <a th:href="@{'/videos/' + ${recommendVideo.id}}"
+                               style="text-decoration: none; color: #000;">
+                                <div class="card bg-transparent no-border">
+                                    <div class="card-media">
+                                        <img alt="" class="img-responsive"
+                                             th:src="${recommendVideo.thumbnailPath}">
+                                    </div>
+                                    <div class="card-block padding-10">
+                                        <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0"
+                                            th:text="${recommendVideo.title}">title</h5>
+                                        <span class="font-size-13"
+                                              th:text="${recommendVideo.writerName}">userName</span>
+                                        <div class="font-size-11">
+                                            <span>조회수 <span th:text="${recommendVideo.views}"></span>회</span>
+                                            <span> · </span>
+                                            <span class="createTimeSpan" th:text="${recommendVideo.createTime}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
                     </div>
-                    <div class="col-lg-2 padding-2">
-                        <div class="card bg-transparent no-border">
-                            <div class="card-media">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_004.jpeg">
-                            </div>
-                            <div class="card-block padding-10">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                    테크토크]
-                                    👩🏻‍💻👨🏻‍💻해리&션의 MVC 패턴</h5>
-                                <span>우아한Tech</span>
-                                <span class="d-block">조회수 952회 | 3일 전</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 padding-2">
-                        <div class="card bg-transparent no-border">
-                            <div class="card-media">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_005.jpeg">
-                            </div>
-                            <div class="card-block padding-10">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                    테크토크]
-                                    👨🏻‍💻👨🏻‍💻지노&비모의 DTO vs VO</h5>
-                                <span>우아한Tech</span>
-                                <span class="d-block">조회수 952회 | 3일 전</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 padding-2">
-                        <div class="card bg-transparent no-border">
-                            <div class="card-media">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_006.jpeg">
-                            </div>
-                            <div class="card-block padding-10">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                    테크토크]
-                                    🤦‍♂️🤦‍♂️슬로스&이바의 우리는 왜 실패했는가</h5>
-                                <span>우아한Tech</span>
-                                <span class="d-block">조회수 952회 | 3일 전</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 padding-2">
-                        <div class="card bg-transparent no-border">
-                            <div class="card-media">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_006.jpeg">
-                            </div>
-                            <div class="card-block padding-10">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                    테크토크]
-                                    🤦‍♂️🤦‍♂️슬로스&이바의 우리는 왜 실패했는가</h5>
-                                <span>우아한Tech</span>
-                                <span class="d-block">조회수 952회 | 3일 전</span>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
                 <hr class="video-line">
@@ -295,52 +109,28 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-2 padding-2">
-                        <div class="card bg-transparent no-border">
-                            <div class="card-media">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_002.jpeg">
+                    <div class="col-lg-2 padding-2" th:each="popularityVideo : ${popularityVideos}">
+                        <a th:href="@{'/videos/' + ${popularityVideo.id}}"
+                           style="text-decoration: none; color: #000;">
+                            <div class="card bg-transparent no-border">
+                                <div class="card-media">
+                                    <img alt="" class="img-responsive"
+                                         th:src="${popularityVideo.thumbnailPath}">
+                                </div>
+                                <div class="card-block padding-10">
+                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0"
+                                        th:text="${popularityVideo.title}">title</h5>
+                                    <span class="font-size-13"
+                                          th:text="${popularityVideo.writerName}">userName</span>
+                                    <div class="font-size-11">
+                                        <span>조회수 <span th:text="${popularityVideo.views}"></span>회</span>
+                                        <span> · </span>
+                                        <span class="createTimeSpan" th:text="${popularityVideo.createTime}"></span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-block padding-10">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                    테크토크] 👾베디의 OCP와
-                                    전략패턴</h5>
-                                <span>우아한Tech</span>
-                                <span class="d-block">조회수 952회 | 3일 전</span>
-                            </div>
-                        </div>
+                        </a>
                     </div>
-                    <div class="col-lg-2 padding-2">
-                        <div class="card bg-transparent no-border">
-                            <div class="card-media">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_003.jpeg">
-                            </div>
-                            <div class="card-block padding-10">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                    테크토크] 🤠루피의 우아한테크코스
-                                    도서관리시스템</h5>
-                                <span>우아한Tech</span>
-                                <span class="d-block">조회수 952회 | 3일 전</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 padding-2">
-                        <div class="card bg-transparent no-border">
-                            <div class="card-media">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_004.jpeg">
-                            </div>
-                            <div class="card-block padding-10">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">[10분
-                                    테크토크]
-                                    👩🏻‍💻👨🏻‍💻해리&션의 MVC 패턴</h5>
-                                <span>우아한Tech</span>
-                                <span class="d-block">조회수 952회 | 3일 전</span>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
             </div>
@@ -349,14 +139,8 @@
 </div>
 
 <th:block th:replace="fragments/script :: scriptFragment"/>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 
-<script>
-    document.querySelector(".side-nav-toggle").addEventListener("click", sideNavToggle);
-
-    function sideNavToggle(event) {
-        event.preventDefault();
-        document.querySelector(".app").classList.toggle("is-collapsed");
-    }
-</script>
 </body>
 </html>

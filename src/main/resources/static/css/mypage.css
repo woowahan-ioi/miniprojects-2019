@@ -4,3 +4,16 @@
     color: gray;
     font-size: 1.0em;
 }
+
+.my-profile-image {]
+    cursor: pointer;
+}
+
+.my-profile-image:hover {
+    opacity: 0.5;
+    transition: opacity .3s;
+}
+
+.my-profile-image:hover:after {
+    transition: opacity .3s;
+}
