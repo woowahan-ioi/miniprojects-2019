@@ -1,25 +1,29 @@
 package com.wootube.ioi.service;
 
-import java.util.Collections;
-import java.util.List;
-import javax.transaction.Transactional;
-
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
+import com.wootube.ioi.service.exception.FileConvertException;
 import com.wootube.ioi.service.exception.NotFoundVideoIdException;
 import com.wootube.ioi.service.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
+import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
 import org.modelmapper.ModelMapper;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -27,24 +31,40 @@ import static java.util.stream.Collectors.toList;
 public class VideoService {
     private final FileUploader fileUploader;
     private final ModelMapper modelMapper;
-
     private final VideoRepository videoRepository;
     private final UserService userService;
+    private final FileConverter fileConverter;
 
-    public VideoService(FileUploader fileUploader, ModelMapper modelMapper, VideoRepository videoRepository, UserService userService) {
+    @Autowired
+    public VideoService(FileUploader fileUploader, ModelMapper modelMapper, VideoRepository videoRepository, UserService userService, FileConverter fileConverter) {
         this.fileUploader = fileUploader;
         this.modelMapper = modelMapper;
         this.videoRepository = videoRepository;
         this.userService = userService;
+        this.fileConverter = fileConverter;
     }
 
-    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
-        List<String> urls = fileUploader.uploadFile(uploadFile, UploadType.VIDEO, UploadType.THUMBNAIL);
-        String originFileName = uploadFile.getOriginalFilename();
+    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) throws IOException {
+        File convertedVideo = fileConverter.convert(uploadFile)
+                .orElseThrow(FileConvertException::new);
+
+        String videoUrl = fileUploader.uploadFile(convertedVideo, UploadType.VIDEO);
+
+        File convertedThumbnail = fileConverter.convert(convertedVideo)
+                .orElseThrow(FileConvertException::new);
+
+        String thumbnailUrl = fileUploader.uploadFile(convertedThumbnail, UploadType.THUMBNAIL);
+
+        String originFileName = convertedVideo.getName();
+        String thumbnailFileName = convertedThumbnail.getName();
+
+        convertedVideo.delete();
+        convertedThumbnail.delete();
+
         User writer = userService.findByIdAndIsActiveTrue(videoRequestDto.getWriterId());
 
         Video video = modelMapper.map(videoRequestDto, Video.class);
-        video.initialize(urls, originFileName, writer);
+        video.initialize(videoUrl, thumbnailUrl, originFileName, thumbnailFileName, writer);
         return modelMapper.map(videoRepository.save(video), VideoResponseDto.class);
     }
 
@@ -65,17 +85,35 @@ public class VideoService {
     }
 
     @Transactional
-    public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) {
+    public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) throws IOException {
         Video video = findById(id);
         matchWriter(videoRequestDto.getWriterId(), id);
 
         if (!uploadFile.isEmpty()) {
-            fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO, UploadType.THUMBNAIL);
-            List<String> videoUrl = fileUploader.uploadFile(uploadFile, UploadType.VIDEO, UploadType.VIDEO);
-            video.updateContentPath(videoUrl);
+            fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
+            fileUploader.deleteFile(video.getThumbnailFileName(), UploadType.THUMBNAIL);
+
+            File convertedVideo = fileConverter.convert(uploadFile)
+                    .orElseThrow(FileConvertException::new);
+
+            String contentPath = fileUploader.uploadFile(convertedVideo, UploadType.VIDEO);
+
+            File convertedThumbnail = fileConverter.convert(convertedVideo)
+                    .orElseThrow(FileConvertException::new);
+
+            String thumbnailPath = fileUploader.uploadFile(convertedThumbnail, UploadType.THUMBNAIL);
+
+            String originFileName = convertedVideo.getName();
+            String thumbnailFileName = convertedThumbnail.getName();
+
+            convertedVideo.delete();
+            convertedThumbnail.delete();
+
+            video.updateVideo(contentPath, originFileName, thumbnailPath, thumbnailFileName);
         }
-        video.update(modelMapper.map(videoRequestDto, Video.class));
-        videoRepository.save(video);
+
+        video.updateTitle(videoRequestDto.getTitle());
+        video.updateDescription(videoRequestDto.getDescription());
     }
 
     @Transactional
@@ -84,13 +122,9 @@ public class VideoService {
         if (!video.matchWriter(userId)) {
             throw new UserAndWriterMisMatchException();
         }
-        fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO, UploadType.THUMBNAIL);
+        fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
+        fileUploader.deleteFile(video.getThumbnailFileName(), UploadType.THUMBNAIL);
         videoRepository.deleteById(video.getId());
-    }
-
-    public List<Video> findAllByWriter(Long writerId) {
-        User writer = userService.findByIdAndIsActiveTrue(writerId);
-        return videoRepository.findByWriter(writer);
     }
 
     public void matchWriter(Long userId, Long videoId) {
@@ -98,6 +132,11 @@ public class VideoService {
         if (!video.matchWriter(userId)) {
             throw new NotMatchUserIdException();
         }
+    }
+
+    public List<Video> findAllByWriter(Long writerId) {
+        User writer = userService.findByIdAndIsActiveTrue(writerId);
+        return videoRepository.findByWriter(writer);
     }
 
     public Page<Video> findAll(Pageable pageable) {
