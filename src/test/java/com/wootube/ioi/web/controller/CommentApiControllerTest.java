@@ -1,13 +1,13 @@
 package com.wootube.ioi.web.controller;
 
+import java.util.List;
+
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.http.MediaType;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
