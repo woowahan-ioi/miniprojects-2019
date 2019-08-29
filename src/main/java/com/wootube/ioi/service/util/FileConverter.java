@@ -1,7 +1,7 @@
-package com.wootube.ioi.service.util.bmoluffy;
+package com.wootube.ioi.service.util;
 
 import com.wootube.ioi.service.exception.FileUploadException;
-
+import com.wootube.ioi.service.exception.InvalidFileExtensionException;
 import org.imgscalr.Scalr;
 import org.jcodec.api.FrameGrab;
 import org.jcodec.api.JCodecException;
@@ -14,19 +14,18 @@ import org.jcodec.scale.AWTUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 
-import javax.imageio.ImageIO;
-
 @Component
 public class FileConverter {
-    private static final int THUMBNAIL_WIDTH = 200;
+    private final int THUMBNAIL_WIDTH = 200;
 
-    public static Optional<File> convert(MultipartFile file) throws IOException {
+    public Optional<File> convert(MultipartFile file) throws IOException {
         File convertFile = new File(file.getOriginalFilename());
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
@@ -37,7 +36,7 @@ public class FileConverter {
         return Optional.empty();
     }
 
-    public static Optional<File> convert(File videoFile) {
+    public Optional<File> convert(File videoFile) {
         String fileName = videoFile.getAbsolutePath();
         String baseName = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.lastIndexOf("."));
 
@@ -46,7 +45,7 @@ public class FileConverter {
         return Optional.of(imgFile);
     }
 
-    private static double getFrameNumber(File videoFile) {
+    private double getFrameNumber(File videoFile) {
         try {
             SeekableByteChannel byteChannel = NIOUtils.readableFileChannel(videoFile);
             MP4Demuxer demuxer = new MP4Demuxer(byteChannel);
@@ -54,12 +53,12 @@ public class FileConverter {
             return track.getMeta().getTotalDuration() / 5.0;
         } catch (IOException e) {
             videoFile.delete();
-            throw new FileUploadException();
+            throw new InvalidFileExtensionException();
         }
 
     }
 
-    private static File getThumbNailImageFile(String fileName, String baseName, double frameNumber) {
+    private File getThumbNailImageFile(String fileName, String baseName, double frameNumber) {
         try {
             Picture thumbnail = FrameGrab.getNativeFrame(new File(fileName), frameNumber);
             BufferedImage img = AWTUtil.toBufferedImage(thumbnail);

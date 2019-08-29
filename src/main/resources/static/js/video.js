@@ -51,14 +51,11 @@ function getLikeCount() {
         }
     }
 
-    const requestBody = {
-    };
-
     const handleError = (error) => {
         alert(error);
     }
 
-    AjaxRequest.POST(requestUri, requestBody, callback, handleError)
+    AjaxRequest.GET(requestUri, callback, handleError)
 }
 
 const videoButton = (function() {

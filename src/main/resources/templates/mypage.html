@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
           name="viewport">
+    <link href="/css/mypage.css" rel="stylesheet">
 </head>
 
 <body>
@@ -34,7 +35,7 @@
                                     size="100"
                                     style="margin-right: 24px;"
                             >
-                                        <img id="profile-image" alt="avatar" th:src="${session.user.profileImageUrl}">
+                                        <img id="profile-image" class="my-profile-image" alt="avatar" th:src="${session.user.profileImageUrl}">
                             </v-avatar>
                         </v-row>
                                     </label>
@@ -121,7 +122,7 @@
                                         <div class="font-size-13">
                                             <span>조회수 952회</span>
                                             <span> · </span>
-                                            <span id="create-time" th:text="${video.updateTime}"></span>
+                                            <span class="createTimeSpan" th:text="${video.createTime}"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -145,6 +146,7 @@
 
 <th:block th:replace="fragments/form-rules:: formRulesFragment"/>
 <script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 
 <script>
     new Vue({

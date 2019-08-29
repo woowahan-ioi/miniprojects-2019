@@ -11,7 +11,7 @@ const Templates = {
                             <i class="ti-more-alt"></i>
                         </button>
                     
-                        <div class="dropdown-menu" role="menu">
+                        <div class="dropdown-menu comment-dropdown-menu" role="menu">
                             <button class="list-group-item list-group-item-action comment-edit-button">
                                 <i class="fa fa-pencil"></i>
                                 <span>수정</span>

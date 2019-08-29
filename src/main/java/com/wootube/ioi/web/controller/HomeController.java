@@ -15,8 +15,10 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("videos", videoService.findAll());
-        model.addAttribute("orderVideos", videoService.findOrderVideos());
+        model.addAttribute("latestVideos", videoService.findLatestVideos());
+        model.addAttribute("subscribeVideos", videoService.findSubscribeVideos());
+
+        model.addAttribute("recommendVideos", videoService.findRecommendVideos());
         model.addAttribute("popularityVideos", videoService.findPopularityVideos());
         return "index";
     }

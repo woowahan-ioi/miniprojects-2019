@@ -3,12 +3,9 @@ package com.wootube.ioi.domain.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -55,16 +52,23 @@ public class Video extends BaseEntity {
     }
 
     public void update(Video updateVideo) {
-        if (updateVideo.contentPath != null) {
-            this.contentPath = updateVideo.contentPath;
-        }
         this.title = updateVideo.title;
         this.description = updateVideo.description;
     }
 
-    public void updateContentPath(String contentPath, String thumbnailPath) {
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
+
+    public void updateVideo(String contentPath, String originFileName, String thumbnailPath, String thumbnailFileName) {
         this.contentPath = contentPath;
+        this.originFileName = originFileName;
         this.thumbnailPath = thumbnailPath;
+        this.thumbnailFileName = thumbnailFileName;
     }
 
     public void initialize(String contentPath, String thumbnailPath, String originFileName, String thumbnailFileName, User writer) {
@@ -83,7 +87,4 @@ public class Video extends BaseEntity {
         this.views++;
     }
 
-//    public void verifyOriginFileName(String originFileName) {
-//        originFileName.mat
-//    }
 }

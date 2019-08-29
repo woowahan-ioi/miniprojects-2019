@@ -11,11 +11,11 @@ import com.wootube.ioi.service.exception.FileConvertException;
 import com.wootube.ioi.service.exception.InActivatedUserException;
 import com.wootube.ioi.service.exception.LoginFailedException;
 import com.wootube.ioi.service.exception.NotFoundUserException;
+import com.wootube.ioi.service.util.FileConverter;
+import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
-import com.wootube.ioi.service.util.bmoluffy.FileConverter;
-import com.wootube.ioi.service.util.bmoluffy.FileUploader2;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,79 +25,90 @@ import java.io.IOException;
 
 @Service
 public class UserService {
-	private final UserRepository userRepository;
-	private final EmailService emailService;
-	private final VerifyKeyService verifyKeyService;
-	private final ModelMapper modelMapper;
-	private final FileUploader2 fileUploader;
+    private final UserRepository userRepository;
+    private final EmailService emailService;
+    private final VerifyKeyService verifyKeyService;
+    private final ModelMapper modelMapper;
+    private final FileUploader fileUploader;
+    private final FileConverter fileConverter;
 
-	public UserService(UserRepository userRepository, EmailService emailService, VerifyKeyService verifyKeyService, ModelMapper modelMapper, FileUploader2 fileUploader) {
-		this.userRepository = userRepository;
-		this.emailService = emailService;
-		this.verifyKeyService = verifyKeyService;
-		this.modelMapper = modelMapper;
-		this.fileUploader = fileUploader;
-	}
+    @Autowired
+    public UserService(UserRepository userRepository, EmailService emailService, VerifyKeyService verifyKeyService, ModelMapper modelMapper, FileUploader fileUploader, FileConverter fileConverter) {
+        this.userRepository = userRepository;
+        this.emailService = emailService;
+        this.verifyKeyService = verifyKeyService;
+        this.modelMapper = modelMapper;
+        this.fileUploader = fileUploader;
+        this.fileConverter = fileConverter;
+    }
 
-	public User createUser(SignUpRequestDto signUpRequestDto) {
-		return userRepository.save(modelMapper.map(signUpRequestDto, User.class));
-	}
+    public User createUser(SignUpRequestDto signUpRequestDto) {
+        return userRepository.save(modelMapper.map(signUpRequestDto, User.class));
+    }
 
-	public User readUser(LogInRequestDto logInRequestDto) {
-		try {
-			User savedEmail = findByEmail(logInRequestDto.getEmail());
-			checkInActive(savedEmail);
-			return savedEmail.matchPassword(logInRequestDto.getPassword());
-		} catch (NotFoundUserException | NotMatchPasswordException e) {
-			throw new LoginFailedException();
-		}
-	}
+    public User readUser(LogInRequestDto logInRequestDto) {
+        try {
+            User savedEmail = findByEmail(logInRequestDto.getEmail());
+            checkInActive(savedEmail);
+            return savedEmail.matchPassword(logInRequestDto.getPassword());
+        } catch (NotFoundUserException | NotMatchPasswordException e) {
+            throw new LoginFailedException();
+        }
+    }
 
-	private void checkInActive(User savedEmail) {
-		if (!savedEmail.isActive()) {
-			emailService.sendMessage(savedEmail.getEmail());
-			throw new InActivatedUserException();
-		}
-	}
+    private void checkInActive(User savedEmail) {
+        if (!savedEmail.isActive()) {
+            emailService.sendMessage(savedEmail.getEmail());
+            throw new InActivatedUserException();
+        }
+    }
 
-	public User findByEmail(String email) {
-		return userRepository.findByEmail(email)
-				.orElseThrow(NotFoundUserException::new);
-	}
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(NotFoundUserException::new);
+    }
 
-	@Transactional
-	public User updateUser(Long userId, EditUserRequestDto editUserRequestDto) {
-		return findByIdAndIsActiveTrue(userId).updateName(editUserRequestDto.getName());
-	}
+    @Transactional
+    public User updateUser(Long userId, EditUserRequestDto editUserRequestDto) {
+        return findByIdAndIsActiveTrue(userId).updateName(editUserRequestDto.getName());
+    }
 
-	public User findByIdAndIsActiveTrue(Long userId) {
-		return userRepository.findByIdAndActiveTrue(userId)
-				.orElseThrow(NotFoundUserException::new);
-	}
+    public User findByIdAndIsActiveTrue(Long userId) {
+        return userRepository.findByIdAndActiveTrue(userId)
+                .orElseThrow(NotFoundUserException::new);
+    }
 
-	@Transactional
-	public User deleteUser(Long userId) {
-		User deleteTargetUser = findByIdAndIsActiveTrue(userId);
-		deleteTargetUser.softDelete();
-		return deleteTargetUser;
-	}
+    @Transactional
+    public User deleteUser(Long userId) {
+        User deleteTargetUser = findByIdAndIsActiveTrue(userId);
+        deleteTargetUser.softDelete();
+        return deleteTargetUser;
+    }
 
-	@Transactional
-	public void activateUser(String email, String verifyKey) {
-		if (verifyKeyService.confirmKey(email, verifyKey)) {
-			findByEmail(email).activateUser();
-		}
-	}
+    @Transactional
+    public void activateUser(String email, String verifyKey) {
+        if (verifyKeyService.confirmKey(email, verifyKey)) {
+            findByEmail(email).activateUser();
+        }
+    }
 
-	@Transactional
+    @Transactional
     public User updateProfileImage(Long userId, MultipartFile uploadFile) throws IOException {
-		File convertedProfileImage = FileConverter.convert(uploadFile)
-				.orElseThrow(FileConvertException::new);
+        User user = findByIdAndIsActiveTrue(userId);
 
-		String profileImageUrl = fileUploader.uploadFile(convertedProfileImage, UploadType.PROFILE);
-		String originFileName = uploadFile.getOriginalFilename();
+        ProfileImage profileImage = user.getProfileImage();
+        if (!user.isDefaultProfile()) {
+            fileUploader.deleteFile(profileImage.getProfileImageFileName(), UploadType.PROFILE);
+        }
 
-		User user = findByIdAndIsActiveTrue(userId);
-		return user.updateProfileImage(new ProfileImage(profileImageUrl, originFileName));
+        File convertedProfileImage = fileConverter.convert(uploadFile)
+                .orElseThrow(FileConvertException::new);
+
+        String profileImageUrl = fileUploader.uploadFile(convertedProfileImage, UploadType.PROFILE);
+        String originFileName = uploadFile.getOriginalFilename();
+
+        convertedProfileImage.delete();
+
+        return user.updateProfileImage(new ProfileImage(profileImageUrl, originFileName));
     }
 }

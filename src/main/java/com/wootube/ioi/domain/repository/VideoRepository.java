@@ -12,4 +12,6 @@ import java.util.List;
 public interface VideoRepository extends JpaRepository<Video, Long> {
     List<Video> findByWriter(User writer);
     List<Video> findTop12ByOrderByViewsDesc();
+    List<Video> findTop12ByOrderByCreateTimeDesc();
+
 }
