@@ -4,12 +4,14 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public class ProfileImage {
 
     public static final String DEFAULT_PROFILE_IMAGE_URL = "https://woowa-ioi.s3.ap-northeast-2.amazonaws.com/wootube/basic/default_profile.png";

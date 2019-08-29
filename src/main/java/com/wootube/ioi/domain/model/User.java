@@ -66,7 +66,7 @@ public class User extends BaseEntity {
     }
 
     public void activateUser() {
-        if(this.active) {
+        if (this.active) {
             throw new ActivatedException();
         }
         this.active = true;
@@ -77,5 +77,10 @@ public class User extends BaseEntity {
             throw new InactivatedException();
         }
         this.active = false;
+    }
+
+    public User updateProfileImage(ProfileImage profileImage) {
+        this.profileImage = profileImage;
+        return this;
     }
 }
