@@ -23,11 +23,11 @@ const Templates = {
                         </div>
                     </div>
                     <span class="comment-contents font-size-15">${comment.contents}</span>
-                    <div>
-                        <button class="like-btn">
+                    <div class="comment-like-area">
+                        <button class="like-btn comment-like-btn">
                             <i class="ti-thumb-up"></i>
                         </button>
-                        <span>3.5천</span>
+                        <span class="comment-like-count">0</span>
                         <button class="reply-toggle-btn">답글</button>
                     </div>
                 </div>

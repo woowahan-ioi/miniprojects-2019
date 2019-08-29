@@ -31,12 +31,18 @@ const commentButton = (function () {
             commentAddButton.addEventListener('click', commentService.sortCommentByUpdateTime);
         };
 
+        const increaseLike = function () {
+            const commentArea = document.querySelector('#comment-area');
+            commentArea.addEventListener('click', commentService.increaseLike);
+        }
+
         const init = function () {
             saveComment();
             updateComment();
             deleteComment();
             commentToggle();
             sortCommentByUpdateTime();
+            increaseLike();
         };
 
         return {
@@ -230,6 +236,40 @@ const commentButton = (function () {
             commentList.insertAdjacentHTML("beforeend", Templates.commentTemplate(comment, writtenTime));
         };
 
+        const increaseLike = (event) => {
+            let target = event.target;
+
+            if(target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if(!target.classList.contains("comment-like-btn")) {
+                return;
+            }
+            const commentId = target.parentElement.parentElement.parentElement.dataset.commentid;
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/likes";
+
+            const requestBody = {
+            };
+
+            const callback = (response) => {
+                if (response.status === 201) {
+                    response.json().then(data => {
+                        const commentLikeCountDiv = target.nextElementSibling;
+                        commentLikeCountDiv.innerText = data.count;
+                    })
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.POST(requestUri, requestBody, callback, handleError);
+        }
+
         return {
             save: saveComment,
             update: updateComment,
@@ -239,7 +279,8 @@ const commentButton = (function () {
             toggleCommentSaveButton: toggleCommentSaveButton,
             toggleCommentMoreButton: toggleCommentMoreButton,
             toggleCommentEditButton: toggleCommentEditButton,
-            sortCommentByUpdateTime: sortCommentByUpdateTime
+            sortCommentByUpdateTime: sortCommentByUpdateTime,
+            increaseLike: increaseLike
         }
     };
 
