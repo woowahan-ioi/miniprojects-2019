@@ -1,13 +1,20 @@
 package com.wootube.ioi.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.VideoRequestDto;
+import com.wootube.ioi.service.exception.NotMatchUserIdException;
+import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
 import com.wootube.ioi.service.testutil.TestUtil;
-import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,18 +22,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 class VideoServiceTest extends TestUtil {
@@ -40,9 +44,6 @@ class VideoServiceTest extends TestUtil {
     private FileUploader fileUploader;
 
     @Mock
-    private FileConverter fileConverter;
-
-    @Mock
     private ModelMapper modelMapper;
 
     @Mock
@@ -52,52 +53,30 @@ class VideoServiceTest extends TestUtil {
     private VideoService videoService;
 
     private VideoRequestDto testVideoRequestDto;
-    private MultipartFile testUploadMultipartFile;
 
-    private String videoFileFullPath;
-    private String thumbnailImageFileFullPath;
-
+    private MultipartFile testUploadFile;
+    private List<String> files = new ArrayList<>();
     private User writer;
 
     @BeforeEach
     void setUp() {
-        writer = mock(User.class);
+        writer = new User();
+        String fileFullPath = String.format("%s/%s",DIRECTORY, FILE_NAME);
+        files.add(fileFullPath);
+        files.add(String.format("%s/%s",DIRECTORY, FILE_THUMB_NAIL_NAME));
 
-        videoFileFullPath = String.format("%s/%s/%s", DIRECTORY, UploadType.VIDEO, VIDEO_FILE_NAME);
-        thumbnailImageFileFullPath = String.format("%s/%s/%s", DIRECTORY, UploadType.PROFILE, THUMBNAIL_FILE_NAME);
-
-        testUploadMultipartFile = new MockMultipartFile(videoFileFullPath, VIDEO_FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
+        testUploadFile = new MockMultipartFile(fileFullPath, FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
 
         testVideoRequestDto = new VideoRequestDto(TITLE, DESCRIPTION, USER_ID);
     }
 
     @Test
-    @DisplayName("서비스에서 비디오를 저장한다.")
-    void create() throws IOException {
+    @DisplayName("서비스에서 비디오 저장 테스트를 한다.")
+    void create() {
         createMockVideo();
 
         verify(modelMapper, atLeast(1)).map(testVideoRequestDto, Video.class);
         verify(videoRepository, atLeast(1)).save(testVideo);
-    }
-
-    private void createMockVideo() throws IOException {
-        File convertedVideo = mock(File.class);
-        File convertedThumbnail = mock(File.class);
-
-        mockUploadVideo(convertedVideo, convertedThumbnail);
-
-        given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
-        given(userService.findByIdAndIsActiveTrue(USER_ID)).willReturn(writer);
-
-        videoService.create(testUploadMultipartFile, testVideoRequestDto);
-    }
-
-    private void mockUploadVideo(File convertedVideo, File convertedThumbnail) throws IOException {
-        given(fileConverter.convert(testUploadMultipartFile)).willReturn(Optional.of(convertedVideo));
-        given(fileUploader.uploadFile(convertedVideo, UploadType.VIDEO)).willReturn(videoFileFullPath);
-
-        given(fileConverter.convert(convertedVideo)).willReturn(Optional.of(convertedThumbnail));
-        given(fileUploader.uploadFile(convertedThumbnail, UploadType.THUMBNAIL)).willReturn(thumbnailImageFileFullPath);
     }
 
     @Test
@@ -109,38 +88,74 @@ class VideoServiceTest extends TestUtil {
 
     @Test
     @DisplayName("서비스에서 비디오를 업데이트 한다.")
-    void update() throws IOException {
-        testVideo = mock(Video.class);
+    void update() {
+        createMockVideo();
+        String updateFileFullPath = String.format("%s/%s", DIRECTORY, UPDATE_FILE_NAME);
+        MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
+
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
-        given(testVideo.matchWriter(any())).willReturn(true);
+        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO, UploadType.THUMBNAIL)).willReturn(files);
+        given(testVideo.matchWriter(USER_ID)).willReturn(true);
+        videoService.update(ID, testUpdateChangeUploadFile, testVideoRequestDto);
 
-        File convertedVideo = mock(File.class);
-        File convertedThumbnail = mock(File.class);
-
-        mockUploadVideo(convertedVideo, convertedThumbnail);
-
-        videoService.update(ID, testUploadMultipartFile, testVideoRequestDto);
-
-        verify(testVideo).updateVideo(videoFileFullPath, convertedVideo.getName(), thumbnailImageFileFullPath, convertedThumbnail.getName());
-        verify(testVideo).updateTitle(testVideoRequestDto.getTitle());
-        verify(testVideo).updateDescription(testVideoRequestDto.getDescription());
+        verify(modelMapper, atLeast(1)).map(testVideoRequestDto, Video.class);
+        verify(videoRepository, atLeast(1)).save(testVideo);
     }
 
     @Test
-    @DisplayName("비디오를 삭제한다.")
+    @DisplayName("서비스에서 비디오를 다른아이디로 수정할때 실패한다.")
+    void updateFailed() {
+        createMockVideo();
+        String updateFileFullPath = String.format("%s/%s", DIRECTORY, UPDATE_FILE_NAME);
+        MultipartFile testUpdateChangeUploadFile = getUpdateChangeUploadFile(updateFileFullPath);
+
+        given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
+        given(fileUploader.uploadFile(testUpdateChangeUploadFile, UploadType.VIDEO, UploadType.THUMBNAIL)).willReturn(files);
+
+        given(testVideo.matchWriter(USER_ID)).willReturn(false);
+
+        assertThrows(NotMatchUserIdException.class, ()
+                -> videoService.update(ID, testUpdateChangeUploadFile, testVideoRequestDto));
+    }
+
+    @Test
+    @DisplayName("서비스에서 비디오 아이디로 비디오를 삭제한다.")
     void deleteById() {
         deleteMockVideo();
-        videoService.deleteById(ID, WRITER.getId());
+        videoService.deleteById(ID, USER_ID);
 
-        verify(fileUploader).deleteFile(testVideo.getOriginFileName(), UploadType.VIDEO);
-        verify(fileUploader).deleteFile(testVideo.getThumbnailFileName(), UploadType.THUMBNAIL);
-        verify(videoRepository).deleteById(ID);
+        verify(fileUploader, atLeast(1)).deleteFile(testVideo.getOriginFileName(), UploadType.VIDEO, UploadType.THUMBNAIL);
+        verify(videoRepository, atLeast(1)).deleteById(ID);
+    }
+
+    @Test
+    @DisplayName("서비스에서 비디오를 다른아이디로 삭제할때 실패한다.")
+    void deleteFailed() {
+        deleteMockVideo();
+        assertThrows(UserAndWriterMisMatchException.class, () -> {
+            videoService.deleteById(ID, OTHER_USER_ID);
+        });
+    }
+
+    private void createMockVideo() {
+        given(fileUploader.uploadFile(testUploadFile, UploadType.VIDEO, UploadType.THUMBNAIL)).willReturn(files);
+        given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
+        given(userService.findByIdAndIsActiveTrue(USER_ID)).willReturn(writer);
+
+        videoService.create(testUploadFile, testVideoRequestDto);
     }
 
     private void deleteMockVideo() {
         given(testVideo.getId()).willReturn(ID);
-        given(testVideo.matchWriter(any())).willReturn(true);
+        given(testVideo.matchWriter(USER_ID)).willReturn(true);
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
+    }
+
+    private MultipartFile getUpdateChangeUploadFile(String updateFileFullPath) {
+        testVideoRequestDto.setTitle(UPDATE_TITLE);
+        testVideoRequestDto.setDescription(UPDATE_DESCRIPTION);
+
+        return new MockMultipartFile(updateFileFullPath, UPDATE_FILE_NAME, null, UPDATE_CONTENTS.getBytes(StandardCharsets.UTF_8));
     }
 
     @Test
@@ -151,5 +166,10 @@ class VideoServiceTest extends TestUtil {
 
         verify(videoRepository).findById(ID);
         verify(testVideo).increaseViews();
+    }
+
+    @AfterEach
+    void tearDown() {
+        files.clear();
     }
 }

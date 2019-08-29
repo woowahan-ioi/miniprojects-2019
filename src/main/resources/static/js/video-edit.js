@@ -7,9 +7,9 @@ function unHover(element) {
 }
 
 function move() {
-    const elem = document.getElementById("progressBar");
-    const width = 0;
-    const id = setInterval(frame, 0);
+    var elem = document.getElementById("progressBar");
+    var width = 0;
+    var id = setInterval(frame, 0);
 
     function frame() {
         if (width >= 100) {
@@ -22,10 +22,7 @@ function move() {
     }
 }
 
-function videoSubmit(event) {
-    const submitButton = event.target;
-    document.querySelector("#video-form").submit();
-    submitButton.disabled = true;
-}
-
-document.querySelector("#video-submit-button").addEventListener("click", videoSubmit);
+$(".preview-file-input").on("change", function() {
+    var previewImage = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(previewImage);
+});
