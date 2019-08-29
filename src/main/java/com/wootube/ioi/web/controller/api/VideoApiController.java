@@ -37,7 +37,6 @@ public class VideoApiController {
 		return ResponseEntity.ok(videoLikeService.likeVideo(videoId, userSession.getId()));
 	}
 
-	//TODO METHOD 수정
 	@GetMapping("/{videoId}/likes/counts")
 	public ResponseEntity count(@PathVariable Long videoId) {
 		return ResponseEntity.ok(videoLikeService.getVideoLikeCount(videoId));
