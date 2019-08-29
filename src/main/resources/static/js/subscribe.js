@@ -149,8 +149,5 @@ const subscriptionButton = (function () {
     return {
         init: init
     }
-})();
-
-window.onload = () => {
-    subscriptionButton.init();
-}
+})
+subscriptionButton().init();

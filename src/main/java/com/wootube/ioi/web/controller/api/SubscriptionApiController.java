@@ -6,15 +6,9 @@ import com.wootube.ioi.service.dto.SubscriptionCheckResponseDto;
 import com.wootube.ioi.service.dto.SubscriptionCountResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,7 +40,6 @@ public class SubscriptionApiController {
         return ResponseEntity.ok()
                 .body(subscriptionService.checkSubscription(userSession.getId(), subscribedUserId));
     }
-
 
     @GetMapping("/{subscribedUserId}")
     public ResponseEntity<SubscriptionCountResponseDto> countSubscription(@PathVariable Long subscribedUserId) {

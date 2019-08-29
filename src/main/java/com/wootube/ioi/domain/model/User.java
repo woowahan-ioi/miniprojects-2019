@@ -4,17 +4,12 @@ import com.wootube.ioi.domain.exception.ActivatedException;
 import com.wootube.ioi.domain.exception.InactivatedException;
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.validator.Password;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Getter
@@ -82,5 +77,9 @@ public class User extends BaseEntity {
     public User updateProfileImage(ProfileImage profileImage) {
         this.profileImage = profileImage;
         return this;
+    }
+
+    public boolean isDefaultProfile() {
+        return profileImage.isDefaultFileName();
     }
 }

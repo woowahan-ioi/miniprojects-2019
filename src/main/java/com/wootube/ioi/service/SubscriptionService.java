@@ -9,7 +9,6 @@ import com.wootube.ioi.service.dto.SubscriptionCountResponseDto;
 import com.wootube.ioi.service.exception.AlreadySubscribedException;
 import com.wootube.ioi.service.exception.IllegalUnsubscriptionException;
 import com.wootube.ioi.service.exception.NotFoundSubscriptionException;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

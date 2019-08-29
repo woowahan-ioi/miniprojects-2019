@@ -21,6 +21,8 @@ function deleteVideo(event) {
                 error.then((message) => alert(message))
             }
         );
+
+    target.disabled = true;
 }
 
 const deleteHeaderData = {

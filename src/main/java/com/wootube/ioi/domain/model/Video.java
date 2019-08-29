@@ -3,12 +3,9 @@ package com.wootube.ioi.domain.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -90,8 +87,4 @@ public class Video extends BaseEntity {
         this.views++;
     }
 
-
-//    public void verifyOriginFileName(String originFileName) {
-//        originFileName.mat
-//    }
 }

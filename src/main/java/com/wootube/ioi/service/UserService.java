@@ -14,7 +14,6 @@ import com.wootube.ioi.service.exception.NotFoundUserException;
 import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,7 +97,9 @@ public class UserService {
         User user = findByIdAndIsActiveTrue(userId);
 
         ProfileImage profileImage = user.getProfileImage();
-        fileUploader.deleteFile(profileImage.getProfileImageFileName(), UploadType.PROFILE);
+        if (!user.isDefaultProfile()) {
+            fileUploader.deleteFile(profileImage.getProfileImageFileName(), UploadType.PROFILE);
+        }
 
         File convertedProfileImage = fileConverter.convert(uploadFile)
                 .orElseThrow(FileConvertException::new);

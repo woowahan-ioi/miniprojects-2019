@@ -5,10 +5,9 @@ import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.testutil.TestUtil;
-import com.wootube.ioi.service.util.UploadType;
 import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
-
+import com.wootube.ioi.service.util.UploadType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,10 +24,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 class VideoServiceTest extends TestUtil {
@@ -114,6 +112,7 @@ class VideoServiceTest extends TestUtil {
     void update() throws IOException {
         testVideo = mock(Video.class);
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
+        given(testVideo.matchWriter(any())).willReturn(true);
 
         File convertedVideo = mock(File.class);
         File convertedThumbnail = mock(File.class);
@@ -131,15 +130,16 @@ class VideoServiceTest extends TestUtil {
     @DisplayName("비디오를 삭제한다.")
     void deleteById() {
         deleteMockVideo();
-        videoService.deleteById(ID);
+        videoService.deleteById(ID, WRITER.getId());
 
-        verify(fileUploader, atLeast(1)).deleteFile(testVideo.getOriginFileName(), UploadType.VIDEO);
-        verify(videoRepository, atLeast(1)).deleteById(ID);
+        verify(fileUploader).deleteFile(testVideo.getOriginFileName(), UploadType.VIDEO);
+        verify(fileUploader).deleteFile(testVideo.getThumbnailFileName(), UploadType.THUMBNAIL);
+        verify(videoRepository).deleteById(ID);
     }
 
     private void deleteMockVideo() {
         given(testVideo.getId()).willReturn(ID);
-        given(testVideo.matchWriter(USER_ID)).willReturn(true);
+        given(testVideo.matchWriter(any())).willReturn(true);
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
     }
 

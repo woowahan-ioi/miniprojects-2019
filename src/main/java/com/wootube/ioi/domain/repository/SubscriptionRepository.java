@@ -1,7 +1,6 @@
 package com.wootube.ioi.domain.repository;
 
 import com.wootube.ioi.domain.model.Subscription;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

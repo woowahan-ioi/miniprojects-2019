@@ -8,10 +8,10 @@ import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.service.exception.FileConvertException;
 import com.wootube.ioi.service.exception.NotFoundVideoIdException;
 import com.wootube.ioi.service.exception.NotMatchUserIdException;
+import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
 import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -117,12 +117,13 @@ public class VideoService {
     }
 
     @Transactional
-    public void deleteById(Long videoId) {
+    public void deleteById(Long videoId, Long userId) {
         Video video = findById(videoId);
-
+        if (!video.matchWriter(userId)) {
+            throw new UserAndWriterMisMatchException();
+        }
         fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
         fileUploader.deleteFile(video.getThumbnailFileName(), UploadType.THUMBNAIL);
-
         videoRepository.deleteById(video.getId());
     }
 

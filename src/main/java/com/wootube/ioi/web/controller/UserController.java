@@ -8,7 +8,6 @@ import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +43,8 @@ public class UserController {
     @GetMapping("/mypage")
     public String myPage(Model model) {
         UserSession userSession = userSessionManager.getUserSession();
-        if (userSession.getId() != null) {
-            model.addAttribute("videos", videoService.findAllByWriter(userSession.getId()));
-        }
+        model.addAttribute("videos", videoService.findAllByWriter(userSession.getId()));
+
         return "mypage";
     }
 

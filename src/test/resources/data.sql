@@ -36,3 +36,12 @@ VALUES (1, 2);
 
 INSERT INTO subscription (subscriber_id, subscribed_user_id)
 VALUES (4, 1);
+
+INSERT INTO video_like (like_user_id, video_id)
+VALUES (1, 2);
+
+INSERT INTO video_like (like_user_id, video_id)
+VALUES (1, 3);
+
+INSERT INTO video_like (like_user_id, video_id)
+VALUES (2, 3);

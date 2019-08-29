@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +17,9 @@ public class S3FileUploader implements FileUploader {
     private final String bucket;
 
     @Autowired
-    public S3FileUploader(@Qualifier(value = "amazonS3Client") AmazonS3 amazonS3Client,
+    public S3FileUploader(AmazonS3 amazonS3,
                           @Value("${cloud.aws.s3.bucket}") String bucket) {
-        this.amazonS3Client = amazonS3Client;
+        this.amazonS3Client = amazonS3;
         this.bucket = bucket;
     }
 

@@ -1,6 +1,7 @@
 package com.wootube.ioi.service.util;
 
 import com.wootube.ioi.service.exception.FileUploadException;
+import com.wootube.ioi.service.exception.InvalidFileExtensionException;
 import org.imgscalr.Scalr;
 import org.jcodec.api.FrameGrab;
 import org.jcodec.api.JCodecException;
@@ -52,7 +53,7 @@ public class FileConverter {
             return track.getMeta().getTotalDuration() / 5.0;
         } catch (IOException e) {
             videoFile.delete();
-            throw new FileUploadException();
+            throw new InvalidFileExtensionException();
         }
 
     }

@@ -1,12 +1,12 @@
 package com.wootube.ioi.domain.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter
@@ -30,5 +30,9 @@ public class ProfileImage {
 
     public static ProfileImage defaultImage() {
         return new ProfileImage(DEFAULT_PROFILE_IMAGE_URL, DEFAULT_PROFILE_IMAGE_FILE_NAME);
+    }
+
+    public boolean isDefaultFileName() {
+        return profileImageFileName.equals(DEFAULT_PROFILE_IMAGE_FILE_NAME);
     }
 }
