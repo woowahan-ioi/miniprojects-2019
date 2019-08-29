@@ -36,6 +36,11 @@ const commentButton = (function () {
             commentArea.addEventListener('click', commentService.increaseLike);
         }
 
+        const decreaseLike = function () {
+            const commentArea = document.querySelector('#comment-area');
+            commentArea.addEventListener('click', commentService.decreaseLike);
+        }
+
         const init = function () {
             saveComment();
             updateComment();
@@ -43,6 +48,7 @@ const commentButton = (function () {
             commentToggle();
             sortCommentByUpdateTime();
             increaseLike();
+            decreaseLike();
         };
 
         return {
@@ -255,8 +261,10 @@ const commentButton = (function () {
             const callback = (response) => {
                 if (response.status === 201) {
                     response.json().then(data => {
-                        const commentLikeCountDiv = target.nextElementSibling;
+                        const commentLikeCountDiv = target.parentElement.querySelector(".comment-like-count");
                         commentLikeCountDiv.innerText = data.count;
+                        target.parentElement.querySelector(".comment-like-btn").classList.add("display-none");
+                        target.parentElement.querySelector(".comment-unlike-btn").classList.remove("display-none");
                     })
                     return;
                 }
@@ -270,6 +278,39 @@ const commentButton = (function () {
             AjaxRequest.POST(requestUri, requestBody, callback, handleError);
         }
 
+        const decreaseLike = (event) => {
+            let target = event.target;
+
+            if(target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if(!target.classList.contains("comment-unlike-btn")) {
+                return;
+            }
+            const commentId = target.parentElement.parentElement.parentElement.dataset.commentid;
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/likes";
+
+            const callback = (response) => {
+                if (response.status === 201) {
+                    response.json().then(data => {
+                        const commentLikeCountDiv = target.parentElement.querySelector(".comment-like-count");
+                        commentLikeCountDiv.innerText = data.count;
+                        target.parentElement.querySelector(".comment-unlike-btn").classList.add("display-none");
+                        target.parentElement.querySelector(".comment-like-btn").classList.remove("display-none");
+                    })
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.DELETE(requestUri, callback, handleError);
+        }
+
         return {
             save: saveComment,
             update: updateComment,
@@ -280,7 +321,8 @@ const commentButton = (function () {
             toggleCommentMoreButton: toggleCommentMoreButton,
             toggleCommentEditButton: toggleCommentEditButton,
             sortCommentByUpdateTime: sortCommentByUpdateTime,
-            increaseLike: increaseLike
+            increaseLike: increaseLike,
+            decreaseLike: decreaseLike
         }
     };
 

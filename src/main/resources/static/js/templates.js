@@ -25,7 +25,10 @@ const Templates = {
                     <span class="comment-contents font-size-15">${comment.contents}</span>
                     <div class="comment-like-area">
                         <button class="like-btn comment-like-btn">
-                            <i class="ti-thumb-up"></i>
+                            <i class="fa fa-thumbs-up"></i>
+                        </button>
+                        <button class="like-btn comment-unlike-btn display-none">
+                            <i class="fa fa-thumbs-up like-icon"></i>
                         </button>
                         <span class="comment-like-count">0</span>
                         <button class="reply-toggle-btn">답글</button>

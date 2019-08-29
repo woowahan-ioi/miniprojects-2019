@@ -262,3 +262,7 @@ ul {
     position: relative;
     left: 35px;
 }
+
+.like-icon {
+    color: #2299dd;
+}
