@@ -46,10 +46,21 @@ public class CommentApiController {
     }
 
     @PostMapping("/{commentId}/likes")
-    public ResponseEntity like(@PathVariable Long videoId,
-                               @PathVariable Long commentId) {
+    public ResponseEntity<CommentLikeResponseDto> like(@PathVariable Long videoId,
+                                                       @PathVariable Long commentId) {
         UserSession userSession = userSessionManager.getUserSession();
         CommentLikeResponseDto commentLikeResponseDto = commentLikeService.likeComment(userSession.getId(), commentId, videoId);
+
+        return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId))
+                .body(commentLikeResponseDto);
+    }
+
+    @DeleteMapping("/{commentId}/likes")
+    public ResponseEntity<CommentLikeResponseDto> unlike(@PathVariable Long videoId,
+                                                         @PathVariable Long commentId) {
+        UserSession userSession = userSessionManager.getUserSession();
+        CommentLikeResponseDto commentLikeResponseDto = commentLikeService.unlikeComment(userSession.getId(), commentId, videoId);
+
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId))
                 .body(commentLikeResponseDto);
     }

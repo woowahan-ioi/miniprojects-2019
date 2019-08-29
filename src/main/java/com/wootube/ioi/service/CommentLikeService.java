@@ -48,4 +48,15 @@ public class CommentLikeService {
         long count = commentLikeRepository.countByCommentId(commentId);
         return new CommentLikeResponseDto(count);
     }
+
+    @Transactional
+    public CommentLikeResponseDto unlikeComment(Long userId, Long commentId, Long videoId) {
+        if (existCommentLike(userId, commentId)) {
+            videoService.findById(videoId);
+            commentLikeRepository.deleteByLikeUserIdAndCommentId(userId, commentId);
+            return getCommentLikeCount(commentId);
+        }
+
+        return getCommentLikeCount(commentId);
+    }
 }
