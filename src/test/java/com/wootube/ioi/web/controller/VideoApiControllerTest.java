@@ -31,7 +31,7 @@ public class VideoApiControllerTest extends CommonControllerTest {
 	@Test
 	@DisplayName("좋아요 개수를 반환한다.")
 	void getVideoLikeCount() {
-		request(HttpMethod.POST, "/api/videos/" + USER_C_VIDEO_ID + "/likes/counts")
+		request(HttpMethod.GET, "/api/videos/" + USER_C_VIDEO_ID + "/likes/counts")
 				.expectStatus().isOk()
 				.expectBody().json("{count : 2}");
 	}

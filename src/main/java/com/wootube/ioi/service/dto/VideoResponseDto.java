@@ -12,12 +12,13 @@ public class VideoResponseDto {
     private String title;
     private String description;
     private String contentPath;
-    private long views;
+    private Long views;
     private LocalDateTime createTime;
     private String writerName;
     private Long writerId;
+    private String thumbnailPath;
 
-    public VideoResponseDto(Long id, String title, String description, String contentPath, long views, LocalDateTime createTime, String writerName, Long writerId) {
+    public VideoResponseDto(Long id, String title, String description, String contentPath, Long views, LocalDateTime createTime, String writerName, Long writerId, String thumbnailPath) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -26,5 +27,6 @@ public class VideoResponseDto {
         this.createTime = createTime;
         this.writerName = writerName;
         this.writerId = writerId;
+        this.thumbnailPath = thumbnailPath;
     }
 }

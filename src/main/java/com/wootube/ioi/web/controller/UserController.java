@@ -44,7 +44,6 @@ public class UserController {
     public String myPage(Model model) {
         UserSession userSession = userSessionManager.getUserSession();
         model.addAttribute("videos", videoService.findAllByWriter(userSession.getId()));
-
         return "mypage";
     }
 
