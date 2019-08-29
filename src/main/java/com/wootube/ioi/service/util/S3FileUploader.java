@@ -1,15 +1,15 @@
 package com.wootube.ioi.service.util;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 public class S3FileUploader implements FileUploader {
@@ -20,9 +20,9 @@ public class S3FileUploader implements FileUploader {
     private final AmazonS3 amazonS3Client;
     private final String bucket;
 
-    public S3FileUploader(@Qualifier(value = "amazonS3Client") AmazonS3 amazonS3Client,
+    public S3FileUploader(AmazonS3 amazonS3,
                           @Value("${cloud.aws.s3.bucket}") String bucket) {
-        this.amazonS3Client = amazonS3Client;
+        this.amazonS3Client = amazonS3;
         this.bucket = bucket;
     }
 

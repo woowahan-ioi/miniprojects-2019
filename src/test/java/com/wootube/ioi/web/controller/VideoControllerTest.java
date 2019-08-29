@@ -1,12 +1,18 @@
 package com.wootube.ioi.web.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.time.Duration;
+
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.web.config.TestConfig;
 import io.findify.s3mock.S3Mock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
@@ -17,15 +23,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.reactive.function.BodyInserters;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.time.Duration;
-
 import static org.springframework.http.HttpMethod.*;
 
-@AutoConfigureWebTestClient
 @Import(TestConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class VideoControllerTest extends CommonControllerTest {
@@ -49,7 +48,6 @@ class VideoControllerTest extends CommonControllerTest {
         request(HttpMethod.GET, "/videos/new")
                 .expectStatus().isFound();
     }
-
     @Test
     @DisplayName("비디오를 저장한다.")
     void save() throws IOException {

@@ -54,7 +54,6 @@ dependencies {
     implementation 'org.jcodec:jcodec:0.1.9'
     implementation 'org.jcodec:jcodec-javase:0.1.9'
 
-
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'com.h2database:h2'
 
