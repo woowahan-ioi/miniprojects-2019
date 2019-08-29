@@ -4,8 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 
-import static com.wootube.ioi.web.controller.CommonControllerTest.USER_A_LOGIN_REQUEST_DTO;
-
 public class VideoApiControllerTest extends CommonControllerTest {
 	@Test
 	@DisplayName("사용자가 좋아요를 처음 눌렀을 때 좋아요 개수가 증가한다.")
