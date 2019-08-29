@@ -1,15 +1,14 @@
 package com.wootube.ioi.web.argument;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Redirection {
     private String redirectUrl;
 
-    public Redirection() {
-    }
-
-    public Redirection(String redirectUrl) {
+    Redirection(String redirectUrl) {
         this.redirectUrl = redirectUrl;
     }
 }

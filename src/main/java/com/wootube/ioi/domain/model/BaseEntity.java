@@ -3,7 +3,6 @@ package com.wootube.ioi.domain.model;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 
-import com.wootube.ioi.domain.exception.InactivatedException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,7 +23,7 @@ public abstract class BaseEntity {
     @UpdateTimestamp
     private LocalDateTime updateTime;
 
-    public boolean isSameUserAndWriter(Long userId) {
-        return id.equals(userId);
+    public boolean isSameEntity(Long objectId) {
+        return id.equals(objectId);
     }
 }

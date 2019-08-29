@@ -1,6 +1,7 @@
 package com.wootube.ioi.domain.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,20 +9,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class VerifyKey {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class VerifyKey extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
     @Column(unique = true, nullable = false)
     private String verifyKey;
 
-	public VerifyKey(String inActiveUserEmail, String key) {
-		this.email = inActiveUserEmail;
-		this.verifyKey = key;
-	}
+    public VerifyKey(String inActiveUserEmail, String key) {
+        this.email = inActiveUserEmail;
+        this.verifyKey = key;
+    }
 }

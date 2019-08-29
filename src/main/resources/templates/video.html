@@ -22,12 +22,12 @@
                 <span class="comment-contents font-size-20 text-bold" th:unless="${video.title}" th:text="${video.title}">title</span>
                 <div class="mrg-top-10">
                     <div class="title-views">
-                        <span>조회수 132,323회</span>
+                       조회수 <span th:text="${video.views}"></span>
                     </div>
                     <div class="title-btn">
-                        <button class="title-like-btn">
+                        <button id="title-like-btn" class="title-like-btn">
                             <i class="ti-thumb-up"></i>
-                            <span>3.5천</span>
+                            <span id="likeCount"></span>
                         </button>
                         <button class="title-share-btn">
                             <i class="ti-share"></i>
@@ -51,11 +51,11 @@
                          src="/images/default/eastjun_big.jpg">
                 </div>
                 <div class="relative banner-info d-inline-block col-sm-8">
-                    <span class="left-30 bottom-35 font-size-17 text-bold" th:if="${video.writer.name}" th:text="${video.writer.name}"></span><br>
-                    <span class="left-30 bottom-35 font-size-17 text-bold" th:unless="${video.writer.name}">UserName</span><br>
+                    <span class="left-30 bottom-35 font-size-17 text-bold" th:if="${video.writerName}" th:text="${video.writerName}"></span><br>
+                    <span class="left-30 bottom-35 font-size-17 text-bold" th:unless="${video.writerName}">UserName</span><br>
 
-                    <span class="left-30 bottom-35 font-size-13" th:if="${video.updateTime}" th:text="${video.updateTime}"></span>
-                    <span class="left-30 bottom-35 font-size-13" th:unless="${video.updateTime}">DateTime</span>
+                    게시일 <span class="left-30 bottom-35 font-size-13" th:id="videoCreateTime" th:if="${video.createTime}" th:text="${video.createTime}"></span>
+                    <span class="left-30 bottom-35 font-size-13" th:unless="${video.createTime}">DateTime</span>
 
                     <div class="left-30 mrg-vertical-10">
                         <span class="span-form" id="description" th:if="${video.description}"></span>
@@ -63,10 +63,9 @@
                     </div>
                     <button class="title-more-btn left-30 clicked" id="readMoreSpan">더보기</button>
                 </div>
-                <div class="col-sm-2">
-
-                    <button class="subscribe-btn font-size-13" style="float: right">구독 <span
-                            id="subscribe_number"> 00명</span>
+                <div class="col-sm-2" th:if="${session.user}">
+                    <button id="subscription-btn" class="subscribe-btn font-size-13" style="float: right" th:data-writerid="${video.writerId}">
+                        구독 <span id="subscription-count">0</span>명
                     </button>
                 </div>
             </div>
@@ -183,10 +182,11 @@
     </div>
 </div>
 <script src="/js/common.js" type="text/javascript"></script>
+<script src="/js/templates.js" type="text/javascript"></script>
 <script src="/js/comment.js" type="text/javascript"></script>
 <script src="/js/reply.js" type="text/javascript"></script>
 <script src="/js/video.js" type="text/javascript"></script>
 <th:block th:replace="fragments/script :: scriptFragment"/>
-
+<script src="/js/subscribe.js" type="text/javascript"></script>
 </body>
 </html>
