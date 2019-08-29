@@ -122,7 +122,7 @@
                                         <div class="font-size-13">
                                             <span>조회수 952회</span>
                                             <span> · </span>
-                                            <span id="create-time" th:text="${video.updateTime}"></span>
+                                            <span class="createTimeSpan" th:text="${video.createTime}"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -146,6 +146,7 @@
 
 <th:block th:replace="fragments/form-rules:: formRulesFragment"/>
 <script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 
 <script>
     new Vue({

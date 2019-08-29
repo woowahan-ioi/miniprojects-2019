@@ -127,6 +127,11 @@ public class VideoService {
         videoRepository.deleteById(video.getId());
     }
 
+    public List<Video> findAllByWriter(Long writerId) {
+        User writer = userService.findByIdAndIsActiveTrue(writerId);
+        return videoRepository.findByWriter(writer);
+    }
+
     public void matchWriter(Long userId, Long videoId) {
         Video video = findById(videoId);
         if (!video.matchWriter(userId)) {
@@ -134,34 +139,38 @@ public class VideoService {
         }
     }
 
-    public List<Video> findAllByWriter(Long writerId) {
-        User writer = userService.findByIdAndIsActiveTrue(writerId);
-        return videoRepository.findByWriter(writer);
+    public List<VideoResponseDto> findAll() {
+        return videoRepository.findAll().stream()
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
+                .collect(toList());
     }
 
-    public Page<Video> findAll(Pageable pageable) {
-        return videoRepository.findAll(pageable);
+    public List<VideoResponseDto> findLatestVideos() {
+        return videoRepository.findTop12ByOrderByCreateTimeDesc().stream()
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
+                .collect(toList());
     }
 
-    public List<Video> findAll() {
+    public List<VideoResponseDto> findSubscribeVideos() {
         List<Video> findVideos = videoRepository.findAll();
         Collections.shuffle(findVideos);
 
         return findVideos.stream()
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
                 .limit(12)
                 .collect(toList());
     }
 
-    public List<Video> findOrderVideos() { //구독자만
-        List<Video> findVideos = videoRepository.findAll();
-        Collections.shuffle(findVideos);
-
-        return findVideos.stream()
+    public List<VideoResponseDto> findRecommendVideos() {
+        return videoRepository.findAll().stream()
                 .limit(12)
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
                 .collect(toList());
     }
 
-    public List<Video> findPopularityVideos() {
-        return videoRepository.findTop12ByOrderByViewsDesc();
+    public List<VideoResponseDto> findPopularityVideos() {
+        return videoRepository.findTop12ByOrderByViewsDesc().stream()
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
+                .collect(toList());
     }
 }
