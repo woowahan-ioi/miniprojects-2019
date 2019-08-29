@@ -10,7 +10,7 @@
     <th:block th:replace="fragments/header :: headerFragment"/>
 
     <div class="edit-container pdd-top-75">
-        <form enctype="multipart/form-data"
+        <form id="video-form" enctype="multipart/form-data"
               method="post"
               th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
             <input name="_method" th:if="not ${#strings.isEmpty(video)}" type="hidden" value="PUT">
@@ -55,7 +55,7 @@
                                       th:text="${#strings.isEmpty(video)? '' : video.description}"></textarea>
                         </div>
                         <div class="form-group text-center">
-                            <button class="font-size-13 confirm-btn" type="submit">등록</button>
+                            <button id="video-submit-button" class="font-size-13 confirm-btn">등록</button>
                         </div>
                     </div>
                 </div>
@@ -65,5 +65,15 @@
 </div>
 <script type="text/javascript" src="/js/video-edit.js"></script>
 <th:block th:replace="fragments/script :: scriptFragment"/>
+
+<script th:if="${errors}" th:inline="javascript">
+    /* <![CDATA[ */
+    const initValue = [[ ${errors}]];
+    /* ]]> */
+
+    alert(initValue);
+
+</script>
+
 </body>
 </html>

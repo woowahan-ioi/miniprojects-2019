@@ -149,4 +149,5 @@ const subscriptionButton = (function () {
     return {
         init: init
     }
-})();
+})
+subscriptionButton().init();
