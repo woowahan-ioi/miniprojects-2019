@@ -2,6 +2,10 @@ const commentButton = (function () {
     const CommentController = function () {
         const commentService = new CommentService();
 
+        const getComment = function () {
+            document.addEventListener("DOMContentLoaded", commentService.sortCommentByUpdateTime);
+        };
+
         const saveComment = function () {
             const commentAddButton = document.querySelector('#comment-save-button');
             commentAddButton.addEventListener('click', commentService.save);
@@ -37,6 +41,7 @@ const commentButton = (function () {
             deleteComment();
             commentToggle();
             sortCommentByUpdateTime();
+            getComment();
         };
 
         return {
@@ -95,18 +100,12 @@ const commentButton = (function () {
             }
         }
 
-        const sortCommentByUpdateTime = (event) => {
-            let target = event.target;
-
-            if (!target.classList.contains("comment-recent-sort-btn")) {
-                return;
-            }
-
+        const sortCommentByUpdateTime = () => {
             const requestUri = '/api/videos/' + videoId + '/comments/sort/updatetime';
 
             const callback = (response) => {
-                const commentListDiv = target.parentElement.parentElement.nextElementSibling.nextElementSibling;
-                $(commentListDiv).empty();
+                const commentListDiv = document.querySelector("#comment-area");
+                commentListDiv.innerHTML = "";
                 if (response.status === 200) {
                     response.json().then(data => {
                         let count = 0;
