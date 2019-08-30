@@ -23,29 +23,32 @@
             <v-app>
                 <v-col style="padding-top: 0; background-color: #FFFFFF;">
                     <v-row style="height: 150px; padding: 16px 107px 4px; background-color: #FAFAFA;">
-                                <form id="profile-image-form" enctype="multipart/form-data"
-                                      method="post"
-                                      action="/user/images">
-                                    <input name="_method" type="hidden" value="PUT">
-                                    <input id="file-input" name="uploadFile" type="file" hidden/>
-                                    <label for="file-input">
-                        <v-row style="width: 5vw; align-content: center;">
-                            <v-avatar
-                                    color="white"
-                                    size="100"
-                                    style="margin-right: 24px;"
-                            >
-                                        <img id="profile-image" class="my-profile-image" alt="avatar" th:src="${session.user.profileImageUrl}">
-                            </v-avatar>
-                        </v-row>
-                                    </label>
-                                </form>
-                        <v-row style="width: 50vw; align-content: center;">
-                            <div style="font-size: 28px; font-weight: 500; margin-left: 12px; height: 45px;"
-                                 th:text="${session.user.name}">유저 아이디
-                            </div>
-                        </v-row>
-                        <v-row style="width: 10vw; align-content: center;">
+                        <v-col cols="2">
+                            <form id="profile-image-form" enctype="multipart/form-data"
+                                  method="post"
+                                  action="/user/images">
+                                <input name="_method" type="hidden" value="PUT">
+                                <input id="file-input" name="uploadFile" type="file" hidden/>
+                                <label for="file-input">
+                                <v-row style="width: 5vw; align-content: center;">
+                                    <v-avatar
+                                            color="white"
+                                            size="100"
+                                            style="margin-right: 24px;"
+                                    >
+                                                <img id="profile-image" class="my-profile-image" alt="avatar" th:src="${session.user.profileImageUrl}">
+                                    </v-avatar>
+                                </v-row>
+                                </label>
+                            </form>
+                        </v-col>
+                        <v-col cols="8">
+                            <v-col id="user-info" th:data-userid="${session.user.id}">
+                                <div style="font-size: 28px; font-weight: 500; height: 45px;" th:text="${session.user.name}">유저 아이디</div>
+                                <div style="color: gray">구독자 수 : <span>{{ subscriptionCount }}</span></div>
+                            </v-col>
+                        </v-col>
+                        <v-col cols="2">
                             <v-col>
                                 <v-btn @click="dialog = true" class="primary" depressed>정보 수정
                                 </v-btn>
@@ -57,7 +60,7 @@
                                     </v-btn>
                                 </form>
                             </v-col>
-                        </v-row>
+                        </v-col>
                         <v-row justify="center">
                             <v-dialog max-width="600px" persistent v-model="dialog">
                                 <v-card>
@@ -137,19 +140,20 @@
 
 </div>
 
+<script type="text/javascript" src="/js/mypage.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+
 <th:block th:replace="fragments/script :: scriptFragment"/>
+<th:block th:replace="fragments/form-rules:: formRulesFragment"/>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-<script type="text/javascript" src="/js/mypage.js"></script>
-
-<th:block th:replace="fragments/form-rules:: formRulesFragment"/>
-<script type="text/javascript" src="/js/index.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
-
 <script>
-    new Vue({
+    const BASE_URL = `http://${window.location.host}`
+
+    const myPage = new Vue({
         el: '#mypage',
         vuetify: new Vuetify(),
         data: () => ({
@@ -158,31 +162,51 @@
             rules: {
                 nameRequired: value => Rules.nameRequired(value),
                 namePattern: value => Rules.namePattern(value),
-            }
+            },
+            subscriptionCount: 0
         }),
         methods: {
-            _fieldNotEmpty(field) {
+            $_myPage_fieldNotEmpty(field) {
                 return field.length !== 0
             },
 
-            _namePattern() {
+            $_myPage_namePattern() {
                 return Rules.nameRegExp.test(this.name)
             },
 
-            _fieldCheck() {
-                return this._fieldNotEmpty(this.name)
-                    && this._namePattern()
+            $_myPage_fieldCheck() {
+                return this.$_myPage_fieldNotEmpty(this.name)
+                    && this.$_myPage_namePattern()
             },
 
             editSubmitBtnHandler() {
-                if (this._fieldCheck()) {
+                if (this.$_myPage_fieldCheck()) {
                     document.getElementById('edit-form').submit();
                 }
             },
 
             deleteSubmitBtnHandler() {
                 document.getElementById('delete-form').submit();
+            },
+
+            countSubscription() {
+                const userId = document.querySelector("#user-info").dataset.userid;
+
+                fetch(`${BASE_URL}/api/subscriptions/${userId}`, {
+                    method: "GET",
+                }).then((response) => {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                }).then((data) => {
+                    this.subscriptionCount = data.count
+                }).catch((error) => {
+                    console.log(error)
+                })
             }
+        },
+        beforeMount() {
+            this.countSubscription()
         }
     });
 
