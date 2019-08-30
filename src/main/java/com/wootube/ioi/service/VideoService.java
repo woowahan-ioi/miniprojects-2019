@@ -130,10 +130,45 @@ public class VideoService {
         return videoRepository.findByWriter(writer);
     }
 
-	public void matchWriter(Long userId, Long videoId) {
-		Video video = findById(videoId);
-		if (!video.matchWriter(userId)) {
-			throw new NotMatchUserIdException();
-		}
-	}
+    public void matchWriter(Long userId, Long videoId) {
+        Video video = findById(videoId);
+        if (!video.matchWriter(userId)) {
+            throw new NotMatchUserIdException();
+        }
+    }
+
+    public List<VideoResponseDto> findTop20ByOrderByViewsDesc() {
+        return videoRepository.findTop20ByOrderByViewsDesc().stream()
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
+                .collect(toList());
+    }
+
+    public List<VideoResponseDto> findLatestVideos() {
+        return videoRepository.findTop12ByOrderByCreateTimeDesc().stream()
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
+                .collect(toList());
+    }
+
+    public List<VideoResponseDto> findSubscribeVideos() {
+        List<Video> findVideos = videoRepository.findAll();
+        Collections.shuffle(findVideos);
+
+        return findVideos.stream()
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
+                .limit(12)
+                .collect(toList());
+    }
+
+    public List<VideoResponseDto> findRecommendVideos() {
+        return videoRepository.findAll().stream()
+                .limit(12)
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
+                .collect(toList());
+    }
+
+    public List<VideoResponseDto> findPopularityVideos() {
+        return videoRepository.findTop12ByOrderByViewsDesc().stream()
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
+                .collect(toList());
+    }
 }

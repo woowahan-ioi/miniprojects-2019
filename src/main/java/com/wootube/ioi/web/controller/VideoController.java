@@ -41,6 +41,8 @@ public class VideoController {
     public String video(@PathVariable Long id, Model model) {
         VideoResponseDto videoResponseDto = videoService.findVideo(id);
         model.addAttribute("video", videoResponseDto);
+        model.addAttribute("videos", videoService.findTop20ByOrderByViewsDesc());
+
         return "video";
     }
 
