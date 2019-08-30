@@ -1,13 +1,10 @@
 package com.wootube.ioi.web.advice;
 
-import com.wootube.ioi.service.exception.FileUploadException;
-import com.wootube.ioi.service.exception.NotFoundVideoIdException;
-import com.wootube.ioi.service.exception.NotMatchUserIdException;
-import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
+import com.wootube.ioi.service.exception.*;
 import com.wootube.ioi.web.argument.Redirection;
 import com.wootube.ioi.web.controller.exception.InvalidUserException;
-import lombok.extern.slf4j.Slf4j;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -45,8 +42,8 @@ public class VideoControllerAdvice {
         return new RedirectView("/");
     }
 
-    @ExceptionHandler(FileUploadException.class)
-    public RedirectView handleFileUploadException(FileUploadException e, RedirectAttributes redirectAttributes, Redirection redirection) {
+    @ExceptionHandler({FileUploadException.class, InvalidFileExtensionException.class})
+    public RedirectView handleFileUploadException(RuntimeException e, RedirectAttributes redirectAttributes, Redirection redirection) {
         log.debug(e.getMessage());
         redirectAttributes.addFlashAttribute("errors", e.getMessage());
         return new RedirectView(redirection.getRedirectUrl());

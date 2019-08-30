@@ -1,5 +1,10 @@
 package com.wootube.ioi.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
@@ -15,14 +20,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -68,7 +69,7 @@ class VideoServiceTest extends TestUtil {
 
         testUploadMultipartFile = new MockMultipartFile(videoFileFullPath, VIDEO_FILE_NAME, null, CONTENTS.getBytes(StandardCharsets.UTF_8));
 
-        testVideoRequestDto = new VideoRequestDto(TITLE, DESCRIPTION, USER_ID);
+        testVideoRequestDto = new VideoRequestDto(TITLE, DESCRIPTION);
     }
 
     @Test
@@ -89,7 +90,7 @@ class VideoServiceTest extends TestUtil {
         given(modelMapper.map(testVideoRequestDto, Video.class)).willReturn(testVideo);
         given(userService.findByIdAndIsActiveTrue(USER_ID)).willReturn(writer);
 
-        videoService.create(testUploadMultipartFile, testVideoRequestDto);
+        videoService.create(testUploadMultipartFile, testVideoRequestDto, USER_ID);
     }
 
     private void mockUploadVideo(File convertedVideo, File convertedThumbnail) throws IOException {
@@ -119,7 +120,7 @@ class VideoServiceTest extends TestUtil {
 
         mockUploadVideo(convertedVideo, convertedThumbnail);
 
-        videoService.update(ID, testUploadMultipartFile, testVideoRequestDto);
+        videoService.update(ID, testUploadMultipartFile, testVideoRequestDto, USER_ID);
 
         verify(testVideo).updateVideo(videoFileFullPath, convertedVideo.getName(), thumbnailImageFileFullPath, convertedThumbnail.getName());
         verify(testVideo).updateTitle(testVideoRequestDto.getTitle());

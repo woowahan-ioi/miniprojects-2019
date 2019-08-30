@@ -1,5 +1,7 @@
 package com.wootube.ioi.web.controller;
 
+import java.io.IOException;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.service.UserService;
 import com.wootube.ioi.service.VideoService;

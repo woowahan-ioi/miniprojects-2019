@@ -1,6 +1,7 @@
 package com.wootube.ioi.domain.repository;
 
 import com.wootube.ioi.domain.model.VideoLike;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VideoLikeRepository extends JpaRepository<VideoLike, Long> {

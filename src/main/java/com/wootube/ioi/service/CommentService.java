@@ -1,5 +1,8 @@
 package com.wootube.ioi.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
@@ -8,12 +11,10 @@ import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.exception.NotFoundCommentException;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class CommentService {

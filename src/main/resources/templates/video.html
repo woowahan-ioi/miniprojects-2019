@@ -91,92 +91,26 @@
             <hr class="title-line">
 
             <div class="row pdd-horizon-10">
-                <div class="padding-2">
-                    <div class="card bg-transparent no-border">
-                        <div class="card-media row">
-                            <div class="col-md-6">
-                                <img alt="" class="img-responsive"
-                                     src="/images/default/thumb_001.jpeg">
-                            </div>
-                            <div class="col-md-6">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
-                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
-                                <span class="font-size-11">우아한Tech</span>
-                                <div class="font-size-11">
-                                    <span>조회수 952회</span>
+
+                <div th:each="video : ${videos}" class="padding-2">
+                    <a th:href="'/videos/'+${video.id}">
+                        <div class="card bg-transparent no-border">
+                            <div class="card-media row">
+                                <div class="col-md-6">
+                                    <img alt="" class="img-responsive" th:src="${video.thumbnailPath}">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0" th:text="${video.title}"></h5>
+                                    <span class="font-size-11" th:text="${video.writerName}">우아한Tech</span>
+                                    <div class="font-size-11">
+                                        <span>조회수 <span th:text="${video.views}"></span>회</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="padding-2">
-                    <div class="card bg-transparent no-border">
-                        <div class="card-media row">
-                            <div class="col-md-6">
-                                <img alt="" src="/images/default/thumb_002.jpeg">
-                            </div>
-                            <div class="col-md-6">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
-                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
-                                <span class="font-size-11">우아한Tech</span>
-                                <div class="font-size-11">
-                                    <span>조회수 952회</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="padding-2">
-                    <div class="card bg-transparent no-border">
-                        <div class="card-media row">
-                            <div class="col-md-6">
-                                <img alt="" src="/images/default/thumb_003.jpeg">
-                            </div>
-                            <div class="col-md-6">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
-                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
-                                <span class="font-size-11">우아한Tech</span>
-                                <div class="font-size-11">
-                                    <span>조회수 952회</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="padding-2">
-                    <div class="card bg-transparent no-border">
-                        <div class="card-media row">
-                            <div class="col-md-6">
-                                <img alt="" src="/images/default/thumb_004.jpeg">
-                            </div>
-                            <div class="col-md-6">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
-                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
-                                <span class="font-size-11">우아한Tech</span>
-                                <div class="font-size-11">
-                                    <span>조회수 952회</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="padding-2">
-                    <div class="card bg-transparent no-border">
-                        <div class="card-media row">
-                            <div class="col-md-6">
-                                <img alt="" src="/images/default/thumb_005.jpeg">
-                            </div>
-                            <div class="col-md-6">
-                                <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">
-                                    [10분 테크토크] 🦊🦆닉&러너덕의 점심봇</h5>
-                                <span class="font-size-11">우아한Tech</span>
-                                <div class="font-size-11">
-                                    <span>조회수 952회</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>

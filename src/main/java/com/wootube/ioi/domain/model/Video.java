@@ -1,15 +1,14 @@
 package com.wootube.ioi.domain.model;
 
-import lombok.AccessLevel;
+import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
-
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @DynamicUpdate
 public class Video extends BaseEntity {
     private static final int CONTENT_PATH = 0;

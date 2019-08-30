@@ -1,5 +1,8 @@
 package com.wootube.ioi.web.controller;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
@@ -7,6 +10,7 @@ import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.web.config.TestConfig;
 import io.findify.s3mock.S3Mock;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,9 +22,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 @AutoConfigureWebTestClient
 @Import(TestConfig.class)

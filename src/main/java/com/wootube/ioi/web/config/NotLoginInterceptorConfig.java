@@ -1,6 +1,9 @@
 package com.wootube.ioi.web.config;
 
+import java.util.Arrays;
+
 import com.wootube.ioi.web.interceptor.NotLoginInterceptor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;

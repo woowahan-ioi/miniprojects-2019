@@ -1,19 +1,18 @@
 package com.wootube.ioi.web.controller;
 
+import java.io.IOException;
+
 import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
-
-import java.io.IOException;
 
 @RequestMapping("/videos")
 @Controller
@@ -33,7 +32,8 @@ public class VideoController {
 
     @PostMapping("/new")
     public RedirectView video(MultipartFile uploadFile, VideoRequestDto videoRequestDto) throws IOException {
-        VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto);
+        UserSession userSession = userSessionManager.getUserSession();
+        VideoResponseDto videoResponseDto = videoService.create(uploadFile, videoRequestDto, userSession.getId());
         return new RedirectView("/videos/" + videoResponseDto.getId());
     }
 
@@ -41,7 +41,7 @@ public class VideoController {
     public String video(@PathVariable Long id, Model model) {
         VideoResponseDto videoResponseDto = videoService.findVideo(id);
         model.addAttribute("video", videoResponseDto);
-        model.addAttribute("videos", videoService.findAll());
+        model.addAttribute("videos", videoService.findTop20ByOrderByViewsDesc());
 
         return "video";
     }
@@ -57,7 +57,8 @@ public class VideoController {
 
     @PutMapping("/{id}")
     public RedirectView updateVideo(@PathVariable Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) throws IOException {
-        videoService.update(id, uploadFile, videoRequestDto);
+        UserSession userSession = userSessionManager.getUserSession();
+        videoService.update(id, uploadFile, videoRequestDto, userSession.getId());
         return new RedirectView("/videos/" + id);
     }
 }

@@ -1,5 +1,11 @@
 package com.wootube.ioi.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import javax.transaction.Transactional;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
@@ -13,17 +19,10 @@ import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.transaction.Transactional;
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -44,7 +43,7 @@ public class VideoService {
         this.fileConverter = fileConverter;
     }
 
-    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto) throws IOException {
+    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) throws IOException {
         File convertedVideo = fileConverter.convert(uploadFile)
                 .orElseThrow(FileConvertException::new);
 
@@ -61,8 +60,7 @@ public class VideoService {
         convertedVideo.delete();
         convertedThumbnail.delete();
 
-        User writer = userService.findByIdAndIsActiveTrue(videoRequestDto.getWriterId());
-
+        User writer = userService.findByIdAndIsActiveTrue(writerId);
         Video video = modelMapper.map(videoRequestDto, Video.class);
         video.initialize(videoUrl, thumbnailUrl, originFileName, thumbnailFileName, writer);
         return modelMapper.map(videoRepository.save(video), VideoResponseDto.class);
@@ -85,9 +83,9 @@ public class VideoService {
     }
 
     @Transactional
-    public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto) throws IOException {
+    public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) throws IOException {
         Video video = findById(id);
-        matchWriter(videoRequestDto.getWriterId(), id);
+        matchWriter(writerId, id);
 
         if (!uploadFile.isEmpty()) {
             fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
@@ -139,8 +137,8 @@ public class VideoService {
         }
     }
 
-    public List<VideoResponseDto> findAll() {
-        return videoRepository.findAll().stream()
+    public List<VideoResponseDto> findTop20ByOrderByViewsDesc() {
+        return videoRepository.findTop20ByOrderByViewsDesc().stream()
                 .map(video -> modelMapper.map(video, VideoResponseDto.class))
                 .collect(toList());
     }
