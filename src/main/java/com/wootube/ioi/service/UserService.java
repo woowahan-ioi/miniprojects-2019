@@ -10,14 +10,12 @@ import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.service.dto.EditUserRequestDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
-import com.wootube.ioi.service.exception.FileConvertException;
-import com.wootube.ioi.service.exception.InActivatedUserException;
-import com.wootube.ioi.service.exception.LoginFailedException;
-import com.wootube.ioi.service.exception.NotFoundUserException;
+import com.wootube.ioi.service.exception.*;
 import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
 import org.modelmapper.ModelMapper;
+import org.thymeleaf.util.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
+    private static final String IMAGE_CONTENT_TYPE = "image";
+
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final VerifyKeyService verifyKeyService;
@@ -95,6 +95,8 @@ public class UserService {
 
     @Transactional
     public User updateProfileImage(Long userId, MultipartFile uploadFile) throws IOException {
+        checkMediaType(uploadFile);
+
         User user = findByIdAndIsActiveTrue(userId);
 
         ProfileImage profileImage = user.getProfileImage();
@@ -111,5 +113,12 @@ public class UserService {
         convertedProfileImage.delete();
 
         return user.updateProfileImage(new ProfileImage(profileImageUrl, originFileName));
+    }
+
+    private void checkMediaType(MultipartFile uploadFile) {
+        if (StringUtils.startsWith(uploadFile.getContentType(), IMAGE_CONTENT_TYPE)) {
+            return;
+        }
+        throw new InvalidFileExtensionException();
     }
 }
