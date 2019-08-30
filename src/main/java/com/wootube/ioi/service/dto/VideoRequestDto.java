@@ -11,11 +11,9 @@ import lombok.Setter;
 public class VideoRequestDto {
     private String title;
     private String description;
-    private Long writerId;
 
-    public VideoRequestDto(String title, String description, Long writerId) {
+    public VideoRequestDto(String title, String description) {
         this.title = title;
         this.description = description;
-        this.writerId = writerId;
     }
 }
