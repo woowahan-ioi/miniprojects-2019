@@ -4,16 +4,14 @@ import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
-@ExtendWith(SpringExtension.class)
 public class UserControllerTest extends CommonControllerTest {
-
     @Test
     @DisplayName("[로그인 X] 로그인 페이지로 이동")
     void loginForm() {
@@ -79,5 +77,22 @@ public class UserControllerTest extends CommonControllerTest {
 
         request(POST, "/user/login", parser(logInRequestDto))
                 .expectStatus().is5xxServerError();
+    }
+
+    @Test
+    @DisplayName("프로필사진 수정")
+    void editProfileImage() {
+        MultipartBodyBuilder updateBodyBuilder = new MultipartBodyBuilder();
+        updateBodyBuilder.part("uploadFile", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
+            @Override
+            public String getFilename() {
+                return "update_test_image.png";
+            }
+        }, MediaType.parseMediaType("image/png"));
+
+        requestWithBodyBuilder(updateBodyBuilder, PUT, "/user/images")
+                .expectStatus().isFound()
+                .expectHeader().valueMatches("location", basicPath() + "/user/mypage");
+        stopS3Mock();
     }
 }

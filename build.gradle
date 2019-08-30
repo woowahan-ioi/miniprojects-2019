@@ -46,10 +46,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws'
     implementation 'org.passay:passay:1.5.0'
-    implementation "org.apache.tomcat.embed:tomcat-embed-el"
+    implementation 'org.apache.tomcat.embed:tomcat-embed-el'
     implementation 'io.rest-assured:json-path:4.0.0'
     implementation 'io.rest-assured:xml-path:4.0.0'
     implementation 'org.modelmapper:modelmapper:0.7.8'
+    implementation 'org.imgscalr:imgscalr-lib:4.2'
+    implementation 'org.jcodec:jcodec:0.1.9'
+    implementation 'org.jcodec:jcodec-javase:0.1.9'
 
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'com.h2database:h2'

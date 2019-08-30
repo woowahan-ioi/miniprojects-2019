@@ -1,5 +1,7 @@
 package com.wootube.ioi.service;
 
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.Subscription;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.SubscriptionRepository;
@@ -7,19 +9,15 @@ import com.wootube.ioi.service.dto.SubscriptionCheckResponseDto;
 import com.wootube.ioi.service.exception.AlreadySubscribedException;
 import com.wootube.ioi.service.exception.IllegalUnsubscriptionException;
 import com.wootube.ioi.service.exception.NotFoundSubscriptionException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;

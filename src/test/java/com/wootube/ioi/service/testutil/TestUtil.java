@@ -2,10 +2,7 @@ package com.wootube.ioi.service.testutil;
 
 import java.time.LocalDateTime;
 
-import com.wootube.ioi.domain.model.Comment;
-import com.wootube.ioi.domain.model.Reply;
-import com.wootube.ioi.domain.model.User;
-import com.wootube.ioi.domain.model.Video;
+import com.wootube.ioi.domain.model.*;
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
@@ -21,11 +18,17 @@ public class TestUtil {
     protected static final String UPDATE_CONTENTS = "<<update testVideo data>>";
 
     protected static final String DIRECTORY = "wootube";
-    protected static final String FILE_NAME = "testVideo.mp4";
-    protected static final String UPDATE_FILE_NAME = "changeTestVideo.mp4";
+    protected static final String VIDEO_FILE_NAME = "testVideo.mp4";
+    protected static final String THUMBNAIL_FILE_NAME = "testVideoThumbnail.png";
+
+    protected static final String PROFILE_IMAGE_FILE_NAME = "testImage.png";
+    protected static final String PROFILE_IMAGE_URL = String.format("%s/%s", DIRECTORY, PROFILE_IMAGE_FILE_NAME);
+    protected static final String UPDATE_PROFILE_IMAGE_FILE_NAME = "changeTestImage.png";
+
+    protected static final ProfileImage PROFILE_IMAGE = new ProfileImage(PROFILE_IMAGE_URL, PROFILE_IMAGE_FILE_NAME);
+    protected static final ProfileImage UPDATE_PROFILE_IMAGE = new ProfileImage(PROFILE_IMAGE_URL, UPDATE_PROFILE_IMAGE_FILE_NAME);
 
     protected static final Long USER_ID = 1L;
-    protected static final Long OTHER_USER_ID = 2L;
 
     protected static final Long ID = 1L;
 
@@ -46,10 +49,10 @@ public class TestUtil {
 
     protected static final CommentResponseDto COMMENT_RESPONSE1 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 1",
-            LocalDateTime.now(), WRITER);
+            LocalDateTime.now(), WRITER.getName());
     protected static final CommentResponseDto COMMENT_RESPONSE2 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 2",
-            LocalDateTime.now(), WRITER);
+            LocalDateTime.now(), WRITER.getName());
 
     private static final String REPLY1_CONTENTS = "Reply Contents 1";
 
@@ -57,6 +60,6 @@ public class TestUtil {
 
     protected static final Reply REPLY1 = Reply.of(REPLY1_CONTENTS, COMMENT1, WRITER);
 
-    protected static final ReplyResponseDto REPLY_RESPONSE_DTO1 = ReplyResponseDto.of(REPLY1.getId(), REPLY1.getContents(), REPLY1.getUpdateTime(), WRITER);
+    protected static final ReplyResponseDto REPLY_RESPONSE_DTO1 = ReplyResponseDto.of(REPLY1.getId(), REPLY1.getContents(), REPLY1.getUpdateTime(), WRITER.getName());
 
 }
