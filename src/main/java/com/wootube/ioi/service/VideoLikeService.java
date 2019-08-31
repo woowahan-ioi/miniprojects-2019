@@ -48,7 +48,6 @@ public class VideoLikeService {
 	}
 
 	public VideoLikeResponseDto getVideoLikeCount(Long videoId) {
-		long count = videoLikeRepository.countByVideoId(videoId);
-		return new VideoLikeResponseDto(count);
+		return new VideoLikeResponseDto(videoLikeRepository.countByVideoId(videoId));
 	}
 }

@@ -25,10 +25,10 @@
                        조회수 <span th:text="${video.views}"></span>
                     </div>
                     <div class="title-btn">
-                        <button id="title-like-btn" class="title-like-btn">
-                            <i class="ti-thumb-up"></i>
-                            <span id="likeCount"></span>
+                        <button id="title-like-btn" class="like-btn comment-like-btn">
+                            <i th:class="${video.like}? 'fa fa-thumbs-up like-icon' : 'fa fa-thumbs-up'"></i>
                         </button>
+                        <span id="likeCount">0</span>
                         <button class="title-share-btn">
                             <i class="ti-share"></i>
                             <span>공유</span>
