@@ -138,6 +138,10 @@ const commentButton = (function () {
         }
 
         const saveComment = (event) => {
+            if (event.target.classList.contains("disabled")) {
+                return;
+            }
+
             const inputComment = event.target.parentElement.parentElement.querySelector("INPUT");
             const requestUri = '/api/videos/' + videoId + '/comments';
             const requestBody = {
