@@ -30,7 +30,7 @@ const Templates = {
                         <button class="like-btn comment-unlike-btn display-none">
                             <i class="fa fa-thumbs-up like-icon"></i>
                         </button>
-                        <span class="comment-like-count">0</span>
+                        <span class="comment-like-count">${comment.like}</span>
                         <button class="reply-toggle-btn">답글</button>
                     </div>
                 </div>

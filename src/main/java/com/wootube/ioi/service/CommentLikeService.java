@@ -48,16 +48,21 @@ public class CommentLikeService {
     }
 
     public CommentLikeResponseDto getCommentLikeCount(Long commentId) {
-        long count = commentLikeRepository.countByCommentId(commentId);
+        long count = countByCommentId(commentId);
+
         return new CommentLikeResponseDto(count);
     }
 
     public List<CommentResponseDto> saveCommentLike(List<CommentResponseDto> comments) {
         comments.forEach(commentResponseDto -> {
             long commentId = commentResponseDto.getId();
-            commentResponseDto.setLike(commentLikeRepository.countByCommentId(commentId));
+            commentResponseDto.setLike(countByCommentId(commentId));
         });
         return comments;
+    }
+
+    public Long countByCommentId(Long commentId) {
+        return commentLikeRepository.countByCommentId(commentId);
     }
 
     @Transactional

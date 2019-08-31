@@ -40,7 +40,11 @@ public class CommentApiController {
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long videoId,
                                                             @RequestBody CommentRequestDto commentRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
+
         CommentResponseDto commentResponseDto = commentService.save(commentRequestDto, videoId, userSession.getEmail());
+        long commentId = commentResponseDto.getId();
+
+        commentResponseDto.setLike(commentLikeService.countByCommentId(commentId));
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentResponseDto.getId()))
                 .body(commentResponseDto);
     }
