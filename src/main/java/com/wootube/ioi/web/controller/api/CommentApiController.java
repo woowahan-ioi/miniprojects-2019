@@ -32,7 +32,7 @@ public class CommentApiController {
     @GetMapping("/sort/updatetime")
     public ResponseEntity<List<CommentResponseDto>> sortCommentByUpdateTime(@PathVariable Long videoId) {
         List<CommentResponseDto> comments = commentService.sortComment(DESC_SORT_BY_UPDATE_TIME, videoId);
-
+        commentLikeService.saveCommentLike(comments);
         return ResponseEntity.ok(comments);
     }
 

@@ -5,9 +5,12 @@ import com.wootube.ioi.domain.model.CommentLike;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.CommentLikeRepository;
 import com.wootube.ioi.service.dto.CommentLikeResponseDto;
+import com.wootube.ioi.service.dto.CommentResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CommentLikeService {
@@ -47,6 +50,14 @@ public class CommentLikeService {
     public CommentLikeResponseDto getCommentLikeCount(Long commentId) {
         long count = commentLikeRepository.countByCommentId(commentId);
         return new CommentLikeResponseDto(count);
+    }
+
+    public List<CommentResponseDto> saveCommentLike(List<CommentResponseDto> comments) {
+        comments.forEach(commentResponseDto -> {
+            long commentId = commentResponseDto.getId();
+            commentResponseDto.setLike(commentLikeRepository.countByCommentId(commentId));
+        });
+        return comments;
     }
 
     @Transactional
