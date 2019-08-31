@@ -185,13 +185,15 @@ const replyButton = (function () {
 
         function toggleReplyCancel(event) {
             if (event.target.classList.contains("reply-cancel-btn")) {
-                event.target.closest("li").querySelector(".reply-edit").classList.add("display-none");
+                event.target.closest("li").querySelector(".reply-edit").classList.toggle("display-none");
+                event.target.closest("li").querySelector("#reply-list-more-area").classList.toggle("display-none");
             }
         }
 
         function toggleReplyWrite(event) {
             if (event.target.classList.contains("reply-toggle-btn")) {
-                event.target.closest("li").querySelector(".reply-edit").classList.remove("display-none");
+                event.target.closest("li").querySelector(".reply-edit").classList.toggle("display-none");
+                event.target.closest("li").querySelector("#reply-list-more-area").classList.toggle("display-none");
             }
         }
 
