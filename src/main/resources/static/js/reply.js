@@ -87,6 +87,10 @@ const replyButton = (function () {
                 return;
             }
 
+            if(event.target.classList.contains("disabled")) {
+                return;
+            }
+
             const id = event.target.closest("li").dataset.commentid;
             const inputComment = event.target.closest("div").querySelector("input");
 
