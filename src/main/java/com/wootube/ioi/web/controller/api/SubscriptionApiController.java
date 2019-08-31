@@ -42,7 +42,6 @@ public class SubscriptionApiController {
                 .body(subscriptionService.checkSubscription(userSession.getId(), subscribedUserId));
     }
 
-
     @GetMapping("/{subscribedUserId}")
     public ResponseEntity<SubscriptionCountResponseDto> countSubscription(@PathVariable Long subscribedUserId) {
         return ResponseEntity.ok()

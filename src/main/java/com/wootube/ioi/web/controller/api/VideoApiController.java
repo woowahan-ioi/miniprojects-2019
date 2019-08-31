@@ -2,7 +2,6 @@ package com.wootube.ioi.web.controller.api;
 
 import com.wootube.ioi.service.VideoLikeService;
 import com.wootube.ioi.service.VideoService;
-import com.wootube.ioi.web.controller.exception.InvalidUserException;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
 
@@ -26,7 +25,6 @@ public class VideoApiController {
 
 	@DeleteMapping("/{videoId}")
 	public ResponseEntity delete(@PathVariable Long videoId) {
-		checkUserSession();
 		UserSession userSession = userSessionManager.getUserSession();
 		videoService.deleteById(videoId, userSession.getId());
 
@@ -36,20 +34,12 @@ public class VideoApiController {
 
 	@PostMapping("/{videoId}/likes")
 	public ResponseEntity like(@PathVariable Long videoId) {
-		checkUserSession();
 		UserSession userSession = userSessionManager.getUserSession();
 		return ResponseEntity.ok(videoLikeService.likeVideo(videoId, userSession.getId()));
 	}
 
-	@PostMapping("/{videoId}/likes/counts")
+	@GetMapping("/{videoId}/likes/counts")
 	public ResponseEntity count(@PathVariable Long videoId) {
 		return ResponseEntity.ok(videoLikeService.getVideoLikeCount(videoId));
-	}
-
-	private void checkUserSession() {
-		UserSession userSession = userSessionManager.getUserSession();
-		if (userSession == null) {
-			throw new InvalidUserException();
-		}
 	}
 }

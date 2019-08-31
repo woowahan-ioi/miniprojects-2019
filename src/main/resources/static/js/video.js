@@ -51,14 +51,11 @@ function getLikeCount() {
         }
     }
 
-    const requestBody = {
-    };
-
     const handleError = (error) => {
         alert(error);
     }
 
-    AjaxRequest.POST(requestUri, requestBody, callback, handleError)
+    AjaxRequest.GET(requestUri, callback, handleError)
 }
 
 const videoButton = (function() {
@@ -87,7 +84,6 @@ const videoButton = (function() {
         const increaseLike = () => {
             const videoId = document.querySelector("#video-contents").dataset.videoid;
             const requestUri = '/api/videos/' + videoId + '/likes';
-    // 1. 좋아요가 되어있으면 파란색 2. 좋아요가 되어있지 않으면 검은색
 
             const callback = (response) => {
                 if(response.status === 200) {

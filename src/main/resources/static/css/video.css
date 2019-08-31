@@ -239,6 +239,8 @@ ul {
     border: none;
     color: gray;
     font-size: 1.0em;
+    position: relative;
+    left: 30px;
 }
 
 .list-group-item {
@@ -246,7 +248,7 @@ ul {
     background: none;
 }
 
-.dropdown-menu {
+.comment-dropdown-menu {
     width: 85px;
     min-width: 0px;
 }

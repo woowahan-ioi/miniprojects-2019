@@ -1,5 +1,6 @@
 package com.wootube.ioi.web.controller;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import com.wootube.ioi.domain.model.User;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -68,9 +70,6 @@ public class CommonControllerTest {
     @Autowired
     private S3Mock s3Mock;
 
-    private void stopS3Mock() {
-        s3Mock.stop();
-    }
 
     String basicPath() {
         return "http://localhost:" + port;
@@ -115,7 +114,10 @@ public class CommonControllerTest {
 
     WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, MultiValueMap<String, String> data, LogInRequestDto logInRequestDto) {
         String sessionValue = login(logInRequestDto);
-        return webTestClient.method(method)
+        return webTestClient
+                .mutate()
+                .responseTimeout(Duration.ofMillis(15000))
+                .build().method(method)
                 .uri(uri)
                 .cookie("JSESSIONID", sessionValue)
                 .body(BodyInserters.fromFormData(data))
@@ -124,5 +126,28 @@ public class CommonControllerTest {
 
     WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, LogInRequestDto logInRequestDto) {
         return loginAndRequest(method, uri, new LinkedMultiValueMap<>(), logInRequestDto);
+    }
+
+    WebTestClient.ResponseSpec requestWithBodyBuilder(MultipartBodyBuilder bodyBuilder, HttpMethod requestMethod, String requestUri) {
+        return webTestClient
+                .mutate()
+                .responseTimeout(Duration.ofMillis(15000))
+                .build()
+                .method(requestMethod)
+                .uri(requestUri)
+                .header("Cookie", getLoginCookie(webTestClient, new LogInRequestDto("a@test.com", "1234qwer")))
+                .body(BodyInserters.fromObject(bodyBuilder.build()))
+                .exchange();
+    }
+
+    String getLoginCookie(WebTestClient webTestClient, LogInRequestDto logInRequestDto) {
+        return webTestClient.post().uri("/user/login")
+                .body(BodyInserters.fromFormData(parser(logInRequestDto)))
+                .exchange()
+                .returnResult(String.class).getResponseHeaders().getFirst("Set-Cookie");
+    }
+
+    void stopS3Mock() {
+        s3Mock.stop();
     }
 }
