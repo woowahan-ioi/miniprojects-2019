@@ -12,7 +12,8 @@
     <div class="edit-container pdd-top-75">
         <form id="video-form" enctype="multipart/form-data"
               method="post"
-              th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
+              th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}"
+              onsubmit="return submitForm();">
             <input name="_method" th:if="not ${#strings.isEmpty(video)}" type="hidden" value="PUT">
             <input type="hidden" name="writerId" th:value="${session.user.id}">
             <div class="row">

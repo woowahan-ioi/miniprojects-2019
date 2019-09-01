@@ -22,10 +22,23 @@ function move() {
     }
 }
 
-function videoSubmit(event) {
-    const submitButton = event.target;
-    document.querySelector("#video-form").submit();
-    submitButton.disabled = true;
+function submitForm(){
+    const title = document.forms["video-form"]["title"].value;
+    const file = document.forms["video-form"]["file-input"].value;
+    const description = document.forms["video-form"]["description"].value;
+
+    if(checkValidation(title) && checkValidation(file) && checkValidation(description)) {
+        document.querySelector("#video-submit-button").disabled = true;
+        return true;
+    }
+
+    alert("빈 칸이 존재합니다. 다시 입력해주세요.");
+    return false;
 }
 
-document.querySelector("#video-submit-button").addEventListener("click", videoSubmit);
+function checkValidation(data) {
+    if(data === '' || data === null) {
+        return false;
+    }
+    return true;
+}
