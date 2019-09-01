@@ -22,10 +22,9 @@ function move() {
     }
 }
 
-function videoSubmit(event) {
+function disabledButton(event) {
     const submitButton = event.target;
-    document.querySelector("#video-form").submit();
     submitButton.disabled = true;
 }
 
-document.querySelector("#video-submit-button").addEventListener("click", videoSubmit);
+document.querySelector("#video-submit-button").addEventListener("click", disabledButton);
