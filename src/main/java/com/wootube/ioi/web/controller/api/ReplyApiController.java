@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/videos/{videoId}/comments/{commentId}/replies")
 @RestController
 public class ReplyApiController {
-    private static final Sort DESC_SORT_BY_UPDATE_TIME = new Sort(Sort.Direction.DESC, "updateTime");
+    private static final Sort ASC_SORT_BY_UPDATE_TIME = new Sort(Sort.Direction.ASC, "updateTime");
 
     private final ReplyService replyService;
     private final ReplyLikeService replyLikeService;
@@ -32,7 +32,7 @@ public class ReplyApiController {
     @GetMapping("/sort/updatetime")
     public ResponseEntity<List<ReplyResponseDto>> sortReplyByUpdateTime(@PathVariable Long videoId,
                                                                         @PathVariable Long commentId) {
-        List<ReplyResponseDto> replies = replyService.sortReply(DESC_SORT_BY_UPDATE_TIME, videoId, commentId);
+        List<ReplyResponseDto> replies = replyService.sortReply(ASC_SORT_BY_UPDATE_TIME, videoId, commentId);
 
         replyLikeService.saveReplyLike(replies);
 
