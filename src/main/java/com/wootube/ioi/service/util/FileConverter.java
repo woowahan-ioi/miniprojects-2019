@@ -1,5 +1,14 @@
 package com.wootube.ioi.service.util;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+import javax.imageio.ImageIO;
+
 import com.wootube.ioi.service.exception.FileUploadException;
 import com.wootube.ioi.service.exception.InvalidFileExtensionException;
 import org.imgscalr.Scalr;
@@ -11,17 +20,9 @@ import org.jcodec.common.SeekableByteChannel;
 import org.jcodec.common.model.Picture;
 import org.jcodec.containers.mp4.demuxer.MP4Demuxer;
 import org.jcodec.scale.AWTUtil;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 @Component
 public class FileConverter {

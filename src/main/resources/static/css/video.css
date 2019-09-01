@@ -7,6 +7,11 @@ header {
     left: 0;
 }
 
+.like-icon {
+    color: #2299dd;
+    color: royalblue;
+}
+
 .subscribe-btn {
     background-color: #CC0000;
     border: none;

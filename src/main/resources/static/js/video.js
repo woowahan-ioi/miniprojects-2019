@@ -78,7 +78,9 @@ const videoButton = (function() {
 
     const VideoService = function () {
         function toggleVideoLike(count) {
-            document.querySelector("#likeCount").innerHTML = count;
+            document.querySelector("#likeCount").innerText = count;
+            document.querySelector("#title-like-btn").firstElementChild
+                .classList.toggle("like-icon")
         };
 
         const increaseLike = () => {
