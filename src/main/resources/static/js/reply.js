@@ -104,6 +104,7 @@ const replyButton = (function () {
                         appendReply(comment, event.target);
                         inputComment.value = "";
                         event.target.closest(".reply-edit").classList.add("display-none")
+                        event.target.closest("li").querySelector("#reply-list-more-area").classList.toggle("display-none");
                     });
 
                     return;
