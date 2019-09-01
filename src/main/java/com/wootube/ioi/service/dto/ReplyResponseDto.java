@@ -13,14 +13,22 @@ public class ReplyResponseDto {
     private String contents;
     private LocalDateTime updateTime;
     private String writerName;
+    private String writerProfileImageUrl;
+    private Long like;
 
-    public static ReplyResponseDto of(Long id, String contents, LocalDateTime updateTime, String writerName) {
+    public static ReplyResponseDto of(Long id, String contents, LocalDateTime updateTime, String writerName, String writerProfileImageUrl) {
         ReplyResponseDto replyResponseDto = new ReplyResponseDto();
         replyResponseDto.id = id;
         replyResponseDto.contents = contents;
         replyResponseDto.updateTime = updateTime;
         replyResponseDto.writerName = writerName;
+        replyResponseDto.writerProfileImageUrl = writerProfileImageUrl;
+        replyResponseDto.like = 0L;
 
         return replyResponseDto;
+    }
+
+    public void setLike(Long like) {
+        this.like = like;
     }
 }

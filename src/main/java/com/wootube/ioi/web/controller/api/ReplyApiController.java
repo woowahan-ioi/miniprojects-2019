@@ -34,6 +34,8 @@ public class ReplyApiController {
                                                                         @PathVariable Long commentId) {
         List<ReplyResponseDto> replies = replyService.sortReply(DESC_SORT_BY_UPDATE_TIME, videoId, commentId);
 
+        replyLikeService.saveReplyLike(replies);
+
         return ResponseEntity.ok(replies);
     }
 
@@ -44,6 +46,9 @@ public class ReplyApiController {
                                                         @RequestBody ReplyRequestDto replyRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
         ReplyResponseDto replyResponseDto = replyService.save(replyRequestDto, commentId, userSession.getEmail(), videoId);
+
+        replyLikeService.saveReplyLike(replyResponseDto);
+
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId + "/replies/" + replyResponseDto.getId()))
                 .body(replyResponseDto);
     }
@@ -54,6 +59,7 @@ public class ReplyApiController {
                                                      @PathVariable Long replyId) {
         UserSession userSession = userSessionManager.getUserSession();
         ReplyLikeResponseDto replyLikeResponseDto = replyLikeService.likeReply(userSession.getId(), commentId, replyId);
+
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId + "/replies/" + replyId))
                 .body(replyLikeResponseDto);
     }
@@ -65,6 +71,7 @@ public class ReplyApiController {
                                       @RequestBody ReplyRequestDto replyRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
         replyService.update(replyRequestDto, userSession.getEmail(), videoId, commentId, replyId);
+
         return ResponseEntity.noContent()
                 .build();
     }
@@ -75,6 +82,7 @@ public class ReplyApiController {
                                                         @PathVariable Long replyId) {
         UserSession userSession = userSessionManager.getUserSession();
         ReplyLikeResponseDto replyLikeResponseDto = replyLikeService.dislikeReply(userSession.getId(), commentId, replyId);
+
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId))
                 .body(replyLikeResponseDto);
     }
@@ -85,6 +93,7 @@ public class ReplyApiController {
                                       @PathVariable Long replyId) {
         UserSession userSession = userSessionManager.getUserSession();
         replyService.delete(videoId, commentId, replyId, userSession.getEmail());
+
         return ResponseEntity.noContent()
                 .build();
     }

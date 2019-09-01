@@ -70,7 +70,7 @@ const Templates = {
             </li>`
     },
     replyTemplate : (reply, writtenTime) => { return `<li class="reply mrg-btm-20" data-replyid="${reply.id}">
-                            <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
+                            <img class="img-circle width-50 comment-writer-img" th:src="${reply.writerProfileImageUrl}" alt="">
                             <div class="comment-block">
                                 <div class="font-size-13">
                                     <span class="user-name">${reply.writerName}</span>
@@ -100,7 +100,7 @@ const Templates = {
                                     <button class="like-btn reply-dislike-btn display-none">
                                         <i class="fa fa-thumbs-up like-icon"></i>
                                     </button>
-                                    <span class="reply-like-count"></span>
+                                    <span class="reply-like-count">${reply.like}</span>
                                 </div>
                             </div>
                             <div class="reply-update-area display-none mrg-btm-50">

@@ -5,9 +5,12 @@ import com.wootube.ioi.domain.model.ReplyLike;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.ReplyLikeRepository;
 import com.wootube.ioi.service.dto.ReplyLikeResponseDto;
+import com.wootube.ioi.service.dto.ReplyResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ReplyLikeService {
@@ -41,8 +44,12 @@ public class ReplyLikeService {
     }
 
     public ReplyLikeResponseDto getReplyLikeCount(Long replyId) {
-        long count = replyLikeRepository.countByReplyId(replyId);
+        long count = countByReplyId(replyId);
         return new ReplyLikeResponseDto(count);
+    }
+
+    public long countByReplyId(Long replyId) {
+        return replyLikeRepository.countByReplyId(replyId);
     }
 
     @Transactional
@@ -54,5 +61,19 @@ public class ReplyLikeService {
         }
 
         return getReplyLikeCount(replyId);
+    }
+
+    public List<ReplyResponseDto> saveReplyLike(List<ReplyResponseDto> replies) {
+        replies.forEach(replyResponseDto -> {
+            long replyId = replyResponseDto.getId();
+            replyResponseDto.setLike(countByReplyId(replyId));
+        });
+        return replies;
+    }
+
+    public ReplyResponseDto saveReplyLike(ReplyResponseDto replyResponseDto) {
+        long replyId = replyResponseDto.getId();
+        replyResponseDto.setLike(countByReplyId(replyId));
+        return replyResponseDto;
     }
 }

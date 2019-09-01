@@ -61,6 +61,12 @@ public class CommentLikeService {
         return comments;
     }
 
+    public CommentResponseDto saveCommentLike(CommentResponseDto commentResponseDto) {
+        long commentId = commentResponseDto.getId();
+        commentResponseDto.setLike(countByCommentId(commentId));
+        return commentResponseDto;
+    }
+
     public Long countByCommentId(Long commentId) {
         return commentLikeRepository.countByCommentId(commentId);
     }
