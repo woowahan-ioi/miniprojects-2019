@@ -33,7 +33,7 @@ public class CommentLikeService {
     }
 
     @Transactional
-    public CommentLikeResponseDto likeComment(Long userId, Long commentId, Long videoId) {
+    public CommentLikeResponseDto likeComment(Long userId, Long videoId, Long commentId) {
         videoService.findById(videoId);
         Comment comment = commentService.findById(commentId);
         User user = userService.findByIdAndIsActiveTrue(userId);
@@ -66,7 +66,7 @@ public class CommentLikeService {
     }
 
     @Transactional
-    public CommentLikeResponseDto unlikeComment(Long userId, Long commentId, Long videoId) {
+    public CommentLikeResponseDto dislikeComment(Long userId, Long commentId, Long videoId) {
         if (existCommentLike(userId, commentId)) {
             videoService.findById(videoId);
             commentLikeRepository.deleteByLikeUserIdAndCommentId(userId, commentId);

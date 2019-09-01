@@ -1,8 +1,5 @@
 package com.wootube.ioi.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.model.Reply;
 import com.wootube.ioi.domain.model.User;
@@ -12,7 +9,6 @@ import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.service.exception.NotFoundReplyException;
 import org.modelmapper.ModelMapper;
-
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,8 +44,7 @@ public class ReplyService {
     public ReplyResponseDto update(ReplyRequestDto replyRequestDto, String email, Long videoId, Long commentId, Long replyId) {
         User writer = userService.findByEmail(email);
         Comment comment = findComment(commentId, videoId);
-        Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(NotFoundReplyException::new);
+        Reply reply = findById(replyId);
 
         reply.update(writer, comment, replyRequestDto.getContents());
         return modelMapper.map(reply, ReplyResponseDto.class);
@@ -59,8 +54,7 @@ public class ReplyService {
     public void delete(Long videoId, Long commentId, Long replyId, String email) {
         User writer = userService.findByEmail(email);
         Comment comment = findComment(commentId, videoId);
-        Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(NotFoundReplyException::new);
+        Reply reply = findById(replyId);
 
         reply.checkMatchWriter(writer);
         reply.checkMatchComment(comment);
@@ -86,5 +80,10 @@ public class ReplyService {
             replyResponseDtos.add(replyResponseDto);
         });
         return replyResponseDtos;
+    }
+
+    public Reply findById(Long replyId) {
+        return replyRepository.findById(replyId)
+                .orElseThrow(NotFoundReplyException::new);
     }
 }
