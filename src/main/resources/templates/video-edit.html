@@ -49,10 +49,10 @@
                             <label for="title" class="font-size-13">제목 :</label>
                             <input class="form-control" id="title" name="title"
                                    th:value="${#strings.isEmpty(video)? '' : video.title}"
-                                   type="text">
+                                   type="text" maxlength="50">
                             <br>
                             <label for="description" class="font-size-13">설명 :</label>
-                            <textarea class="form-control" id="description" rows="15" name="description"
+                            <textarea class="form-control" id="description" rows="10" maxlength="500" name="description"
                                       th:text="${#strings.isEmpty(video)? '' : video.description}"></textarea>
                         </div>
                         <div class="form-group text-center">
