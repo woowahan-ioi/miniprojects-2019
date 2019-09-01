@@ -26,12 +26,24 @@ const replyButton = (function () {
             document.querySelector("#comment-area").addEventListener("click", replyService.sortReplyByUpdateTime)
         }
 
+        const increaseLike = function () {
+            const commentArea = document.querySelector('#comment-area');
+            commentArea.addEventListener('click', replyService.increaseLike);
+        }
+
+        const decreaseLike = function () {
+            const commentArea = document.querySelector('#comment-area');
+            commentArea.addEventListener('click', replyService.decreaseLike);
+        }
+
         const init = function () {
             replyToggle();
             saveReply();
             updateReply();
             deleteReply();
             sortReplyByUpdateTime();
+            increaseLike();
+            decreaseLike();
         };
 
         return {
@@ -248,6 +260,81 @@ const replyButton = (function () {
             replyList.insertAdjacentHTML("beforeend", Templates.replyTemplate(reply, writtenTime));
         }
 
+        const increaseLike = (event) => {
+            let target = event.target;
+
+            if(target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if(!target.classList.contains("reply-like-btn")) {
+                return;
+            }
+
+            const replyId = target.closest("li").dataset.replyid;
+            const commentId = target.closest("li").parentElement.closest("li").dataset.commentid;
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/replies/" + replyId + "/likes";
+
+            const requestBody = {
+            };
+
+            const callback = (response) => {
+                if (response.status === 201) {
+                    response.json().then(data => {
+                        const replyLikeCountDiv = target.parentElement.querySelector(".reply-like-count");
+                        replyLikeCountDiv.innerText = data.count;
+                        target.parentElement.querySelector(".reply-like-btn").classList.add("display-none");
+                        target.parentElement.querySelector(".reply-dislike-btn").classList.remove("display-none");
+                    })
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.POST(requestUri, requestBody, callback, handleError);
+        }
+
+        const decreaseLike = (event) => {
+            let target = event.target;
+
+            if(target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if(!target.classList.contains("reply-dislike-btn")) {
+                return;
+            }
+
+            const replyId = target.closest("li").dataset.replyid;
+            const commentId = target.closest("li").parentElement.closest("li").dataset.commentid;
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/replies/" + replyId + "/likes";
+
+            const callback = (response) => {
+                if (response.status === 201) {
+                    response.json().then(data => {
+                        const replyLikeCountDiv = target.parentElement.querySelector(".reply-like-count");
+                        replyLikeCountDiv.innerText = data.count;
+                        target.parentElement.querySelector(".reply-dislike-btn").classList.add("display-none");
+                        target.parentElement.querySelector(".reply-like-btn").classList.remove("display-none");
+                    })
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.DELETE(requestUri, callback, handleError);
+        }
+
+
+
         return {
             toggleReplyCancel: toggleReplyCancel,
             toggleReplyWrite: toggleReplyWrite,
@@ -257,7 +344,9 @@ const replyButton = (function () {
             save: saveReply,
             update: updateReply,
             delete: deleteReply,
-            sortReplyByUpdateTime: sortReplyByUpdateTime
+            sortReplyByUpdateTime: sortReplyByUpdateTime,
+            increaseLike: increaseLike,
+            decreaseLike: decreaseLike
         }
     };
 

@@ -27,7 +27,7 @@ const Templates = {
                         <button class="like-btn comment-like-btn">
                             <i class="fa fa-thumbs-up"></i>
                         </button>
-                        <button class="like-btn comment-unlike-btn display-none">
+                        <button class="like-btn comment-dislike-btn display-none">
                             <i class="fa fa-thumbs-up like-icon"></i>
                         </button>
                         <span class="comment-like-count">${comment.like}</span>
@@ -94,10 +94,13 @@ const Templates = {
                                 </div>
                                 <span class="reply-contents font-size-15">${reply.contents}</span>
                                 <div>
-                                    <button class="like-btn">
-                                        <i class="ti-thumb-up"></i>
+                                    <button class="like-btn reply-like-btn">
+                                        <i class="fa fa-thumbs-up"></i>
                                     </button>
-                                    <span>3.5천</span>
+                                    <button class="like-btn reply-dislike-btn display-none">
+                                        <i class="fa fa-thumbs-up like-icon"></i>
+                                    </button>
+                                    <span class="reply-like-count"></span>
                                 </div>
                             </div>
                             <div class="reply-update-area display-none mrg-btm-50">
