@@ -40,7 +40,6 @@ const AjaxRequest = {
         }).then(response => {
             callback(response)
         }).catch(error => {
-            console.log(error);
             error.text().then(text => handleError(text))
         });
     },

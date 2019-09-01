@@ -10,8 +10,8 @@
             </button>
 
             <div class="dropdown-menu comment-sort-bropdown" role="menu">
-                <button class="comment-like-sort-btn list-group-item list-group-item-action">인기 댓글순</button>
-                <button class="comment-recent-sort-btn list-group-item list-group-item-action">최신 댓글순</button>
+                <button id="sort-comment-like" class="comment-like-sort-btn list-group-item list-group-item-action">인기 댓글순</button>
+                <button id="sort-comment-update-time" class="comment-recent-sort-btn list-group-item list-group-item-action">최신 댓글순</button>
             </div>
         </div>
         <div class="comment mrg-btm-50">
@@ -19,8 +19,8 @@
                 <div class="reply-area">
                     <div class="mrg-btm-10">
                         <img alt="" class="img-circle width-50 comment-writer-img"
-                             src="/images/default/eastjun_big.jpg">
-                        <input class="comment-input" id="comment-input-text"
+                             th:src="${session.user.profileImageUrl}">
+                        <input class="comment-input mrg-left-10" id="comment-input-text"
                                placeholder="공개 댓글 추가..." type="text">
                     </div>
                     <div class="display-none" id="comment-button-area">

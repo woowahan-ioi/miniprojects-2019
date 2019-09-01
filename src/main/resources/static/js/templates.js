@@ -1,6 +1,6 @@
 const Templates = {
-    commentTemplate : (comment, writtenTime) => {return `<li class="comment mrg-btm-30" data-commentid="${comment.id}">
-                <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
+    commentTemplate : (comment, writtenTime) => {return `<li class="comment mrg-btm-20" data-commentid="${comment.id}">
+                <img alt="" class="img-circle width-50 comment-writer-img" th:src="${comment.writerProfileImageUrl}">
                 <div class="comment-block">
                     <div class="font-size-13">
                         <span class="user-name">${comment.writerName}</span>
@@ -35,12 +35,12 @@ const Templates = {
                     </div>
                 </div>
                 <div class="comment-update-area display-none mrg-btm-50">
-                    <div>
+                    <div class="mrg-btm-10">
                         <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
                              alt="">
                         <input class="comment-input" type="text" value="${comment.contents}">
                     </div>
-                    <button class="btn comment-btn comment-update-cancel-btn">취소</button>
+                    <button class="btn comment-btn comment-update-cancel-btn mrg-right-55">취소</button>
                     <button class="btn comment-btn edit comment-update-btn">수정</button>
                 </div>
                 <div class="mrg-top-5 reply-area">
@@ -50,7 +50,7 @@ const Templates = {
                                  alt="">
                             <input class="comment-input" type="text" placeholder="공개 답글 추가...">
                         </div>
-                        <button class="btn comment-btn edit reply-save-btn disabled">답글</button>
+                        <button class="btn mrg-right-55 comment-btn edit reply-save-btn disabled">답글</button>
                         <button class="btn comment-btn reply-cancel-btn">취소</button>
                     </div>
                     <div id="reply-list-more-area" class="mrg-btm-10">
@@ -69,7 +69,7 @@ const Templates = {
                 </div>
             </li>`
     },
-    replyTemplate : (reply, writtenTime) => { return `<li class="reply mrg-btm-30" data-replyid="${reply.id}">
+    replyTemplate : (reply, writtenTime) => { return `<li class="reply mrg-btm-20" data-replyid="${reply.id}">
                             <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                             <div class="comment-block">
                                 <div class="font-size-13">
@@ -81,7 +81,7 @@ const Templates = {
                                         <i class="ti-more-alt"></i>
                                     </button>
                                 
-                                    <div class="dropdown-menu" role="menu">
+                                    <div class="dropdown-menu reply-dropdown-menu" role="menu">
                                         <button class="list-group-item list-group-item-action reply-edit-button">
                                             <i class="fa fa-pencil"></i>
                                             <span>수정</span>
@@ -101,12 +101,12 @@ const Templates = {
                                 </div>
                             </div>
                             <div class="reply-update-area display-none mrg-btm-50">
-                                <div>
+                                <div class="mrg-btm-10">
                                     <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
                                          alt="">
                                     <input class="comment-input" type="text" value="${reply.contents}">
                                 </div>
-                                <button class="btn comment-btn reply-update-cancel-btn">취소</button>
+                                <button class="btn mrg-right-55 comment-btn reply-update-cancel-btn">취소</button>
                                 <button class="btn comment-btn edit reply-update-btn">수정</button>
                             </div>
                         </li>`

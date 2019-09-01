@@ -176,7 +176,7 @@ ul {
     border-right: none;
     border-bottom: 1px solid #dddddd;
     height: 30px;
-    width: 99.5%;
+    width: 93%;
 }
 
 .comment-input:focus {
@@ -239,8 +239,6 @@ ul {
     border: none;
     color: gray;
     font-size: 1.0em;
-    position: relative;
-    left: 30px;
 }
 
 .list-group-item {
@@ -248,7 +246,7 @@ ul {
     background: none;
 }
 
-.comment-dropdown-menu {
+.comment-dropdown-menu, .reply-dropdown-menu {
     width: 85px;
     min-width: 0px;
 }
@@ -267,4 +265,26 @@ ul {
 
 .like-icon {
     color: royalblue;
+}
+
+.comment-update-btn.disabled, .reply-save-btn.disabled, .reply-update-btn.disabled {
+    background: lightgray;
+    color: white;
+    border-radius: 5%;
+}
+
+.comment-update-btn, .reply-save-btn, .reply-update-btn {
+    background: #065fd4;
+    color: white;
+    border-radius: 5%;
+
+}
+
+.comment-update-cancel-btn, .reply-cancel-btn, .reply-update-cancel-btn {
+    background: none;
+    border-radius: 5%;
+}
+
+.fa-thumbs-up {
+    font-size: 18px;
 }

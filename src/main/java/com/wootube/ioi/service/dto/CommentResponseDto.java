@@ -13,14 +13,16 @@ public class CommentResponseDto {
     private String contents;
     private LocalDateTime updateTime;
     private String writerName;
+    private String writerProfileImageUrl;
     private Long like;
 
-    public static CommentResponseDto of(Long id, String contents, LocalDateTime updateTime, String writerName) {
+    public static CommentResponseDto of(Long id, String contents, LocalDateTime updateTime, String writerName, String writerProfileImageUrl) {
         CommentResponseDto commentResponseDto = new CommentResponseDto();
         commentResponseDto.id = id;
         commentResponseDto.contents = contents;
         commentResponseDto.updateTime = updateTime;
         commentResponseDto.writerName = writerName;
+        commentResponseDto.writerProfileImageUrl = writerProfileImageUrl;
         commentResponseDto.like = 0L;
 
         return commentResponseDto;

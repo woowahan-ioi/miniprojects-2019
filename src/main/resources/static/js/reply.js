@@ -61,7 +61,6 @@ const replyButton = (function () {
                         const replyListDiv = target.parentElement.nextElementSibling;
                         $(replyListDiv).empty();
 
-                        console.log(data);
                         for (const reply of data) {
                             appendReply(reply, target);
                         }
