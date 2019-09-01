@@ -25,14 +25,17 @@ const commentButton = (function () {
             document.querySelector("#comment-cancel-button").addEventListener("click", commentService.toggleCommentCancel);
             document.querySelector("#comment-input-text").addEventListener("click", commentService.toggleCommentWrite);
             document.querySelector("#comment-input-text").addEventListener("keyup", commentService.toggleCommentSaveButton);
-            document.querySelector("#comment-area").addEventListener("mouseover", commentService.toggleCommentMoreButton);
-
             document.querySelector("#comment-area").addEventListener("click", commentService.toggleCommentEditButton);
         };
 
         const sortCommentByUpdateTime = function () {
-            const commentAddButton = document.querySelector('#comment-sort-button');
+            const commentAddButton = document.querySelector('#sort-comment-update-time');
             commentAddButton.addEventListener('click', commentService.sortCommentByUpdateTime);
+        };
+
+        const sortCommentByLikeCount = function () {
+            const commentAddButton = document.querySelector('#sort-comment-like');
+            commentAddButton.addEventListener('click', commentService.sortCommentByLikeCount);
         };
 
         const increaseLike = function () {
@@ -51,6 +54,7 @@ const commentButton = (function () {
             deleteComment();
             commentToggle();
             sortCommentByUpdateTime();
+            sortCommentByLikeCount();
             getComment();
             increaseLike();
             decreaseLike();
@@ -78,7 +82,7 @@ const commentButton = (function () {
         }
 
         function toggleCommentSaveButton(event) {
-            if (event.target.className === "comment-input" && event.target.value !== "") {
+            if (event.target.classList.contains("comment-input") && event.target.value !== "") {
                 document.querySelector("#comment-save-button").classList.remove("disabled")
                 return;
             }
@@ -96,19 +100,12 @@ const commentButton = (function () {
             if (target.tagName === "I" || target.tagName === "SPAN") {
                 target = target.parentElement;
             }
-            if (target.classList.contains("comment-update-cancel-btn")) {
-                const commentButtonDiv = target.parentElement;
-                commentButtonDiv.nextElementSibling.classList.toggle("display-none");
-                commentButtonDiv.classList.toggle("display-none");
-                commentButtonDiv.previousElementSibling.classList.toggle("display-none");
-                commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
-            }
-            if (target.classList.contains("comment-edit-button")) {
-                const commentButtonDiv = target.parentElement.parentElement;
-                commentButtonDiv.parentElement.nextElementSibling.nextElementSibling.classList.toggle("display-none");
-                commentButtonDiv.parentElement.classList.toggle("display-none");
-                commentButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
-                commentButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");
+            if (target.classList.contains("comment-update-cancel-btn") || target.classList.contains("comment-edit-button")) {
+                const commentList = target.closest("li");
+                commentList.querySelector(".reply-area").classList.toggle("display-none");
+                commentList.querySelector(".comment-update-area").classList.toggle("display-none");
+                commentList.querySelector(".comment-block").classList.toggle("display-none");
+                commentList.querySelector(".comment-writer-img").classList.toggle("display-none");
             }
         }
 
@@ -137,12 +134,36 @@ const commentButton = (function () {
             AjaxRequest.GET(requestUri, callback, handleError);
         }
 
+        const sortCommentByLikeCount = () => {
+            const requestUri = '/api/videos/' + videoId + '/comments/sort/likecount';
+            const callback = (response) => {
+                const commentListDiv = document.querySelector("#comment-area");
+                commentListDiv.innerHTML = "";
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        let count = 0;
+                        for (const comment of data) {
+                            appendComment(comment);
+                            count++;
+                        }
+                        commentCount.innerText = count;
+                    });
+                    return;
+                }
+                throw response;
+            };
+            const handleError = (error) => {
+                alert(error);
+            };
+            AjaxRequest.GET(requestUri, callback, handleError);
+        }
+
         const saveComment = (event) => {
             if (event.target.classList.contains("disabled")) {
                 return;
             }
 
-            const inputComment = event.target.parentElement.parentElement.querySelector("INPUT");
+            const inputComment = event.target.parentElement.parentElement.querySelector(".comment-input");
             const requestUri = '/api/videos/' + videoId + '/comments';
             const requestBody = {
                 contents: inputComment.value
@@ -177,8 +198,9 @@ const commentButton = (function () {
                 return;
             }
 
-            const commentId = target.closest("li").dataset.commentid;
-            const contents = target.parentElement.querySelector("INPUT").value;
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
+            const contents = commentList.querySelector(".comment-input").value;
 
             const requestUri = '/api/videos/' + videoId + '/comments/' + commentId;
             const requestBody = {
@@ -186,16 +208,12 @@ const commentButton = (function () {
             };
             const callback = (response) => {
                 if (response.status === 204) {
-
                     toggleCommentMoreButton(event);
-                    target.parentElement.previousElementSibling.querySelector(".comment-contents").innerText = contents;
-
-                    const commentButtonDiv = event.target.parentElement;
-                    commentButtonDiv.nextElementSibling.classList.toggle("display-none");
-                    commentButtonDiv.classList.toggle("display-none");
-                    commentButtonDiv.previousElementSibling.classList.toggle("display-none");
-                    commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
-
+                    commentList.querySelector(".comment-contents").innerText = contents;
+                    commentList.querySelector(".comment-update-area").classList.toggle("display-none");
+                    commentList.querySelector(".reply-area").classList.toggle("display-none");
+                    commentList.querySelector(".comment-block").classList.toggle("display-none");
+                    commentList.querySelector(".comment-writer-img").classList.toggle("display-none");
                     return;
                 }
                 throw response;
@@ -218,13 +236,14 @@ const commentButton = (function () {
                 return;
             }
 
-            const commentId = target.closest("li").dataset.commentid;
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
 
             const requestUri = '/api/videos/' + videoId + '/comments/' + commentId;
             const callback = (response) => {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
-                    target.closest("li").remove();
+                    commentList.remove();
                     let currentCommentCount = parseInt(commentCount.innerText)
                     commentCount.innerText = String(currentCommentCount - 1);
 
@@ -242,7 +261,7 @@ const commentButton = (function () {
         const appendComment = (comment) => {
             const writtenTime = calculateWrittenTime(comment.updateTime);
             const commentList = document.querySelector("#comment-area");
-            commentList.insertAdjacentHTML("beforeend", Templates.commentTemplate(comment, writtenTime));
+            commentList.insertAdjacentHTML("afterbegin", Templates.commentTemplate(comment, writtenTime));
         };
 
         const increaseLike = (event) => {
@@ -255,7 +274,8 @@ const commentButton = (function () {
             if(!target.classList.contains("comment-like-btn")) {
                 return;
             }
-            const commentId = target.parentElement.parentElement.parentElement.dataset.commentid;
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
             const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/likes";
 
             const requestBody = {
@@ -264,10 +284,10 @@ const commentButton = (function () {
             const callback = (response) => {
                 if (response.status === 201) {
                     response.json().then(data => {
-                        const commentLikeCountDiv = target.parentElement.querySelector(".comment-like-count");
+                        const commentLikeCountDiv = commentList.querySelector(".comment-like-count");
                         commentLikeCountDiv.innerText = data.count;
-                        target.parentElement.querySelector(".comment-like-btn").classList.add("display-none");
-                        target.parentElement.querySelector(".comment-unlike-btn").classList.remove("display-none");
+                        commentList.querySelector(".comment-like-btn").classList.add("display-none");
+                        commentList.querySelector(".comment-dislike-btn").classList.remove("display-none");
                     })
                     return;
                 }
@@ -288,19 +308,21 @@ const commentButton = (function () {
                 target = target.parentElement;
             }
 
-            if(!target.classList.contains("comment-unlike-btn")) {
+            if(!target.classList.contains("comment-dislike-btn")) {
                 return;
             }
-            const commentId = target.parentElement.parentElement.parentElement.dataset.commentid;
+
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
             const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/likes";
 
             const callback = (response) => {
                 if (response.status === 201) {
                     response.json().then(data => {
-                        const commentLikeCountDiv = target.parentElement.querySelector(".comment-like-count");
+                        const commentLikeCountDiv = commentList.querySelector(".comment-like-count");
                         commentLikeCountDiv.innerText = data.count;
-                        target.parentElement.querySelector(".comment-unlike-btn").classList.add("display-none");
-                        target.parentElement.querySelector(".comment-like-btn").classList.remove("display-none");
+                        commentList.querySelector(".comment-dislike-btn").classList.add("display-none");
+                        commentList.querySelector(".comment-like-btn").classList.remove("display-none");
                     })
                     return;
                 }
@@ -321,9 +343,9 @@ const commentButton = (function () {
             toggleCommentCancel: toggleCommentCancel,
             toggleCommentWrite: toggleCommentWrite,
             toggleCommentSaveButton: toggleCommentSaveButton,
-            toggleCommentMoreButton: toggleCommentMoreButton,
             toggleCommentEditButton: toggleCommentEditButton,
             sortCommentByUpdateTime: sortCommentByUpdateTime,
+            sortCommentByLikeCount: sortCommentByLikeCount,
             increaseLike: increaseLike,
             decreaseLike: decreaseLike
         }

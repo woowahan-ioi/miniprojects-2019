@@ -64,22 +64,23 @@ const replyButton = (function () {
             if(!target.classList.contains("reply-list-open-button")) {
                 return;
             }
-            const commentId = target.parentElement.closest("li").dataset.commentid;
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
             const requestUri = '/api/videos/' + videoId + '/comments/' + commentId +'/replies/sort/updatetime';
 
             const callback = (response) => {
                 if (response.status === 200) {
                     response.json().then(data => {
-                        const replyListDiv = target.parentElement.nextElementSibling;
-                        $(replyListDiv).empty();
+                        const replyListDiv = commentList.querySelector(".reply-list");
+                        replyListDiv.innerHTML = "";
 
                         for (const reply of data) {
                             appendReply(reply, target);
                         }
 
-                        target.classList.toggle("display-none");
-                        target.nextElementSibling.classList.toggle("display-none");
-                        target.parentElement.nextElementSibling.classList.remove("display-none");
+                        commentList.querySelector(".reply-list-open-button").classList.toggle("display-none");
+                        commentList.querySelector(".reply-list-close-button").classList.toggle("display-none");
+                        replyListDiv.classList.remove("display-none");
                     });
                     return;
                 }
@@ -102,10 +103,11 @@ const replyButton = (function () {
                 return;
             }
 
-            const id = event.target.closest("li").dataset.commentid;
-            const inputComment = event.target.closest("div").querySelector("input");
+            const commentList = event.target.closest("li");
+            const commentid = commentList.dataset.commentid;
+            const inputComment = event.target.closest(".reply-edit").querySelector(".comment-input");
+            const requestUri = '/api/videos/' + videoId + '/comments/' + commentid + '/replies';
 
-            const requestUri = '/api/videos/' + videoId + '/comments/' + id + '/replies';
             const requestBody = {
                 contents: inputComment.value
             };
@@ -115,7 +117,7 @@ const replyButton = (function () {
                         appendReply(comment, event.target);
                         inputComment.value = "";
                         event.target.closest(".reply-edit").classList.add("display-none")
-                        event.target.closest("li").querySelector("#reply-list-more-area").classList.toggle("display-none");
+                        commentList.querySelector("#reply-list-more-area").classList.toggle("display-none");
                     });
 
                     return;
@@ -134,8 +136,9 @@ const replyButton = (function () {
             if(!target.classList.contains("reply-update-btn")) {
                 return;
             }
-            const replyId = target.closest("li").dataset.replyid;
-            const commentId = target.closest("ul").parentElement.parentElement.dataset.commentid;
+            const replyListDiv = target.closest("li");
+            const replyId = replyListDiv.dataset.replyid;
+            const commentId = target.closest("ul").closest("li").dataset.commentid;
             const inputEditReply = target.closest("div").querySelector("input");
             const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + '/replies/' + replyId;
 
@@ -145,14 +148,10 @@ const replyButton = (function () {
 
             const callback = (response) => {
                 if (response.status === 204) {
-
-                    target.parentElement.previousElementSibling.querySelector(".reply-contents").innerText = inputEditReply.value;
-
-                    const replyButtonDiv = target.parentElement;
-                    replyButtonDiv.classList.toggle("display-none");
-                    replyButtonDiv.previousElementSibling.classList.toggle("display-none");
-                    replyButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
-
+                    replyListDiv.querySelector(".reply-contents").innerText = inputEditReply.value;
+                    replyListDiv.querySelector(".reply-update-area").classList.toggle("display-none");
+                    replyListDiv.querySelector(".comment-block").classList.toggle("display-none");
+                    replyListDiv.querySelector(".reply-writer-img").classList.toggle("display-none");
                     return;
                 }
                 throw response;
@@ -229,8 +228,8 @@ const replyButton = (function () {
             }
 
             replyListButton.classList.toggle("display-none");
-            replyListButton.parentElement.nextElementSibling.classList.add("display-none");
-            replyListButton.previousElementSibling.classList.toggle("display-none");
+            replyListButton.parentElement.parentElement.querySelector(".reply-list").classList.add("display-none");
+            replyListButton.parentElement.querySelector(".reply-list-open-button").classList.toggle("display-none");
         }
 
         function toggleReplyEditButton(event) {
@@ -239,25 +238,23 @@ const replyButton = (function () {
                 target = target.parentElement;
             }
             if (target.classList.contains("reply-update-cancel-btn")) {
-                const replyButtonDiv = target.parentElement;
+                const replyButtonDiv = target.closest(".reply-update-area");
                 replyButtonDiv.classList.toggle("display-none");
-                replyButtonDiv.previousElementSibling.classList.toggle("display-none");
-                replyButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
+                replyButtonDiv.parentElement.querySelector(".comment-block").classList.toggle("display-none")
+                replyButtonDiv.parentElement.querySelector(".reply-writer-img").classList.toggle("display-none");
             }
             if (target.classList.contains("reply-edit-button")) {
-                const replyButtonDiv = target.parentElement.parentElement;
-                replyButtonDiv.parentElement.classList.toggle("display-none");
-                replyButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
-                replyButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");
+                const replyButtonDiv = target.closest(".reply-more-box");
+                replyButtonDiv.closest(".comment-block").classList.toggle("display-none");
+                replyButtonDiv.parentElement.parentElement.querySelector(".reply-writer-img").classList.toggle("display-none");
+                replyButtonDiv.parentElement.parentElement.querySelector(".reply-update-area").classList.toggle("display-none");
             }
         }
 
         function appendReply(reply, target) {
             const writtenTime = calculateWrittenTime(reply.updateTime);
-
             const replyList = target.closest(".reply-area").querySelector(".reply-list");
-
-            replyList.insertAdjacentHTML("beforeend", Templates.replyTemplate(reply, writtenTime));
+            replyList.insertAdjacentHTML("afterbegin", Templates.replyTemplate(reply, writtenTime));
         }
 
         const increaseLike = (event) => {
