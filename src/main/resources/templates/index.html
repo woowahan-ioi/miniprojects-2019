@@ -12,7 +12,7 @@
 
     <div class="page-container">
         <div class="main-content pdd-right-50 pdd-left-50">
-            <div class="container-fluid max-width-lg-2">
+            <div id="video-area" class="container-fluid max-width-lg-2">
 
                 <div th:if="${session}">
                     <div>
@@ -139,6 +139,7 @@
 </div>
 
 <th:block th:replace="fragments/script :: scriptFragment"/>
+<script type="text/javascript" src="/js/templates.js"></script>
 <script type="text/javascript" src="/js/index.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 

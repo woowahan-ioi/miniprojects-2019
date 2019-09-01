@@ -2,6 +2,7 @@ package com.wootube.ioi.web.controller;
 
 import java.io.IOException;
 
+import com.wootube.ioi.service.VideoLikeService;
 import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
@@ -18,10 +19,12 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class VideoController {
     private final VideoService videoService;
+    private final VideoLikeService videoLikeService;
     private final UserSessionManager userSessionManager;
 
-    public VideoController(VideoService videoService, UserSessionManager userSessionManager) {
+    public VideoController(VideoService videoService, VideoLikeService videoLikeService, UserSessionManager userSessionManager) {
         this.videoService = videoService;
+        this.videoLikeService = videoLikeService;
         this.userSessionManager = userSessionManager;
     }
 
@@ -40,9 +43,14 @@ public class VideoController {
     @GetMapping("/{id}")
     public String video(@PathVariable Long id, Model model) {
         VideoResponseDto videoResponseDto = videoService.findVideo(id);
+        UserSession userSession = userSessionManager.getUserSession();
+
+        if(userSession != null) {
+            videoResponseDto.setLike(videoLikeService.existsVideoLike(id, userSession.getId()));
+        }
+
         model.addAttribute("video", videoResponseDto);
         model.addAttribute("videos", videoService.findTop20ByOrderByViewsDesc());
-
         return "video";
     }
 

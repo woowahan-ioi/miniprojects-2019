@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class VideoResponseDto {
     private Long id;
@@ -17,8 +19,9 @@ public class VideoResponseDto {
     private String writerName;
     private Long writerId;
     private String thumbnailPath;
+    private boolean isLike;
 
-    public VideoResponseDto(Long id, String title, String description, String contentPath, Long views, LocalDateTime createTime, String writerName, Long writerId, String thumbnailPath) {
+    public VideoResponseDto(Long id, String title, String description, String contentPath, Long views, LocalDateTime createTime, String writerName, Long writerId, String thumbnailPath, boolean isLike) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -28,5 +31,6 @@ public class VideoResponseDto {
         this.writerName = writerName;
         this.writerId = writerId;
         this.thumbnailPath = thumbnailPath;
+        this.isLike = isLike;
     }
 }
