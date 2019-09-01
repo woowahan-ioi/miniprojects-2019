@@ -1,7 +1,7 @@
 const Templates = {
     commentTemplate : (comment, writtenTime) => {return `<li class="comment mrg-btm-20" data-commentid="${comment.id}">
-                <img alt="" class="img-circle width-50 comment-writer-img" th:src="${comment.writerProfileImageUrl}">
                 <div class="comment-block">
+                <img alt="" class="img-circle width-50 comment-writer-img mrg-right-5" src="${comment.writerProfileImageUrl}">
                     <div class="font-size-13">
                         <span class="user-name">${comment.writerName}</span>
                         <span class="update-date">${writtenTime}</span>
@@ -36,7 +36,7 @@ const Templates = {
                 </div>
                 <div class="comment-update-area display-none mrg-btm-50">
                     <div class="mrg-btm-10">
-                        <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
+                        <img class="img-circle width-50 comment-writer-img mrg-right-5" src="${comment.writerProfileImageUrl}"
                              alt="">
                         <input class="comment-input" type="text" value="${comment.contents}">
                     </div>
@@ -70,7 +70,7 @@ const Templates = {
             </li>`
     },
     replyTemplate : (reply, writtenTime) => { return `<li class="reply mrg-btm-20" data-replyid="${reply.id}">
-                            <img class="img-circle width-50 comment-writer-img" th:src="${reply.writerProfileImageUrl}" alt="">
+                            <img class="img-circle width-50 reply-writer-img mrg-right-5" src="${reply.writerProfileImageUrl}" alt="">
                             <div class="comment-block">
                                 <div class="font-size-13">
                                     <span class="user-name">${reply.writerName}</span>

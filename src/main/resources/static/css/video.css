@@ -48,6 +48,11 @@ header {
     float: left;
 }
 
+.reply-writer-img {
+    width: 4%;
+    float: left;
+}
+
 .comment-block {
     width: 94%;
     display: inline-block;
