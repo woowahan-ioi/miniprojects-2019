@@ -48,7 +48,7 @@
             <div id="video-contents" class="width-100 row" th:data-videoid="${video.id}">
                 <div class="col-sm-2">
                     <img alt="" class="video-owner-img img-circle"
-                         src="/images/default/eastjun_big.jpg">
+                         th:src="${video.writerProfileImage}">
                 </div>
                 <div class="relative banner-info d-inline-block col-sm-8">
                     <span class="left-30 bottom-35 font-size-17 text-bold" th:if="${video.writerName}" th:text="${video.writerName}"></span><br>
