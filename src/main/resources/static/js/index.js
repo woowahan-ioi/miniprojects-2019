@@ -44,7 +44,7 @@ const navButton = (() => {
                for(video of videos) {
                    videoArea.innerHTML += Templates.videoTemplate(video);
                }
-            });
+            }).catch(error => {alert("영상이 없습니다.")});
         }
 
         const alertError = (error) => {
