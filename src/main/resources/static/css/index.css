@@ -121,3 +121,19 @@ header ul.nav-right li, header ul.nav-left li {
     height: 1px;
     background: #cccccc;
 }
+
+.collapsed {
+    left: 0 !important;
+}
+
+.side-nav {
+    left:-70px;
+}
+
+.display-none {
+    display: none;
+}
+
+#side-nav-toggle-list {
+    cursor: pointer;
+}
