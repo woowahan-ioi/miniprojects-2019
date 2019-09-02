@@ -13,6 +13,7 @@ import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.SubscriberResponseDto;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
+import com.wootube.ioi.service.exception.FileUploadException;
 import com.wootube.ioi.service.exception.NotFoundVideoIdException;
 import com.wootube.ioi.service.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
@@ -74,7 +75,7 @@ public class VideoService {
 	}
 
 	@Transactional
-	public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) throws IOException {
+	public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) {
 		Video video = findById(id);
 		matchWriter(writerId, id);
 
@@ -82,10 +83,14 @@ public class VideoService {
 			fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
 			fileUploader.deleteFile(video.getThumbnailFileName(), UploadType.THUMBNAIL);
 
-			S3UploadFileFactory s3UploadFileFactory = new S3UploadFileFactory(uploadFile, fileConverter, fileUploader).invoke();
-
-			video.updateVideo(s3UploadFileFactory.getVideoUrl(), s3UploadFileFactory.getOriginFileName(),
-					s3UploadFileFactory.getThumbnailUrl(), s3UploadFileFactory.getThumbnailFileName());
+			try {
+				S3UploadFileFactory s3UploadFileFactory = new S3UploadFileFactory(uploadFile, fileConverter, fileUploader)
+						.invoke();
+				video.updateVideo(s3UploadFileFactory.getVideoUrl(), s3UploadFileFactory.getOriginFileName(),
+						s3UploadFileFactory.getThumbnailUrl(), s3UploadFileFactory.getThumbnailFileName());
+			} catch (IOException e) {
+				throw new FileUploadException();
+			}
 		}
 
 		video.updateTitle(videoRequestDto.getTitle());
