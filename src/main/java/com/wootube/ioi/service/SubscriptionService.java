@@ -20,62 +20,62 @@ import org.springframework.stereotype.Service;
 @Service
 public class SubscriptionService {
 
-    private final SubscriptionRepository subscriptionRepository;
-    private final UserService userService;
-    private final ModelMapper modelMapper;
+	private final SubscriptionRepository subscriptionRepository;
+	private final UserService userService;
+	private final ModelMapper modelMapper;
 
-    @Autowired
-    public SubscriptionService(SubscriptionRepository subscriptionRepository, UserService userService, ModelMapper modelMapper) {
-        this.subscriptionRepository = subscriptionRepository;
-        this.userService = userService;
-        this.modelMapper = modelMapper;
-    }
+	@Autowired
+	public SubscriptionService(SubscriptionRepository subscriptionRepository, UserService userService, ModelMapper modelMapper) {
+		this.subscriptionRepository = subscriptionRepository;
+		this.userService = userService;
+		this.modelMapper = modelMapper;
+	}
 
-    public List<SubscriberResponseDto> findAllUsersBySubscriberId(Long subscriberId) {
-        List<Subscription> subscriptions = subscriptionRepository.findAllBySubscriberId(subscriberId);
+	public List<SubscriberResponseDto> findAllUsersBySubscriberId(Long subscriberId) {
+		List<Subscription> subscriptions = subscriptionRepository.findAllBySubscriberId(subscriberId);
 
-        return subscriptions.stream()
-                .map(subscription -> modelMapper.map(subscription.getSubscriber(), SubscriberResponseDto.class))
-                .collect(Collectors.toList());
-    }
+		return subscriptions.stream()
+				.map(subscription -> modelMapper.map(subscription.getSubscribedUser(), SubscriberResponseDto.class))
+				.collect(Collectors.toList());
+	}
 
-    public SubscriptionCountResponseDto countSubscription(Long subscribedUserId) {
-        return new SubscriptionCountResponseDto(subscriptionRepository.countBySubscribedUserId(subscribedUserId));
-    }
+	public SubscriptionCountResponseDto countSubscription(Long subscribedUserId) {
+		return new SubscriptionCountResponseDto(subscriptionRepository.countBySubscribedUserId(subscribedUserId));
+	}
 
-    public void subscribe(Long subscriberId, Long subscribedUserId) {
-        if (contains(subscriberId, subscribedUserId)) {
-            throw new AlreadySubscribedException();
-        }
-        User subscriber = userService.findByIdAndIsActiveTrue(subscriberId);
-        User subscribedUser = userService.findByIdAndIsActiveTrue(subscribedUserId);
-        Subscription subscription = new Subscription(subscriber, subscribedUser);
-        subscriptionRepository.save(subscription);
-    }
+	public void subscribe(Long subscriberId, Long subscribedUserId) {
+		if (contains(subscriberId, subscribedUserId)) {
+			throw new AlreadySubscribedException();
+		}
+		User subscriber = userService.findByIdAndIsActiveTrue(subscriberId);
+		User subscribedUser = userService.findByIdAndIsActiveTrue(subscribedUserId);
+		Subscription subscription = new Subscription(subscriber, subscribedUser);
+		subscriptionRepository.save(subscription);
+	}
 
-    private boolean contains(Long subscriberId, Long subscribedUserId) {
-        try {
-            findSubscription(subscriberId, subscribedUserId);
-            return true;
-        } catch (NotFoundSubscriptionException e) {
-            return false;
-        }
-    }
+	private boolean contains(Long subscriberId, Long subscribedUserId) {
+		try {
+			findSubscription(subscriberId, subscribedUserId);
+			return true;
+		} catch (NotFoundSubscriptionException e) {
+			return false;
+		}
+	}
 
-    public void unsubscribe(Long subscriberId, Long subscribedUserId) {
-        if (subscriberId.equals(subscribedUserId)) {
-            throw new IllegalUnsubscriptionException();
-        }
-        Subscription subscription = findSubscription(subscriberId, subscribedUserId);
-        subscriptionRepository.delete(subscription);
-    }
+	public void unsubscribe(Long subscriberId, Long subscribedUserId) {
+		if (subscriberId.equals(subscribedUserId)) {
+			throw new IllegalUnsubscriptionException();
+		}
+		Subscription subscription = findSubscription(subscriberId, subscribedUserId);
+		subscriptionRepository.delete(subscription);
+	}
 
-    private Subscription findSubscription(Long subscriberId, Long subscribedUserId) {
-        return subscriptionRepository.findBySubscriberIdAndSubscribedUserId(subscriberId, subscribedUserId)
-                .orElseThrow(NotFoundSubscriptionException::new);
-    }
+	private Subscription findSubscription(Long subscriberId, Long subscribedUserId) {
+		return subscriptionRepository.findBySubscriberIdAndSubscribedUserId(subscriberId, subscribedUserId)
+				.orElseThrow(NotFoundSubscriptionException::new);
+	}
 
-    public SubscriptionCheckResponseDto checkSubscription(Long subscriberId, Long subscribedUserId) {
-        return new SubscriptionCheckResponseDto(contains(subscriberId, subscribedUserId));
-    }
+	public SubscriptionCheckResponseDto checkSubscription(Long subscriberId, Long subscribedUserId) {
+		return new SubscriptionCheckResponseDto(contains(subscriberId, subscribedUserId));
+	}
 }
