@@ -1,7 +1,6 @@
 package com.wootube.ioi.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -106,10 +105,10 @@ public class UserServiceTest extends TestUtil {
 
     @DisplayName("프로필 사진 업데이트")
     @Test
-    void updateProfileImage() throws IOException {
+    void updateProfileImage() {
         given(userRepository.findByIdAndActiveTrue(USER_ID)).willReturn(Optional.of(testUser));
         given(testUser.getProfileImage()).willReturn(PROFILE_IMAGE);
-        given(fileConverter.convert(updateTestUploadFile)).willReturn(Optional.of(testFile));
+        given(fileConverter.convert(updateTestUploadFile)).willReturn(testFile);
         given(fileUploader.uploadFile(testFile, UploadType.PROFILE)).willReturn(PROFILE_IMAGE_URL);
 
         userService.updateProfileImage(USER_ID, updateTestUploadFile);

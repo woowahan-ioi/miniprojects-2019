@@ -93,11 +93,11 @@ class VideoServiceTest extends TestUtil {
         videoService.create(testUploadMultipartFile, testVideoRequestDto, USER_ID);
     }
 
-    private void mockUploadVideo(File convertedVideo, File convertedThumbnail) throws IOException {
-        given(fileConverter.convert(testUploadMultipartFile)).willReturn(Optional.of(convertedVideo));
+    private void mockUploadVideo(File convertedVideo, File convertedThumbnail) {
+        given(fileConverter.convert(testUploadMultipartFile)).willReturn(convertedVideo);
         given(fileUploader.uploadFile(convertedVideo, UploadType.VIDEO)).willReturn(videoFileFullPath);
 
-        given(fileConverter.convert(convertedVideo)).willReturn(Optional.of(convertedThumbnail));
+        given(fileConverter.convert(convertedVideo)).willReturn(convertedThumbnail);
         given(fileUploader.uploadFile(convertedThumbnail, UploadType.THUMBNAIL)).willReturn(thumbnailImageFileFullPath);
     }
 
@@ -110,7 +110,7 @@ class VideoServiceTest extends TestUtil {
 
     @Test
     @DisplayName("서비스에서 비디오를 업데이트 한다.")
-    void update() throws IOException {
+    void update() {
         testVideo = mock(Video.class);
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
         given(testVideo.matchWriter(any())).willReturn(true);
