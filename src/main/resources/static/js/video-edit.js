@@ -6,6 +6,22 @@ function unHover(element) {
     element.setAttribute('src', '/images/logo/youtube-upload-logo.png');
 }
 
+function move() {
+    const elem = document.getElementById("progressBar");
+    const width = 0;
+    const id = setInterval(frame, 0);
+
+    function frame() {
+        if (width >= 100) {
+            clearInterval(id);
+        } else {
+            width++;
+            elem.style.width = width + '%';
+            elem.innerHTML = width + '%';
+        }
+    }
+}
+
 function submitForm(){
     const title = document.forms["video-form"]["title"].value;
     const file = document.forms["video-form"]["file-input"].value;
@@ -21,21 +37,8 @@ function submitForm(){
 }
 
 function checkValidation(data) {
-    return !(data === '' || data === null);
-}
-
-function checkTextLength() {
-    const textArea = document.querySelector("#description");
-    if(textArea.value.length > 1000) {
-        alert("1000자 이내의 내용을 입력해주세요.");
-        textArea.value = textArea.value.substr(0, 1000);
+    if(data === '' || data === null) {
         return false;
     }
     return true;
 }
-
-document.querySelector("#description").addEventListener("keyup", checkTextLength);
-
-
-
-
