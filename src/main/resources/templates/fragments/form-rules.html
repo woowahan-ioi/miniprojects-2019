@@ -33,20 +33,15 @@
             }
 
             static passwordPattern(value) {
-                if (!value.match(/[a-z]/g) ||
-                    !value.match(/[0-9]/g) ||
-                    value.length < 8) {
-                    return '강력한 비밀번호를 설정해주세요'
+                if (value.length < 8) {
+                    return '비밀번호는 8자 이상입니다.'
+                }
+                if (!value.match(/[a-z]/g)
+                    || !value.match(/[0-9]/g)) {
+                    return '영어 소문자와 숫자를 포함해야 합니다.'
                 }
                 if (value.length > 32) {
-                    return '너무 깁니다.'
-                }
-                return true
-            }
-
-            static passwordCheckValid(value) {
-                if (signUp.password !== value) {
-                    return '일치하지 않습니다.'
+                    return '비밀번호는 32자 이하입니다.'
                 }
                 return true
             }

@@ -1,5 +1,5 @@
 .side-nav {
-    width: 280px;
+    width: 70px;
     background-color: whitesmoke;
     z-index: 1000;
     top: 0px;
@@ -139,11 +139,19 @@
 @media only screen and (max-width: 992px) {
     .side-nav {
         left: -280px;
-        width: calc(280px - 30px);
+        width: 70px;
+    }
+
+    .side-nav:hover{
+        width: 280px;
     }
 }
 
 @media only screen and (min-width: 1440px) {
+    .side-nav:hover{
+        width: 280px;
+    }
+
     .is-collapsed .side-nav {
         width: 70px;
     }
@@ -254,3 +262,4 @@
 .is-collapsed .page-container {
     padding-left: 70px;
 }
+

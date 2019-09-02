@@ -6,26 +6,36 @@ function unHover(element) {
     element.setAttribute('src', '/images/logo/youtube-upload-logo.png');
 }
 
-function move() {
-    const elem = document.getElementById("progress-bar");
-    let width = 0;
-    const id = setInterval(frame, 0);
+function submitForm(){
+    const title = document.forms["video-form"]["title"].value;
+    const file = document.forms["video-form"]["file-input"].value;
+    const description = document.forms["video-form"]["description"].value;
 
-    function frame() {
-        if (width >= 100) {
-            clearInterval(id);
-        } else {
-            width++;
-            elem.style.width = width + '%';
-            elem.innerHTML = width + '%';
-        }
+    if(checkValidation(title) && checkValidation(file) && checkValidation(description)) {
+        document.querySelector("#video-submit-button").disabled = true;
+        return true;
     }
+
+    alert("빈 칸이 존재합니다. 다시 입력해주세요.");
+    return false;
 }
 
-function videoSubmit(event) {
-    const submitButton = event.target;
-    document.querySelector("#video-form").submit();
-    submitButton.disabled = true;
+function checkValidation(data) {
+    return !(data === '' || data === null);
 }
 
-document.querySelector("#video-submit-button").addEventListener("click", videoSubmit);
+function checkTextLength() {
+    const textArea = document.querySelector("#description");
+    if(textArea.value.length > 1000) {
+        alert("1000자 이내의 내용을 입력해주세요.");
+        textArea.value = textArea.value.substr(0, 1000);
+        return false;
+    }
+    return true;
+}
+
+document.querySelector("#description").addEventListener("keyup", checkTextLength);
+
+
+
+

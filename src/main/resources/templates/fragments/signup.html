@@ -47,8 +47,15 @@
                     nameRequired: value => Rules.nameRequired(value),
                     namePattern: value => Rules.namePattern(value),
                     passwordRequired: value => Rules.passwordRequired(value),
-                    passwordPattern: value => Rules.passwordPattern(value),
-                    passwordChecking: value => Rules.passwordCheckValid(value)
+                    passwordPattern: value => Rules.passwordPattern(value)
+                }
+            },
+            computed: {
+                passwordConfirmation() {
+                    if (this.password !== this.passwordCheck) {
+                        return '일치하지 않습니다.'
+                    }
+                    return true
                 }
             },
             methods: {
@@ -60,6 +67,7 @@
                     return this.$_signUp_fieldNotEmpty(this.name)
                         && this.$_signUp_fieldNotEmpty(this.email)
                         && this.$_signUp_fieldNotEmpty(this.password)
+                        && this.$_signUp_fieldNotEmpty(this.passwordCheck)
                 },
 
                 $_signUp_emailPattern() {

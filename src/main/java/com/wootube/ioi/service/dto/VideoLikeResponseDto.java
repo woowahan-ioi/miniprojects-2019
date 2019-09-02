@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class VideoLikeResponseDto {
-	private long count;
+    private long count;
 
-	public VideoLikeResponseDto(long count) {
-		this.count = count;
-	}
+    public VideoLikeResponseDto(long count) {
+        this.count = count;
+    }
 }

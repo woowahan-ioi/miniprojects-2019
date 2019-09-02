@@ -112,16 +112,18 @@ const commentButton = (function () {
             const callback = (response) => {
                 const commentListDiv = document.querySelector("#comment-area");
                 commentListDiv.innerHTML = "";
+                console.log(response)
                 if (response.status === 200) {
                     response.json().then(data => {
                         let count = 0;
+                        console.log(data)
                         for (const comment of data) {
                             appendComment(comment);
                             markCommentLike(commentListDiv, comment);
                             count++;
                         }
                         commentCount.innerText = count;
-                    });
+                    }).catch(error => alert("gg"));
                     return;
                 }
                 throw response;

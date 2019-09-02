@@ -3,7 +3,6 @@ package com.wootube.ioi.web.advice;
 import com.wootube.ioi.service.exception.*;
 import com.wootube.ioi.web.argument.Redirection;
 import com.wootube.ioi.web.controller.exception.InvalidUserException;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +43,20 @@ public class VideoControllerAdvice {
 
     @ExceptionHandler({FileUploadException.class, InvalidFileExtensionException.class})
     public RedirectView handleFileUploadException(RuntimeException e, RedirectAttributes redirectAttributes, Redirection redirection) {
+        log.debug(e.getMessage());
+        redirectAttributes.addFlashAttribute("errors", e.getMessage());
+        return new RedirectView(redirection.getRedirectUrl());
+    }
+
+    @ExceptionHandler(TitleMaxLenthException.class)
+    public RedirectView handleTitleMaxLengthException(RedirectAttributes redirectAttributes, Redirection redirection, TitleMaxLenthException e) {
+        log.debug(e.getMessage());
+        redirectAttributes.addFlashAttribute("errors", e.getMessage());
+        return new RedirectView(redirection.getRedirectUrl());
+    }
+
+    @ExceptionHandler(DescriptionMaxLengthException.class)
+    public RedirectView handleDescriptionLengthException(RedirectAttributes redirectAttributes, Redirection redirection, DescriptionMaxLengthException e) {
         log.debug(e.getMessage());
         redirectAttributes.addFlashAttribute("errors", e.getMessage());
         return new RedirectView(redirection.getRedirectUrl());

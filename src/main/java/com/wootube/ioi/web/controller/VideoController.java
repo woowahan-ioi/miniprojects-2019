@@ -1,27 +1,29 @@
 package com.wootube.ioi.web.controller;
 
-import java.io.IOException;
-
+import com.wootube.ioi.service.VideoLikeService;
 import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.IOException;
+
 @RequestMapping("/videos")
 @Controller
 public class VideoController {
     private final VideoService videoService;
+    private final VideoLikeService videoLikeService;
     private final UserSessionManager userSessionManager;
 
-    public VideoController(VideoService videoService, UserSessionManager userSessionManager) {
+    public VideoController(VideoService videoService, VideoLikeService videoLikeService, UserSessionManager userSessionManager) {
         this.videoService = videoService;
+        this.videoLikeService = videoLikeService;
         this.userSessionManager = userSessionManager;
     }
 
@@ -40,9 +42,14 @@ public class VideoController {
     @GetMapping("/{id}")
     public String video(@PathVariable Long id, Model model) {
         VideoResponseDto videoResponseDto = videoService.findVideo(id);
+        UserSession userSession = userSessionManager.getUserSession();
+
+        if (userSession != null) {
+            videoResponseDto.setLike(videoLikeService.existsVideoLike(id, userSession.getId()));
+        }
+
         model.addAttribute("video", videoResponseDto);
         model.addAttribute("videos", videoService.findTop20ByOrderByViewsDesc());
-
         return "video";
     }
 
