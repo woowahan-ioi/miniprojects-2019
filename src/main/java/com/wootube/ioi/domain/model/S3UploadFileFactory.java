@@ -1,7 +1,6 @@
 package com.wootube.ioi.domain.model;
 
 import java.io.File;
-import java.io.IOException;
 
 import com.wootube.ioi.service.exception.FileConvertException;
 import com.wootube.ioi.service.util.FileConverter;
@@ -28,7 +27,7 @@ public class S3UploadFileFactory {
 		this.fileUploader = fileUploader;
 	}
 
-	public S3UploadFileFactory invoke() throws IOException {
+	public S3UploadFileFactory invoke() {
 		File convertedVideo = fileConverter.convert(uploadFile)
 				.orElseThrow(FileConvertException::new);
 

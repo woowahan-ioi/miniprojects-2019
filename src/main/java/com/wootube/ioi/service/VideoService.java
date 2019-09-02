@@ -1,6 +1,5 @@
 package com.wootube.ioi.service;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +12,6 @@ import com.wootube.ioi.domain.repository.VideoRepository;
 import com.wootube.ioi.service.dto.SubscriberResponseDto;
 import com.wootube.ioi.service.dto.VideoRequestDto;
 import com.wootube.ioi.service.dto.VideoResponseDto;
-import com.wootube.ioi.service.exception.FileUploadException;
 import com.wootube.ioi.service.exception.NotFoundVideoIdException;
 import com.wootube.ioi.service.exception.NotMatchUserIdException;
 import com.wootube.ioi.service.exception.UserAndWriterMisMatchException;
@@ -47,7 +45,7 @@ public class VideoService {
 		this.subscriptionService = subscriptionService;
 	}
 
-	public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) throws IOException {
+	public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) {
 		S3UploadFileFactory s3UploadFileFactory = new S3UploadFileFactory(uploadFile, fileConverter, fileUploader).invoke();
 
 		User writer = userService.findByIdAndIsActiveTrue(writerId);
@@ -83,14 +81,10 @@ public class VideoService {
 			fileUploader.deleteFile(video.getOriginFileName(), UploadType.VIDEO);
 			fileUploader.deleteFile(video.getThumbnailFileName(), UploadType.THUMBNAIL);
 
-			try {
-				S3UploadFileFactory s3UploadFileFactory = new S3UploadFileFactory(uploadFile, fileConverter, fileUploader)
-						.invoke();
-				video.updateVideo(s3UploadFileFactory.getVideoUrl(), s3UploadFileFactory.getOriginFileName(),
-						s3UploadFileFactory.getThumbnailUrl(), s3UploadFileFactory.getThumbnailFileName());
-			} catch (IOException e) {
-				throw new FileUploadException();
-			}
+			S3UploadFileFactory s3UploadFileFactory = new S3UploadFileFactory(uploadFile, fileConverter, fileUploader)
+					.invoke();
+			video.updateVideo(s3UploadFileFactory.getVideoUrl(), s3UploadFileFactory.getOriginFileName(),
+					s3UploadFileFactory.getThumbnailUrl(), s3UploadFileFactory.getThumbnailFileName());
 		}
 
 		video.updateTitle(videoRequestDto.getTitle());
