@@ -1,18 +1,17 @@
 package com.wootube.ioi.service;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import com.wootube.ioi.service.exception.SendFailException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import com.wootube.ioi.service.exception.SendFailException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
@@ -23,6 +22,9 @@ public class EmailService {
     private final VerifyKeyService verifyKeyService;
     private final JavaMailSender emailSender;
 
+    @Value("${spring.mail.service.hostUrl}")
+    private String hostUrl;
+
     @Autowired
     public EmailService(Environment environment, VerifyKeyService verifyKeyService, JavaMailSender emailSender) {
         this.environment = environment;
@@ -32,12 +34,11 @@ public class EmailService {
 
     public void sendMessage(String inActiveUserEmail) {
         try {
-            String hostUrl = InetAddress.getLocalHost().getHostAddress();
             String verifyKey = verifyKeyService.createVerifyKey(inActiveUserEmail);
             String contents = String.format(EMAIL_CONTENTS, generateLink(hostUrl, inActiveUserEmail, verifyKey));
             MimeMessage message = generateMessage(inActiveUserEmail, contents);
             emailSender.send(message);
-        } catch (UnknownHostException | MessagingException e) {
+        } catch (MessagingException e) {
             throw new SendFailException();
         }
     }
