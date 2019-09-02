@@ -110,7 +110,7 @@ const commentButton = (function () {
         }
 
         const sortCommentByUpdateTime = () => {
-            const requestUri = '/api/videos/' + videoId + '/comments/sort/updatetime';
+            const requestUri = `/api/videos/${videoId}/comments/sort/updatetime`;
 
             const callback = (response) => {
                 const commentListDiv = document.querySelector("#comment-area");
@@ -136,7 +136,7 @@ const commentButton = (function () {
         }
 
         const sortCommentByLikeCount = () => {
-            const requestUri = '/api/videos/' + videoId + '/comments/sort/likecount';
+            const requestUri = `/api/videos/${videoId}/comments/sort/likecount`;
             const callback = (response) => {
                 const commentListDiv = document.querySelector("#comment-area");
                 commentListDiv.innerHTML = "";
@@ -166,7 +166,7 @@ const commentButton = (function () {
             }
 
             const inputComment = event.target.parentElement.parentElement.querySelector(".comment-input");
-            const requestUri = '/api/videos/' + videoId + '/comments';
+            const requestUri = `/api/videos/${videoId}/comments`;
             const requestBody = {
                 contents: inputComment.value
             };
@@ -204,7 +204,7 @@ const commentButton = (function () {
             const commentId = commentList.dataset.commentid;
             const contents = commentList.querySelector(".comment-input").value;
 
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}`;
             const requestBody = {
                 contents: contents
             };
@@ -241,7 +241,7 @@ const commentButton = (function () {
             const commentList = target.closest("li");
             const commentId = commentList.dataset.commentid;
 
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}`;
             const callback = (response) => {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
@@ -298,7 +298,7 @@ const commentButton = (function () {
             }
             const commentList = target.closest("li");
             const commentId = commentList.dataset.commentid;
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/likes";
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/likes`;
 
             const requestBody = {
             };
@@ -336,7 +336,7 @@ const commentButton = (function () {
 
             const commentList = target.closest("li");
             const commentId = commentList.dataset.commentid;
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/likes";
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/likes`;
 
             const callback = (response) => {
                 if (response.status === 201) {

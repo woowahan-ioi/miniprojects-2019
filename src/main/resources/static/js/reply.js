@@ -86,7 +86,7 @@ const replyButton = (function () {
             }
             const commentList = target.closest("li");
             const commentId = commentList.dataset.commentid;
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId +'/replies/sort/updatetime';
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/sort/updatetime`;
 
             const callback = (response) => {
                 if (response.status === 200) {
@@ -127,7 +127,7 @@ const replyButton = (function () {
             const commentList = event.target.closest("li");
             const commentid = commentList.dataset.commentid;
             const inputComment = event.target.closest(".reply-edit").querySelector(".comment-input");
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentid + '/replies';
+            const requestUri = `/api/videos/${videoId}/comments/${commentid}/replies`;
 
             const requestBody = {
                 contents: inputComment.value
@@ -161,7 +161,7 @@ const replyButton = (function () {
             const replyId = replyListDiv.dataset.replyid;
             const commentId = target.closest("ul").closest("li").dataset.commentid;
             const inputEditReply = target.closest("div").querySelector("input");
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + '/replies/' + replyId;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}`;
 
             const requestBody = {
                 contents : inputEditReply.value
@@ -198,7 +198,7 @@ const replyButton = (function () {
 
             const replyId = target.closest("li").dataset.replyid;
             const commentId = target.closest("ul").closest("li").dataset.commentid;
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + '/replies/' + replyId;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}`;
 
             const callback = (response) => {
                 if (response.status === 204) {
@@ -291,7 +291,7 @@ const replyButton = (function () {
 
             const replyId = target.closest("li").dataset.replyid;
             const commentId = target.closest("li").parentElement.closest("li").dataset.commentid;
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/replies/" + replyId + "/likes";
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}/likes`;
 
             const requestBody = {
             };
@@ -329,7 +329,7 @@ const replyButton = (function () {
 
             const replyId = target.closest("li").dataset.replyid;
             const commentId = target.closest("li").parentElement.closest("li").dataset.commentid;
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + "/replies/" + replyId + "/likes";
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}/likes`;
 
             const callback = (response) => {
                 if (response.status === 201) {
