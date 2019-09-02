@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="sidebarFragment">
-    <div class="side-nav mrg-top-60">
+    <div id="nav-bar" class="side-nav mrg-top-60">
         <div class="side-nav-inner">
             <ul class="side-nav-menu overflow-y-auto">
                 <li class="nav-item">
@@ -20,12 +20,28 @@
                         <span class="title relative bottom-5">인기</span>
                     </a>
                 </li>
-                <li id="nav-item-subscriptions" class="nav-item">
+                <li th:if="${session.user}" id="nav-item-subscriptions" class="nav-item">
                     <a class="" href="javascript:void(0);">
                         <span class="icon-holder">
                             <i class="material-icons">subscriptions</i>
                         </span>
                         <span class="title relative bottom-5">구독</span>
+                    </a>
+                </li>
+                <li id="nav-item-latests" class="nav-item">
+                    <a class="" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="material-icons">latests</i>
+                        </span>
+                        <span class="title relative bottom-5">최근</span>
+                    </a>
+                </li>
+                <li id="nav-item-recommends" class="nav-item">
+                    <a class="" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="material-icons">recommends</i>
+                        </span>
+                        <span class="title relative bottom-5">추천</span>
                     </a>
                 </li>
             </ul>

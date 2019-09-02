@@ -3,63 +3,132 @@ const navButton = (() => {
         const navService = new NavService();
 
         const getPopularVideos = function() {
-            document.querySelector("#nav-item-populars").addEventListener("click", navService.getPopularVideos);
+            const popularsButton = document.querySelector("#nav-item-populars");
+            popularsButton.addEventListener("click", navService.resetVideoArea);
+            popularsButton.addEventListener("click", navService.getPopularVideos);
+            navService.getPopularVideos();
         }
 
         const getSubscribeVideos = function() {
-            document.querySelector("#nav-item-subscriptions").addEventListener("click", navService.getSubscribeVideos);
+            const subscriptionsButton = document.querySelector("#nav-item-subscriptions");
+            if(subscriptionsButton === null) {
+                return;
+            }
+
+            subscriptionsButton.addEventListener("click", navService.resetVideoArea);
+            subscriptionsButton.addEventListener("click", navService.getSubscribeVideos);
+            navService.getSubscribeVideos();
+        }
+
+        const getLatestVideos = function () {
+            const latestsButton = document.querySelector("#nav-item-latests");
+            latestsButton.addEventListener("click", navService.resetVideoArea);
+            latestsButton.addEventListener("click", navService.getLatestVideos);
+            navService.getLatestVideos();
+        }
+
+        const getRecommendedVideos = function () {
+            const recommendedButton = document.querySelector("#nav-item-recommends");
+            recommendedButton.addEventListener("click", navService.resetVideoArea);
+            recommendedButton.addEventListener("click", navService.getRecommendedVideos);
+            navService.getRecommendedVideos();
         }
 
         const init = function() {
             getPopularVideos();
             getSubscribeVideos();
+            getLatestVideos();
+            getRecommendedVideos()
         }
+
         return {
             init: init
         }
     }
     const NavService = function() {
-
-        const getPopularVideos = (event) => {
+        const getPopularVideos = () => {
             const uri = "/api/videos/populars";
-            const popularVideos = Templates.videoArea("인기 동영상");
-            resetVideoArea(popularVideos);
-            AjaxRequest.GET(uri, appendVideos, alertError);
+            const popularVideos = Templates.videoArea("popularsArea", "인기 동영상");
+            const callback = (response) => {
+                response.json().then((videos) => {
+                    const videoArea = document.querySelector("#popularsArea");
+                    for(video of videos) {
+                        videoArea.innerHTML += Templates.videoTemplate(video);
+                    }
+                }).catch(error => {});
+            };
+            document.querySelector("#video-area").innerHTML += popularVideos;
+            AjaxRequest.GET(uri, callback, alertError);
 
-            event.target.closest(".side-nav").classList.toggle("collapsed");
+            document.querySelector("#nav-bar").classList.remove("collapsed");
         }
 
-        const getSubscribeVideos = (event) => {
+        const getSubscribeVideos = () => {
             const uri = "/api/videos/subscriptions";
-            const subscribeVideos = Templates.videoArea("구독한 동영상");
-            resetVideoArea(subscribeVideos);
-            AjaxRequest.GET(uri, appendVideos, alertError);
+            const subscribeVideos = Templates.videoArea("subscribesArea", "구독한 동영상");
+            const callback = (response) => {
+                response.json().then((videos) => {
+                    const videoArea = document.querySelector("#subscribesArea");
+                    for(video of videos) {
+                        videoArea.innerHTML += Templates.videoTemplate(video);
+                    }
+                }).catch(error => {});
+            };
+            document.querySelector("#video-area").innerHTML += subscribeVideos;
+            AjaxRequest.GET(uri, callback, alertError);
 
-            event.target.closest(".side-nav").classList.toggle("collapsed");
+            document.querySelector("#nav-bar").classList.remove("collapsed");
         }
 
-        const appendVideos = (response) => {
-            response.json().then((videos) => {
-               const videoArea = document.querySelector("#video-area").querySelector(".row");
-               for(video of videos) {
-                   videoArea.innerHTML += Templates.videoTemplate(video);
-               }
-            }).catch(error => {alert("영상이 없습니다.")});
+        const getLatestVideos = () => {
+            const uri = "/api/videos/latests";
+            const latestVideos = Templates.videoArea("latestsArea", "최근 동영상");
+            const callback = (response) => {
+                response.json().then((videos) => {
+                    const videoArea = document.querySelector("#latestsArea");
+                    for(video of videos) {
+                        videoArea.innerHTML += Templates.videoTemplate(video);
+                    }
+                }).catch(error => {});
+            };
+            document.querySelector("#video-area").innerHTML += latestVideos;
+            AjaxRequest.GET(uri, callback, alertError);
+
+            document.querySelector("#nav-bar").classList.remove("collapsed");
+        }
+
+        const getRecommendedVideos = () => {
+            const uri = "/api/videos/recommends";
+            const recommendedVideos = Templates.videoArea("recommendsArea", "추천 동영상");
+            const callback = (response) => {
+                response.json().then((videos) => {
+                    const videoArea = document.querySelector("#recommendsArea");
+                    for(video of videos) {
+                        videoArea.innerHTML += Templates.videoTemplate(video);
+                    }
+                }).catch(error => {});
+            };
+            document.querySelector("#video-area").innerHTML += recommendedVideos;
+            AjaxRequest.GET(uri, callback, alertError);
+
+            document.querySelector("#nav-bar").classList.remove("collapsed");
         }
 
         const alertError = (error) => {
             alert(error);
         }
 
-        const resetVideoArea = (videoTemplate) => {
+        const resetVideoArea = () => {
             const videoArea = document.querySelector("#video-area");
             videoArea.innerHTML = "";
-            videoArea.innerHTML += videoTemplate;
         }
 
         return {
             getPopularVideos,
-            getSubscribeVideos
+            getSubscribeVideos,
+            getLatestVideos,
+            getRecommendedVideos,
+            resetVideoArea
         }
     }
 
