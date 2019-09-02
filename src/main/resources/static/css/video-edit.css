@@ -23,13 +23,13 @@ header {
 }
 
 .video-contents {
-    height: 520px;
+    height: 600px;
     background-color: #FFFFFF;
     margin: 5px;
 }
 
 .image-upload {
-    padding-top: 180px;
+    padding-top: 210px;
     text-align: center;
 }
 
@@ -37,12 +37,6 @@ header {
     text-align: center;
     padding-top: 10px;
     padding-left: 100px;
-}
-
-.video-progressbar-contents {
-    height: 80px;
-    background-color: #FFFFFF;
-    margin: 5px;
 }
 
 .video-supplement-div {
