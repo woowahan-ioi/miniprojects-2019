@@ -54,6 +54,26 @@ const replyButton = (function () {
     const ReplyService = function () {
         const videoId = document.querySelector("#video-contents").dataset.videoid;
 
+        const markReplytLike = (replyListDiv, reply) => {
+            const replyId = reply.id;
+            const replyList = replyListDiv.querySelector("li");
+
+            if(!replyList.dataset.commentid === replyId){
+                return;
+            }
+
+            if(reply.likedUser) {
+                replyList.querySelector(".reply-like-btn").classList.add("display-none");
+                replyList.querySelector(".reply-dislike-btn").classList.remove("display-none");
+            }
+
+            if(!reply.likedUser) {
+                replyList.querySelector(".reply-like-btn").classList.remove("display-none");
+                replyList.querySelector(".reply-dislike-btn").classList.add("display-none");
+            }
+        }
+
+
         const sortReplyByUpdateTime = (event) => {
             let target = event.target;
 
@@ -76,6 +96,7 @@ const replyButton = (function () {
 
                         for (const reply of data) {
                             appendReply(reply, target);
+                            markReplytLike(replyListDiv, reply);
                         }
 
                         commentList.querySelector(".reply-list-open-button").classList.toggle("display-none");

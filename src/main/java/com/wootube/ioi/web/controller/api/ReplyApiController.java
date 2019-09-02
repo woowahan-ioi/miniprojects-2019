@@ -34,8 +34,13 @@ public class ReplyApiController {
                                                                         @PathVariable Long commentId) {
         List<ReplyResponseDto> replies = replyService.sortReply(ASC_SORT_BY_UPDATE_TIME, videoId, commentId);
 
-        replyLikeService.saveReplyLike(replies);
+        if (userSessionManager.getUserSession() == null) {
+            replyLikeService.saveReplyLike(replies);
+            return ResponseEntity.ok(replies);
+        }
 
+        UserSession userSession = userSessionManager.getUserSession();
+        replyLikeService.saveReplyLike(replies, userSession.getId());
         return ResponseEntity.ok(replies);
     }
 

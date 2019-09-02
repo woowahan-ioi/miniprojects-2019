@@ -71,6 +71,16 @@ public class ReplyLikeService {
         return replies;
     }
 
+    public List<ReplyResponseDto> saveReplyLike(List<ReplyResponseDto> replies, Long userId) {
+        replies.forEach(replyResponseDto -> {
+            long replyId = replyResponseDto.getId();
+            boolean likedUser = replyLikeRepository.existsByLikeUserIdAndReplyId(userId, replyId);
+            replyResponseDto.setLike(countByReplyId(replyId));
+            replyResponseDto.setLikedUser(likedUser);
+        });
+        return replies;
+    }
+
     public ReplyResponseDto saveReplyLike(ReplyResponseDto replyResponseDto) {
         long replyId = replyResponseDto.getId();
         replyResponseDto.setLike(countByReplyId(replyId));

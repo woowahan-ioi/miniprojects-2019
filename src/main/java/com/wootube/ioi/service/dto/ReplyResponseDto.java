@@ -15,6 +15,7 @@ public class ReplyResponseDto {
     private String writerName;
     private String writerProfileImageUrl;
     private Long like;
+    private boolean likedUser;
 
     public static ReplyResponseDto of(Long id, String contents, LocalDateTime updateTime, String writerName, String writerProfileImageUrl) {
         ReplyResponseDto replyResponseDto = new ReplyResponseDto();
@@ -24,11 +25,16 @@ public class ReplyResponseDto {
         replyResponseDto.writerName = writerName;
         replyResponseDto.writerProfileImageUrl = writerProfileImageUrl;
         replyResponseDto.like = 0L;
+        replyResponseDto.likedUser = false;
 
         return replyResponseDto;
     }
 
     public void setLike(Long like) {
         this.like = like;
+    }
+
+    public void setLikedUser(boolean likedUser) {
+        this.likedUser = likedUser;
     }
 }
