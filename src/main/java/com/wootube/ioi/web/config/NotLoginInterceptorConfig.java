@@ -11,6 +11,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
+
 @Configuration
 public class NotLoginInterceptorConfig implements WebMvcConfigurer {
     @Qualifier(value = "notLoginInterceptor")

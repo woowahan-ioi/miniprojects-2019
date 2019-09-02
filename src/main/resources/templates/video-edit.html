@@ -7,12 +7,13 @@
 </head>
 <body>
 <div class="app">
-    <th:block th:replace="fragments/header :: headerFragment"/>
+    <th:block th:replace="fragments/video-header :: videoHeaderFragment"/>
 
     <div class="edit-container pdd-top-75">
         <form id="video-form" enctype="multipart/form-data"
               method="post"
-              th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
+              th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}"
+              onsubmit="return submitForm();">
             <input name="_method" th:if="not ${#strings.isEmpty(video)}" type="hidden" value="PUT">
             <input type="hidden" name="writerId" th:value="${session.user.id}">
             <div class="row">
@@ -31,14 +32,6 @@
                             <p style="font-size: 15pt"> 버튼을 눌러 동영상을 선택해주세요. </p>
                         </div>
                     </div>
-                    <div class="video-progressbar-contents padding-10">
-                        <span class="font-size-12 text-bold">업로드 상황:</span>
-                        <div id="uploadProgress">
-                            <div id="progressBar"><span class="pdd-left-10">0%</span></div>
-                        </div>
-                        <br>
-                        <button type="button" onclick="move()">click</button>
-                    </div>
                 </div>
 
                 <div class="video-enroll-div col-md-4">
@@ -48,7 +41,7 @@
                             <label for="title" class="font-size-13">제목 :</label>
                             <input class="form-control" id="title" name="title"
                                    th:value="${#strings.isEmpty(video)? '' : video.title}"
-                                   type="text">
+                                   type="text" maxlength="50">
                             <br>
                             <label for="description" class="font-size-13">설명 :</label>
                             <textarea class="form-control" id="description" rows="15" name="description"

@@ -36,9 +36,7 @@ public class CommentService {
         User writer = userService.findByEmail(email);
         Video video = videoService.findById(videoId);
         Comment comment = commentRepository.save(Comment.of(commentRequestDto.getContents(), video, writer));
-        CommentResponseDto dto = modelMapper.map(comment, CommentResponseDto.class);
-
-        return dto;
+        return modelMapper.map(comment, CommentResponseDto.class);
     }
 
     @Transactional
