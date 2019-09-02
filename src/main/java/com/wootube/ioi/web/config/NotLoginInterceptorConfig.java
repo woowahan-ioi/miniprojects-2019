@@ -34,7 +34,8 @@ public class NotLoginInterceptorConfig implements WebMvcConfigurer {
                         "/api/videos/**/comments/**/replies/sort/updatetime",
                         "/api/videos/**/likes/counts",
                         "/user/signup",
-                        "/user/login"
+                        "/user/login",
+                        "/user/confirm/**"
                 ));
     }
 }
