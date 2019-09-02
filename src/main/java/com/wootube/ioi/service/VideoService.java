@@ -1,6 +1,7 @@
 package com.wootube.ioi.service;
 
 import com.wootube.ioi.domain.model.S3UploadFileFactory;
+import com.wootube.ioi.domain.model.Subscription;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
@@ -14,12 +15,13 @@ import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -31,14 +33,16 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final UserService userService;
     private final FileConverter fileConverter;
+    private final SubscriptionService subscriptionService;
 
     @Autowired
-    public VideoService(FileUploader fileUploader, ModelMapper modelMapper, VideoRepository videoRepository, UserService userService, FileConverter fileConverter) {
+    public VideoService(FileUploader fileUploader, ModelMapper modelMapper, VideoRepository videoRepository, UserService userService, FileConverter fileConverter, SubscriptionService subscriptionService) {
         this.fileUploader = fileUploader;
         this.modelMapper = modelMapper;
         this.videoRepository = videoRepository;
         this.userService = userService;
         this.fileConverter = fileConverter;
+        this.subscriptionService = subscriptionService;
     }
 
     public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) throws IOException {
@@ -110,37 +114,31 @@ public class VideoService {
         }
     }
 
-    public List<VideoResponseDto> findTop20ByOrderByViewsDesc() {
-        return videoRepository.findTop20ByOrderByViewsDesc().stream()
+    public List<VideoResponseDto> findSubscribeVideos(Pageable pageable, Long subscriberId) {
+        List<Subscription> subscriptions = subscriptionService.findAllBySubscriberId(subscriberId);
+        return subscriptions.stream()
+                .map(subscription -> subscription.getSubscribedUser().getId())
+                .map(writerId -> videoRepository.findByWriter(userService.findByIdAndIsActiveTrue(writerId)))
+                .flatMap(Collection::stream)
+                .limit(pageable.getPageSize())
                 .map(video -> modelMapper.map(video, VideoResponseDto.class))
                 .collect(toList());
     }
 
-    public List<VideoResponseDto> findLatestVideos() {
-        return videoRepository.findTop12ByOrderByCreateTimeDesc().stream()
+    public List<VideoResponseDto> findRecommendVideos(Pageable pageable) {
+        return videoRepository.findAllRandom(pageable).stream()
                 .map(video -> modelMapper.map(video, VideoResponseDto.class))
                 .collect(toList());
     }
 
-    public List<VideoResponseDto> findSubscribeVideos() {
-        List<Video> findVideos = videoRepository.findAll();
-        Collections.shuffle(findVideos);
-
-        return findVideos.stream()
-                .map(video -> modelMapper.map(video, VideoResponseDto.class))
-                .limit(12)
-                .collect(toList());
-    }
-
-    public List<VideoResponseDto> findRecommendVideos() {
-        return videoRepository.findAll().stream()
-                .limit(12)
+    public List<VideoResponseDto> findPopularityVideos(Pageable pageable) {
+        return videoRepository.findAll(pageable).stream()
                 .map(video -> modelMapper.map(video, VideoResponseDto.class))
                 .collect(toList());
     }
 
-    public List<VideoResponseDto> findPopularityVideos() {
-        return videoRepository.findTop12ByOrderByViewsDesc().stream()
+    public List<VideoResponseDto> findLastestVideos(Pageable pageable) {
+        return videoRepository.findAll(pageable).stream()
                 .map(video -> modelMapper.map(video, VideoResponseDto.class))
                 .collect(toList());
     }
