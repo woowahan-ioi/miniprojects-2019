@@ -293,3 +293,7 @@ ul {
 .fa-thumbs-up {
     font-size: 18px;
 }
+
+.reply {
+    max-width: 95%;
+}

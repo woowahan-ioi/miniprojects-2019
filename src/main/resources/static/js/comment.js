@@ -120,6 +120,7 @@ const commentButton = (function () {
                         let count = 0;
                         for (const comment of data) {
                             appendComment(comment);
+                            markCommentLike(commentListDiv, comment);
                             count++;
                         }
                         commentCount.innerText = count;
@@ -144,6 +145,7 @@ const commentButton = (function () {
                         let count = 0;
                         for (const comment of data) {
                             appendComment(comment);
+                            markCommentLike(commentListDiv, comment);
                             count++;
                         }
                         commentCount.innerText = count;
@@ -263,6 +265,26 @@ const commentButton = (function () {
             const commentList = document.querySelector("#comment-area");
             commentList.insertAdjacentHTML("afterbegin", Templates.commentTemplate(comment, writtenTime));
         };
+
+        const markCommentLike = (commentListDiv, comment) => {
+            const commentId = comment.id;
+            const commentList = commentListDiv.querySelector("li");
+
+            if(!commentList.dataset.commentid === commentId){
+                return;
+            }
+
+            if(comment.likedUser) {
+                commentList.querySelector(".comment-like-btn").classList.add("display-none");
+                commentList.querySelector(".comment-dislike-btn").classList.remove("display-none");
+            }
+
+            if(!comment.likedUser) {
+                commentList.querySelector(".comment-like-btn").classList.remove("display-none");
+                commentList.querySelector(".comment-dislike-btn").classList.add("display-none");
+            }
+
+        }
 
         const increaseLike = (event) => {
             let target = event.target;
