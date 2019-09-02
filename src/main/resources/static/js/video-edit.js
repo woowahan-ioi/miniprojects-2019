@@ -6,13 +6,22 @@ function unHover(element) {
     element.setAttribute('src', '/images/logo/youtube-upload-logo.png');
 }
 
-function videoSubmit(event) {
-    const submitButton = event.target;
-    if(checkTextLength() === false) {
-        return;
+function submitForm(){
+    const title = document.forms["video-form"]["title"].value;
+    const file = document.forms["video-form"]["file-input"].value;
+    const description = document.forms["video-form"]["description"].value;
+
+    if(checkValidation(title) && checkValidation(file) && checkValidation(description)) {
+        document.querySelector("#video-submit-button").disabled = true;
+        return true;
     }
-    document.querySelector("#video-form").submit();
-    submitButton.disabled = true;
+
+    alert("빈 칸이 존재합니다. 다시 입력해주세요.");
+    return false;
+}
+
+function checkValidation(data) {
+    return !(data === '' || data === null);
 }
 
 function checkTextLength() {
@@ -26,4 +35,7 @@ function checkTextLength() {
 }
 
 document.querySelector("#description").addEventListener("keyup", checkTextLength);
-document.querySelector("#video-submit-button").addEventListener("click", videoSubmit);
+
+
+
+

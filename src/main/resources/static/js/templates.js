@@ -107,5 +107,38 @@ const Templates = {
                                 <button class="btn comment-btn edit reply-update-btn">수정</button>
                             </div>
                         </li>`
+    },
+    videoTemplate : (video) => {
+        video.createTime = calculateWrittenTime(video.createTime);
+        return `<div class="col-lg-2 padding-2">
+                        <a href="@{/videos/${video.id}}"
+                           style="text-decoration: none; color: #000;">
+                            <div class="card bg-transparent no-border">
+                                <div class="card-media">
+                                    <img alt="" class="img-responsive"
+                                         src="${video.thumbnailPath}">
+                                </div>
+                                <div class="card-block padding-10">
+                                    <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">${video.title}</h5>
+                                    <span class="font-size-13">${video.writerName}</span>
+                                    <div class="font-size-11">
+                                        <span>조회수 <span>${video.views}</span>회</span>
+                                        <span> · </span>
+                                        <span class="createTimeSpan">${video.createTime}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>`
+    },
+    videoArea : (areaName) => {
+        return `<div>
+                    <div>
+                        <h3 class="text-bold height-40px">${areaName}</h3>
+                    </div>
+                    <div class="row">
+                        
+                    </div>
+                </div>`;
     }
 }

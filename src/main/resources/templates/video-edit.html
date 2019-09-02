@@ -12,7 +12,8 @@
     <div class="edit-container pdd-top-75">
         <form id="video-form" enctype="multipart/form-data"
               method="post"
-              th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}">
+              th:action="${#strings.isEmpty(video)? '/videos/new' : #strings.concat('/videos/', video.id)}"
+              onsubmit="return submitForm();">
             <input name="_method" th:if="not ${#strings.isEmpty(video)}" type="hidden" value="PUT">
             <input type="hidden" name="writerId" th:value="${session.user.id}">
             <div class="row">
@@ -40,7 +41,7 @@
                             <label for="title" class="font-size-13">제목 :</label>
                             <input class="form-control" id="title" name="title"
                                    th:value="${#strings.isEmpty(video)? '' : video.title}"
-                                   type="text">
+                                   type="text" maxlength="50">
                             <br>
                             <label for="description" class="font-size-13">설명 :</label>
                             <textarea class="form-control" id="description" rows="15" name="description"
