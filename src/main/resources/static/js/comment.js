@@ -1,6 +1,7 @@
 const commentButton = (function () {
     const CommentController = function () {
         const commentService = new CommentService();
+        const commentArea = document.querySelector('#comment-area');
 
         const getComment = function () {
             document.addEventListener("DOMContentLoaded", commentService.sortCommentByUpdateTime);
@@ -12,12 +13,10 @@ const commentButton = (function () {
         };
 
         const updateComment = function () {
-            const commentArea = document.querySelector('#comment-area');
             commentArea.addEventListener('click', commentService.update);
         };
 
         const deleteComment = function () {
-            const commentArea = document.querySelector('#comment-area');
             commentArea.addEventListener('click', commentService.delete);
         };
 
@@ -25,7 +24,7 @@ const commentButton = (function () {
             document.querySelector("#comment-cancel-button").addEventListener("click", commentService.toggleCommentCancel);
             document.querySelector("#comment-input-text").addEventListener("click", commentService.toggleCommentWrite);
             document.querySelector("#comment-input-text").addEventListener("keyup", commentService.toggleCommentSaveButton);
-            document.querySelector("#comment-area").addEventListener("click", commentService.toggleCommentEditButton);
+            commentArea.addEventListener("click", commentService.toggleCommentEditButton);
         };
 
         const sortCommentByUpdateTime = function () {
@@ -39,12 +38,10 @@ const commentButton = (function () {
         };
 
         const increaseLike = function () {
-            const commentArea = document.querySelector('#comment-area');
             commentArea.addEventListener('click', commentService.increaseLike);
         }
 
         const decreaseLike = function () {
-            const commentArea = document.querySelector('#comment-area');
             commentArea.addEventListener('click', commentService.decreaseLike);
         }
 
@@ -174,7 +171,7 @@ const commentButton = (function () {
                 if (response.status === 201) {
                     response.json().then(comment => {
                         appendComment(comment);
-                        let currentCommentCount = parseInt(commentCount.innerText)
+                        const currentCommentCount = parseInt(commentCount.innerText)
                         commentCount.innerText = String(currentCommentCount + 1);
                         inputComment.value = "";
                     })
@@ -270,16 +267,16 @@ const commentButton = (function () {
             const commentId = comment.id;
             const commentList = commentListDiv.querySelector("li");
 
-            if(!commentList.dataset.commentid === commentId){
+            if (!commentList.dataset.commentid === commentId) {
                 return;
             }
 
-            if(comment.likedUser) {
+            if (comment.likedUser) {
                 commentList.querySelector(".comment-like-btn").classList.add("display-none");
                 commentList.querySelector(".comment-dislike-btn").classList.remove("display-none");
             }
 
-            if(!comment.likedUser) {
+            if (!comment.likedUser) {
                 commentList.querySelector(".comment-like-btn").classList.remove("display-none");
                 commentList.querySelector(".comment-dislike-btn").classList.add("display-none");
             }
@@ -289,19 +286,18 @@ const commentButton = (function () {
         const increaseLike = (event) => {
             let target = event.target;
 
-            if(target.tagName === "I") {
+            if (target.tagName === "I") {
                 target = target.parentElement;
             }
 
-            if(!target.classList.contains("comment-like-btn")) {
+            if (!target.classList.contains("comment-like-btn")) {
                 return;
             }
             const commentList = target.closest("li");
             const commentId = commentList.dataset.commentid;
             const requestUri = `/api/videos/${videoId}/comments/${commentId}/likes`;
 
-            const requestBody = {
-            };
+            const requestBody = {};
 
             const callback = (response) => {
                 if (response.status === 201) {
@@ -326,11 +322,11 @@ const commentButton = (function () {
         const decreaseLike = (event) => {
             let target = event.target;
 
-            if(target.tagName === "I") {
+            if (target.tagName === "I") {
                 target = target.parentElement;
             }
 
-            if(!target.classList.contains("comment-dislike-btn")) {
+            if (!target.classList.contains("comment-dislike-btn")) {
                 return;
             }
 

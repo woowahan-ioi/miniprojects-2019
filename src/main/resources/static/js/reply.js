@@ -1,38 +1,37 @@
 const replyButton = (function () {
     const ReplyController = function () {
         const replyService = new ReplyService();
+        const commentArea = document.querySelector("#comment-area");
 
         const saveReply = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.save);
+            commentArea.addEventListener("click", replyService.save);
         }
 
         const updateReply = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.update);
+            commentArea.addEventListener("click", replyService.update);
         }
 
         const deleteReply = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.delete);
+            commentArea.addEventListener("click", replyService.delete);
         }
 
         const replyToggle = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyCancel);
-            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyWrite);
-            document.querySelector("#comment-area").addEventListener("keyup", replyService.toggleReplySaveButton);
-            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyEditButton);
-            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyListButton);
+            commentArea.addEventListener("click", replyService.toggleReplyCancel);
+            commentArea.addEventListener("click", replyService.toggleReplyWrite);
+            commentArea.addEventListener("keyup", replyService.toggleReplySaveButton);
+            commentArea.addEventListener("click", replyService.toggleReplyEditButton);
+            commentArea.addEventListener("click", replyService.toggleReplyListButton);
         }
 
         const sortReplyByUpdateTime = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.sortReplyByUpdateTime)
+            commentArea.addEventListener("click", replyService.sortReplyByUpdateTime)
         }
 
         const increaseLike = function () {
-            const commentArea = document.querySelector('#comment-area');
             commentArea.addEventListener('click', replyService.increaseLike);
         }
 
         const decreaseLike = function () {
-            const commentArea = document.querySelector('#comment-area');
             commentArea.addEventListener('click', replyService.decreaseLike);
         }
 
@@ -58,16 +57,16 @@ const replyButton = (function () {
             const replyId = reply.id;
             const replyList = replyListDiv.querySelector("li");
 
-            if(!replyList.dataset.commentid === replyId){
+            if (!replyList.dataset.commentid === replyId) {
                 return;
             }
 
-            if(reply.likedUser) {
+            if (reply.likedUser) {
                 replyList.querySelector(".reply-like-btn").classList.add("display-none");
                 replyList.querySelector(".reply-dislike-btn").classList.remove("display-none");
             }
 
-            if(!reply.likedUser) {
+            if (!reply.likedUser) {
                 replyList.querySelector(".reply-like-btn").classList.remove("display-none");
                 replyList.querySelector(".reply-dislike-btn").classList.add("display-none");
             }
@@ -81,7 +80,7 @@ const replyButton = (function () {
                 target = target.parentElement;
             }
 
-            if(!target.classList.contains("reply-list-open-button")) {
+            if (!target.classList.contains("reply-list-open-button")) {
                 return;
             }
             const commentList = target.closest("li");
@@ -116,11 +115,11 @@ const replyButton = (function () {
         }
 
         function saveReply(event) {
-            if(!event.target.classList.contains("reply-save-btn")) {
+            if (!event.target.classList.contains("reply-save-btn")) {
                 return;
             }
 
-            if(event.target.classList.contains("disabled")) {
+            if (event.target.classList.contains("disabled")) {
                 return;
             }
 
@@ -152,9 +151,9 @@ const replyButton = (function () {
         }
 
         function updateReply(event) {
-            let target = event.target;
+            const target = event.target;
 
-            if(!target.classList.contains("reply-update-btn")) {
+            if (!target.classList.contains("reply-update-btn")) {
                 return;
             }
             const replyListDiv = target.closest("li");
@@ -164,7 +163,7 @@ const replyButton = (function () {
             const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}`;
 
             const requestBody = {
-                contents : inputEditReply.value
+                contents: inputEditReply.value
             }
 
             const callback = (response) => {
@@ -255,7 +254,7 @@ const replyButton = (function () {
 
         function toggleReplyEditButton(event) {
             let target = event.target;
-            if(target.tagName === "I" || target.tagName === "SPAN") {
+            if (target.tagName === "I" || target.tagName === "SPAN") {
                 target = target.parentElement;
             }
             if (target.classList.contains("reply-update-cancel-btn")) {
@@ -281,11 +280,11 @@ const replyButton = (function () {
         const increaseLike = (event) => {
             let target = event.target;
 
-            if(target.tagName === "I") {
+            if (target.tagName === "I") {
                 target = target.parentElement;
             }
 
-            if(!target.classList.contains("reply-like-btn")) {
+            if (!target.classList.contains("reply-like-btn")) {
                 return;
             }
 
@@ -293,8 +292,7 @@ const replyButton = (function () {
             const commentId = target.closest("li").parentElement.closest("li").dataset.commentid;
             const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}/likes`;
 
-            const requestBody = {
-            };
+            const requestBody = {};
 
             const callback = (response) => {
                 if (response.status === 201) {
@@ -319,11 +317,11 @@ const replyButton = (function () {
         const decreaseLike = (event) => {
             let target = event.target;
 
-            if(target.tagName === "I") {
+            if (target.tagName === "I") {
                 target = target.parentElement;
             }
 
-            if(!target.classList.contains("reply-dislike-btn")) {
+            if (!target.classList.contains("reply-dislike-btn")) {
                 return;
             }
 
@@ -350,7 +348,6 @@ const replyButton = (function () {
 
             AjaxRequest.DELETE(requestUri, callback, handleError);
         }
-
 
 
         return {

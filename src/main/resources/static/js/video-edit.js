@@ -7,8 +7,8 @@ function unHover(element) {
 }
 
 function move() {
-    const elem = document.getElementById("progressBar");
-    const width = 0;
+    const elem = document.getElementById("progress-bar");
+    let width = 0;
     const id = setInterval(frame, 0);
 
     function frame() {

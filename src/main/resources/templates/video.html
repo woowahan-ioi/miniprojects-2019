@@ -27,7 +27,7 @@
                     <div class="title-btn">
                         <button id="title-like-btn" class="title-like-btn">
                             <i class="ti-thumb-up"></i>
-                            <span id="likeCount"></span>
+                            <span id="like-count"></span>
                         </button>
                         <button class="title-share-btn">
                             <i class="ti-share"></i>
@@ -61,7 +61,7 @@
                         <span class="span-form" id="description" th:if="${video.description}"></span>
                         <span class="span-form" id="description-storage" th:text="${video.description}" hidden></span>
                     </div>
-                    <button class="title-more-btn left-30 clicked" id="readMoreSpan">더보기</button>
+                    <button class="title-more-btn left-30 clicked" id="read-more-span">더보기</button>
                 </div>
                 <div class="col-sm-2" th:if="${session.user}">
                     <button id="subscription-btn" class="subscribe-btn font-size-13" style="float: right" th:data-writerid="${video.writerId}">
