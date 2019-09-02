@@ -28,7 +28,7 @@ public class ReplyApiController {
 
     @GetMapping("/sort/updatetime")
     public ResponseEntity<List<ReplyResponseDto>> sortReplyByUpdateTime(@PathVariable Long videoId,
-                                                                          @PathVariable Long commentId) {
+                                                                        @PathVariable Long commentId) {
         List<ReplyResponseDto> replies = replyService.sortReply(DESC_SORT_BY_UPDATE_TIME, videoId, commentId);
 
         return ResponseEntity.ok(replies);
@@ -37,8 +37,8 @@ public class ReplyApiController {
 
     @PostMapping
     public ResponseEntity<ReplyResponseDto> createReply(@PathVariable Long videoId,
-                                      @PathVariable Long commentId,
-                                      @RequestBody ReplyRequestDto replyRequestDto) {
+                                                        @PathVariable Long commentId,
+                                                        @RequestBody ReplyRequestDto replyRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
         ReplyResponseDto replyResponseDto = replyService.save(replyRequestDto, commentId, userSession.getEmail(), videoId);
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId + "/replies/" + replyResponseDto.getId()))

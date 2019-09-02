@@ -19,7 +19,7 @@ public class VideoRequestDto {
 		this.title = title;
 		this.description = description;
 	}
-
+	
 	private void checkTextLength(String title, String description) {
 		if (title.length() > 50) {
 			throw new TitleMaxLenthException();

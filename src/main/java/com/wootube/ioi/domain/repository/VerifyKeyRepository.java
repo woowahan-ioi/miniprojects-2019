@@ -7,5 +7,5 @@ import com.wootube.ioi.domain.model.VerifyKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VerifyKeyRepository extends JpaRepository<VerifyKey, Long> {
-	Optional<VerifyKey> findByEmailAndVerifyKey(String email, String verifyKey);
+    Optional<VerifyKey> findByEmailAndVerifyKey(String email, String verifyKey);
 }

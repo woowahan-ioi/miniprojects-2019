@@ -45,9 +45,9 @@ public class VideoController {
 		VideoResponseDto videoResponseDto = videoService.findVideo(id);
 		UserSession userSession = userSessionManager.getUserSession();
 
-		if (userSession != null) {
-			videoResponseDto.setLike(videoLikeService.existsVideoLike(id, userSession.getId()));
-		}
+        if (userSession != null) {
+            videoResponseDto.setLike(videoLikeService.existsVideoLike(id, userSession.getId()));
+        }
 
 		model.addAttribute("video", videoResponseDto);
 		model.addAttribute("videos", videoService.findTop20ByOrderByViewsDesc());

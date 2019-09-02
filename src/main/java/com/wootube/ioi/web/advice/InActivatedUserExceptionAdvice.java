@@ -13,10 +13,10 @@ import org.springframework.web.servlet.view.RedirectView;
 @ControllerAdvice
 public class InActivatedUserExceptionAdvice {
 
-	@ExceptionHandler(InActivatedUserException.class)
-	public RedirectView inActivatedUserExceptionHandler(InActivatedUserException e, RedirectAttributes redirectAttributes, Redirection redirection) {
-		log.debug(e.getMessage());
-		redirectAttributes.addFlashAttribute("errors", e.getMessage());
-		return new RedirectView(redirection.getRedirectUrl());
-	}
+    @ExceptionHandler(InActivatedUserException.class)
+    public RedirectView inActivatedUserExceptionHandler(InActivatedUserException e, RedirectAttributes redirectAttributes, Redirection redirection) {
+        log.debug(e.getMessage());
+        redirectAttributes.addFlashAttribute("errors", e.getMessage());
+        return new RedirectView(redirection.getRedirectUrl());
+    }
 }

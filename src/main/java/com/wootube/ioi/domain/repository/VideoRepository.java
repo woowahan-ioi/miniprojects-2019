@@ -17,6 +17,4 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	List<Video> findTop20ByOrderByViewsDesc();
 
 	List<Video> findTop12ByOrderByCreateTimeDesc();
-
-
 }
