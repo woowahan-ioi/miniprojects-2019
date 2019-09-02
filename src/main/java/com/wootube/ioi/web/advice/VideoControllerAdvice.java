@@ -48,4 +48,19 @@ public class VideoControllerAdvice {
         redirectAttributes.addFlashAttribute("errors", e.getMessage());
         return new RedirectView(redirection.getRedirectUrl());
     }
+
+    @ExceptionHandler(TitleMaxLenthException.class)
+    public RedirectView handleTitleMaxLengthException(RedirectAttributes redirectAttributes, Redirection redirection, TitleMaxLenthException e) {
+        log.debug(e.getMessage());
+        redirectAttributes.addFlashAttribute("errors", e.getMessage());
+        return new RedirectView(redirection.getRedirectUrl());
+    }
+
+    @ExceptionHandler(DescriptionMaxLengthException.class)
+    public RedirectView handleDescriptionLengthException(RedirectAttributes redirectAttributes, Redirection redirection, DescriptionMaxLengthException e) {
+        log.debug(e.getMessage());
+        redirectAttributes.addFlashAttribute("errors", e.getMessage());
+        return new RedirectView(redirection.getRedirectUrl());
+    }
+
 }
