@@ -1,19 +1,18 @@
 package com.wootube.ioi.web.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.util.ResourceUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
 
 import static org.springframework.http.HttpMethod.*;
 
@@ -32,6 +31,7 @@ class VideoControllerTest extends CommonControllerTest {
         request(HttpMethod.GET, "/videos/new")
                 .expectStatus().isFound();
     }
+
     @Test
     @DisplayName("비디오를 저장한다.")
     void save() throws IOException {

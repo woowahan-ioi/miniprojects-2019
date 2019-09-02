@@ -14,9 +14,9 @@ class SubscriptionApiControllerTest extends CommonControllerTest {
 
         given().
                 cookie("JSESSIONID", sessionValue).
-        when().
+                when().
                 get(basicPath() + "/api/subscriptions/" + USER_C_ID + "/checks").
-        then().
+                then().
                 statusCode(200).
                 body("subscribe", is(false));
     }
@@ -28,9 +28,9 @@ class SubscriptionApiControllerTest extends CommonControllerTest {
 
         given().
                 cookie("JSESSIONID", sessionValue).
-        when().
+                when().
                 get(basicPath() + "/api/subscriptions/" + USER_B_ID + "/checks").
-        then().
+                then().
                 statusCode(200).
                 body("subscribe", is(true));
     }
@@ -39,9 +39,9 @@ class SubscriptionApiControllerTest extends CommonControllerTest {
     @DisplayName("구독자 수 확인")
     void countSubscription() {
         given().
-        when().
+                when().
                 get(basicPath() + "/api/subscriptions/" + USER_B_ID).
-        then().
+                then().
                 statusCode(200).
                 body("count", is(1));
     }
@@ -53,9 +53,9 @@ class SubscriptionApiControllerTest extends CommonControllerTest {
 
         given().
                 cookie("JSESSIONID", sessionValue).
-        when().
+                when().
                 post(basicPath() + "/api/subscriptions/" + USER_D_ID).
-        then().
+                then().
                 statusCode(200);
     }
 
@@ -66,9 +66,9 @@ class SubscriptionApiControllerTest extends CommonControllerTest {
 
         given().
                 cookie("JSESSIONID", sessionValue).
-        when().
+                when().
                 delete(basicPath() + "/api/subscriptions/" + USER_A_ID).
-        then().
+                then().
                 statusCode(204);
     }
 }
