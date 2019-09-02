@@ -1,17 +1,16 @@
 package com.wootube.ioi.web.controller.api;
 
-import java.net.URI;
-import java.util.List;
-
 import com.wootube.ioi.service.ReplyService;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
-
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/videos/{videoId}/comments/{commentId}/replies")
 @RestController
@@ -28,7 +27,7 @@ public class ReplyApiController {
 
     @GetMapping("/sort/updatetime")
     public ResponseEntity<List<ReplyResponseDto>> sortReplyByUpdateTime(@PathVariable Long videoId,
-                                                                          @PathVariable Long commentId) {
+                                                                        @PathVariable Long commentId) {
         List<ReplyResponseDto> replies = replyService.sortReply(DESC_SORT_BY_UPDATE_TIME, videoId, commentId);
 
         return ResponseEntity.ok(replies);
@@ -37,8 +36,8 @@ public class ReplyApiController {
 
     @PostMapping
     public ResponseEntity<ReplyResponseDto> createReply(@PathVariable Long videoId,
-                                      @PathVariable Long commentId,
-                                      @RequestBody ReplyRequestDto replyRequestDto) {
+                                                        @PathVariable Long commentId,
+                                                        @RequestBody ReplyRequestDto replyRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
         ReplyResponseDto replyResponseDto = replyService.save(replyRequestDto, commentId, userSession.getEmail(), videoId);
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId + "/replies/" + replyResponseDto.getId()))

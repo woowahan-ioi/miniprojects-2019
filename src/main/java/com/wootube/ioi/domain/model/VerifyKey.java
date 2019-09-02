@@ -1,10 +1,10 @@
 package com.wootube.ioi.domain.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
 @Getter

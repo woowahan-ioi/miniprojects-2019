@@ -21,10 +21,10 @@ public class VideoRequestDto {
     }
 
     private void checkTextLength(String title, String description) {
-        if(title.length() > 50) {
+        if (title.length() > 50) {
             throw new TitleMaxLenthException();
         }
-        if(description.length() > 1000) {
+        if (description.length() > 1000) {
             throw new DescriptionMaxLengthException();
         }
     }

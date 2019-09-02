@@ -14,8 +14,8 @@ public class AmazonS3Config {
 
     @Bean
     public AmazonS3 amazonS3() {
-		return AmazonS3ClientBuilder.standard()
-				.withRegion(Regions.fromName(region))
-				.build();
-	}
+        return AmazonS3ClientBuilder.standard()
+                .withRegion(Regions.fromName(region))
+                .build();
+    }
 }

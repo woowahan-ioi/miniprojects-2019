@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class VideoService {

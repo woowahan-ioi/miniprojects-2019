@@ -1,10 +1,10 @@
 package com.wootube.ioi.domain.model;
 
-import javax.persistence.*;
-
 import com.wootube.ioi.domain.exception.IllegalSubscriptionException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @Getter

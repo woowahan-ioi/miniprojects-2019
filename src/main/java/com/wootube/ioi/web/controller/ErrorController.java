@@ -9,9 +9,9 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/errors")
 @Controller
 public class ErrorController {
-	@GetMapping("/unknown")
-	public RedirectView error(RedirectAttributes redirectAttributes) {
-		redirectAttributes.addFlashAttribute("errors", "뭔가 알 수 없는 에러가 발생했습니다.");
-		return new RedirectView("/user/login");
-	}
+    @GetMapping("/unknown")
+    public RedirectView error(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("errors", "뭔가 알 수 없는 에러가 발생했습니다.");
+        return new RedirectView("/user/login");
+    }
 }

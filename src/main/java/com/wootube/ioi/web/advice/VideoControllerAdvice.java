@@ -4,7 +4,6 @@ import com.wootube.ioi.service.exception.*;
 import com.wootube.ioi.web.argument.Redirection;
 import com.wootube.ioi.web.controller.exception.InvalidUserException;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
