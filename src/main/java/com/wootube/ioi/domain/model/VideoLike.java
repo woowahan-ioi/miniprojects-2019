@@ -12,18 +12,18 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @NoArgsConstructor
 public class VideoLike extends BaseEntity {
-	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_video_like_to_video"), nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Video video;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_like_to_video"), nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Video video;
 
-	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_video_like_to_user"), nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private User likeUser;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_like_to_user"), nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User likeUser;
 
-	public VideoLike(User user, Video video) {
-		this.video = video;
-		this.likeUser = user;
-	}
+    public VideoLike(User user, Video video) {
+        this.video = video;
+        this.likeUser = user;
+    }
 }

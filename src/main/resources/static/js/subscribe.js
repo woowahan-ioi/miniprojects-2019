@@ -38,7 +38,7 @@ const subscriptionButton = (function () {
         const subscribe = (event) => {
             let target = event.target;
 
-            if(event.target.tagName === "SPAN") {
+            if (event.target.tagName === "SPAN") {
                 target = event.target.parentElement;
             }
 
@@ -65,7 +65,7 @@ const subscriptionButton = (function () {
         const unsubscribe = (event) => {
             let target = event.target;
 
-            if(event.target.tagName === "SPAN") {
+            if (event.target.tagName === "SPAN") {
                 target = event.target.parentElement;
             }
 
@@ -115,7 +115,7 @@ const subscriptionButton = (function () {
             const callback = (response) => {
                 if (response.ok) {
                     response.json().then(subscriptionCheck => {
-                        if(subscriptionCheck.subscribe) {
+                        if (subscriptionCheck.subscribe) {
                             const subscriptionButton = document.querySelector("#subscription-btn");
                             subscriptionButton.classList.add("subscribed")
                         }

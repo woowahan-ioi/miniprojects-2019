@@ -36,9 +36,7 @@ public class CommentService {
         User writer = userService.findByEmail(email);
         Video video = videoService.findById(videoId);
         Comment comment = commentRepository.save(Comment.of(commentRequestDto.getContents(), video, writer));
-        CommentResponseDto dto = modelMapper.map(comment, CommentResponseDto.class);
-
-        return dto;
+        return modelMapper.map(comment, CommentResponseDto.class);
     }
 
     @Transactional
@@ -68,8 +66,7 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> sortComment(Sort sort, Long videoId) {
-        Video video = videoService.findById(videoId);
-        List<Comment> comments =  commentRepository.findAllByVideo(sort, video);
+        List<Comment> comments = commentRepository.findAllByVideoId(sort, videoId);
         List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
 
         comments.forEach(comment -> {

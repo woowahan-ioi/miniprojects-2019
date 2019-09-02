@@ -14,7 +14,7 @@
         <div class="main-content pdd-right-50 pdd-left-50">
             <div id="video-area" class="container-fluid max-width-lg-2">
 
-                <div th:if="${session}">
+                <div th:if="${session.user}">
                     <div>
                         <h3 class="text-bold height-40px">최근 동영상</h3>
                     </div>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <div th:unless="${session}">
+                <div th:unless="${session.user}">
                     <div>
                         <h3 class="text-bold height-40px">맞춤 동영상</h3>
                     </div>
@@ -132,7 +132,6 @@
                         </a>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -140,8 +139,8 @@
 
 <th:block th:replace="fragments/script :: scriptFragment"/>
 <script type="text/javascript" src="/js/templates.js"></script>
-<script type="text/javascript" src="/js/index.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/sidebar.js"></script>
 
 </body>
 </html>
