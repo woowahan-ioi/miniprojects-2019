@@ -6,6 +6,9 @@ import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,14 +49,27 @@ public class VideoApiController {
     }
 
     @GetMapping("/subscriptions")
-    public ResponseEntity<List<VideoResponseDto>> subscriptions() {
-        List<VideoResponseDto> subscribeVideos = videoService.findSubscribeVideos();
+    public ResponseEntity<List<VideoResponseDto>> subscriptions(@PageableDefault(size = 12) Pageable pageable) {
+        UserSession userSession = userSessionManager.getUserSession();
+        List<VideoResponseDto> subscribeVideos = videoService.findSubscribeVideos(pageable, userSession.getId());
         return ResponseEntity.ok(subscribeVideos);
     }
 
     @GetMapping("/populars")
-    public ResponseEntity<List<VideoResponseDto>> populars() {
-        List<VideoResponseDto> popularVideos = videoService.findPopularityVideos();
+    public ResponseEntity<List<VideoResponseDto>> populars(@PageableDefault(size = 12, sort = "views", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<VideoResponseDto> popularVideos = videoService.findPopularityVideos(pageable);
+        return ResponseEntity.ok(popularVideos);
+    }
+
+    @GetMapping("/latests")
+    public ResponseEntity<List<VideoResponseDto>> latests(@PageableDefault(size = 12, sort = {"createTime"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        List<VideoResponseDto> popularVideos = videoService.findLastestVideos(pageable);
+        return ResponseEntity.ok(popularVideos);
+    }
+
+    @GetMapping("/recommends")
+    public ResponseEntity<List<VideoResponseDto>> recommends(@PageableDefault(size = 12, sort = {"createTime"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        List<VideoResponseDto> popularVideos = videoService.findRecommendVideos(pageable);
         return ResponseEntity.ok(popularVideos);
     }
 }

@@ -31,11 +31,13 @@ public class SubscriptionService {
     }
 
     public List<SubscriberResponseDto> findAllUsersBySubscriberId(Long subscriberId) {
-        List<Subscription> subscriptions = subscriptionRepository.findAllBySubscriberId(subscriberId);
-
-        return subscriptions.stream()
+        return findAllBySubscriberId(subscriberId).stream()
                 .map(subscription -> modelMapper.map(subscription.getSubscriber(), SubscriberResponseDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public List<Subscription> findAllBySubscriberId(Long subscriberId) {
+        return subscriptionRepository.findAllBySubscriberId(subscriberId);
     }
 
     public SubscriptionCountResponseDto countSubscription(Long subscribedUserId) {
