@@ -27,7 +27,7 @@ public class HomeController {
 		model.addAttribute("recommendVideos", videoService.findRecommendVideos());
 		model.addAttribute("popularityVideos", videoService.findPopularityVideos());
 
-		if(userSession != null) {
+		if (userSession != null) {
 			model.addAttribute("subscribeVideos", videoService.findSubscribeVideos(userSession.getId()));
 			return "index";
 		}

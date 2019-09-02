@@ -19,69 +19,69 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReplyService {
-    private final ReplyRepository replyRepository;
-    private final UserService userService;
-    private final VideoService videoService;
-    private final CommentService commentService;
-    private final ModelMapper modelMapper;
+	private final ReplyRepository replyRepository;
+	private final UserService userService;
+	private final VideoService videoService;
+	private final CommentService commentService;
+	private final ModelMapper modelMapper;
 
-    public ReplyService(ReplyRepository replyRepository, UserService userService, VideoService videoService, CommentService commentService, ModelMapper modelMapper) {
-        this.replyRepository = replyRepository;
-        this.userService = userService;
-        this.videoService = videoService;
-        this.commentService = commentService;
-        this.modelMapper = modelMapper;
-    }
+	public ReplyService(ReplyRepository replyRepository, UserService userService, VideoService videoService, CommentService commentService, ModelMapper modelMapper) {
+		this.replyRepository = replyRepository;
+		this.userService = userService;
+		this.videoService = videoService;
+		this.commentService = commentService;
+		this.modelMapper = modelMapper;
+	}
 
-    public ReplyResponseDto save(ReplyRequestDto replyRequestDto, Long commentId, String email, Long videoId) {
-        User writer = userService.findByEmail(email);
-        Comment comment = findComment(commentId, videoId);
+	public ReplyResponseDto save(ReplyRequestDto replyRequestDto, Long commentId, String email, Long videoId) {
+		User writer = userService.findByEmail(email);
+		Comment comment = findComment(commentId, videoId);
 
-        Reply savedReply = replyRepository.save(Reply.of(replyRequestDto.getContents(), comment, writer));
-        return modelMapper.map(savedReply, ReplyResponseDto.class);
-    }
+		Reply savedReply = replyRepository.save(Reply.of(replyRequestDto.getContents(), comment, writer));
+		return modelMapper.map(savedReply, ReplyResponseDto.class);
+	}
 
-    @Transactional
-    public ReplyResponseDto update(ReplyRequestDto replyRequestDto, String email, Long videoId, Long commentId, Long replyId) {
-        User writer = userService.findByEmail(email);
-        Comment comment = findComment(commentId, videoId);
-        Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(NotFoundReplyException::new);
+	@Transactional
+	public ReplyResponseDto update(ReplyRequestDto replyRequestDto, String email, Long videoId, Long commentId, Long replyId) {
+		User writer = userService.findByEmail(email);
+		Comment comment = findComment(commentId, videoId);
+		Reply reply = replyRepository.findById(replyId)
+				.orElseThrow(NotFoundReplyException::new);
 
-        reply.update(writer, comment, replyRequestDto.getContents());
-        return modelMapper.map(reply, ReplyResponseDto.class);
+		reply.update(writer, comment, replyRequestDto.getContents());
+		return modelMapper.map(reply, ReplyResponseDto.class);
 
-    }
+	}
 
-    public void delete(Long videoId, Long commentId, Long replyId, String email) {
-        User writer = userService.findByEmail(email);
-        Comment comment = findComment(commentId, videoId);
-        Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(NotFoundReplyException::new);
+	public void delete(Long videoId, Long commentId, Long replyId, String email) {
+		User writer = userService.findByEmail(email);
+		Comment comment = findComment(commentId, videoId);
+		Reply reply = replyRepository.findById(replyId)
+				.orElseThrow(NotFoundReplyException::new);
 
-        reply.checkMatchWriter(writer);
-        reply.checkMatchComment(comment);
+		reply.checkMatchWriter(writer);
+		reply.checkMatchComment(comment);
 
-        replyRepository.delete(reply);
-    }
+		replyRepository.delete(reply);
+	}
 
-    private Comment findComment(Long commentId, Long videoId) {
-        Video video = videoService.findById(videoId);
-        Comment comment = commentService.findById(commentId);
+	private Comment findComment(Long commentId, Long videoId) {
+		Video video = videoService.findById(videoId);
+		Comment comment = commentService.findById(commentId);
 
-        comment.checkMatchVideo(video);
-        return comment;
-    }
+		comment.checkMatchVideo(video);
+		return comment;
+	}
 
-    public List<ReplyResponseDto> sortReply(Sort sort, Long videoId, Long commentId) {
-        Comment comment = findComment(commentId, videoId);
-        List<Reply> replies = replyRepository.findAllByComment(sort, comment);
-        List<ReplyResponseDto> replyResponseDtos = new ArrayList<>();
+	public List<ReplyResponseDto> sortReply(Sort sort, Long videoId, Long commentId) {
+		Comment comment = findComment(commentId, videoId);
+		List<Reply> replies = replyRepository.findAllByComment(sort, comment);
+		List<ReplyResponseDto> replyResponseDtos = new ArrayList<>();
 
-        replies.forEach(reply -> {
-            ReplyResponseDto replyResponseDto = modelMapper.map(reply, ReplyResponseDto.class);
-            replyResponseDtos.add(replyResponseDto);
-        });
-        return replyResponseDtos;
-    }
+		replies.forEach(reply -> {
+			ReplyResponseDto replyResponseDto = modelMapper.map(reply, ReplyResponseDto.class);
+			replyResponseDtos.add(replyResponseDto);
+		});
+		return replyResponseDtos;
+	}
 }

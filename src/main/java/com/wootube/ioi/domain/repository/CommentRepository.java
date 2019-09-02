@@ -9,5 +9,5 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findAllByVideo(Sort sort, Video video);
+	List<Comment> findAllByVideo(Sort sort, Video video);
 }

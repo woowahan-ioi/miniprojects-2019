@@ -9,5 +9,5 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
-    List<Reply> findAllByComment(Sort sort, Comment comment);
+	List<Reply> findAllByComment(Sort sort, Comment comment);
 }

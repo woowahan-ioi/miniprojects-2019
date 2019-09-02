@@ -4,14 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum UploadType {
-    VIDEO("video"),
-    PROFILE("profile"),
-    THUMBNAIL("thumbnail");
+	VIDEO("video"),
+	PROFILE("profile"),
+	THUMBNAIL("thumbnail");
 
-    private final String uploadType;
+	private final String uploadType;
 
-    UploadType(String uploadType) {
-        this.uploadType = uploadType;
-    }
+	UploadType(String uploadType) {
+		this.uploadType = uploadType;
+	}
 }
 

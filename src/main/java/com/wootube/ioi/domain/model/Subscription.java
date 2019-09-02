@@ -11,19 +11,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Subscription extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_subscriber"), nullable = false)
-    private User subscriber;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_subscriber"), nullable = false)
+	private User subscriber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_subscribed_user"), nullable = false)
-    private User subscribedUser;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_subscribed_user"), nullable = false)
+	private User subscribedUser;
 
-    public Subscription(User subscriber, User subscribedUser) {
-        if (subscriber.equals(subscribedUser)) {
-            throw new IllegalSubscriptionException();
-        }
-        this.subscriber = subscriber;
-        this.subscribedUser = subscribedUser;
-    }
+	public Subscription(User subscriber, User subscribedUser) {
+		if (subscriber.equals(subscribedUser)) {
+			throw new IllegalSubscriptionException();
+		}
+		this.subscriber = subscriber;
+		this.subscribedUser = subscribedUser;
+	}
 }

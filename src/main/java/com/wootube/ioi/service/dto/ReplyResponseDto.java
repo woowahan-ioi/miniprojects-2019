@@ -9,18 +9,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReplyResponseDto {
-    private Long id;
-    private String contents;
-    private LocalDateTime updateTime;
-    private String writerName;
+	private Long id;
+	private String contents;
+	private LocalDateTime updateTime;
+	private String writerName;
 
-    public static ReplyResponseDto of(Long id, String contents, LocalDateTime updateTime, String writerName) {
-        ReplyResponseDto replyResponseDto = new ReplyResponseDto();
-        replyResponseDto.id = id;
-        replyResponseDto.contents = contents;
-        replyResponseDto.updateTime = updateTime;
-        replyResponseDto.writerName = writerName;
+	public static ReplyResponseDto of(Long id, String contents, LocalDateTime updateTime, String writerName) {
+		ReplyResponseDto replyResponseDto = new ReplyResponseDto();
+		replyResponseDto.id = id;
+		replyResponseDto.contents = contents;
+		replyResponseDto.updateTime = updateTime;
+		replyResponseDto.writerName = writerName;
 
-        return replyResponseDto;
-    }
+		return replyResponseDto;
+	}
 }

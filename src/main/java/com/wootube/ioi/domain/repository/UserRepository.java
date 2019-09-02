@@ -7,6 +7,7 @@ import com.wootube.ioi.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
-    Optional<User> findByIdAndActiveTrue(Long id);
+	Optional<User> findByEmail(String email);
+
+	Optional<User> findByIdAndActiveTrue(Long id);
 }

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 	List<Subscription> findAllBySubscriberId(Long userId);
+
 	Optional<Subscription> findBySubscriberIdAndSubscribedUserId(Long subscriberId, Long subscribedUserId);
 
 	Long countBySubscribedUserId(Long userId);

@@ -34,7 +34,7 @@ public class VideoLikeService {
 		Video video = videoService.findById(videoId);
 		VideoLike videoLike = new VideoLike(user, video);
 
-		if(existsVideoLike(videoId, userId)) {
+		if (existsVideoLike(videoId, userId)) {
 			delete(videoId, userId);
 			return getVideoLikeCount(videoId);
 		}
