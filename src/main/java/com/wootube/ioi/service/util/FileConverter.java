@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import javax.imageio.ImageIO;
 
 import com.wootube.ioi.service.exception.FileConvertException;
@@ -29,30 +28,28 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileConverter {
 	private final int THUMBNAIL_WIDTH = 200;
 
-	public Optional<File> convert(MultipartFile file) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-mm-ss-");
+	public File convert(MultipartFile file) {
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:mm:ss-");
 		File convertFile = new File(LocalDateTime.now().format(dateTimeFormatter) + file.getOriginalFilename());
 
 		try {
 			if (convertFile.createNewFile()) {
 				FileOutputStream fos = new FileOutputStream(convertFile);
 				fos.write(file.getBytes());
-				return Optional.of(convertFile);
+				return convertFile;
 			}
 		} catch (IOException e) {
 			convertFile.delete();
-			throw new FileConvertException();
 		}
-		return Optional.empty();
+		throw new FileConvertException();
 	}
 
-	public Optional<File> convert(File videoFile) {
+	public File convert(File videoFile) {
 		String fileName = videoFile.getAbsolutePath();
 		String baseName = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.lastIndexOf("."));
 
 		double frameNumber = getFrameNumber(videoFile);
-		File imgFile = getThumbNailImageFile(fileName, baseName, frameNumber);
-		return Optional.of(imgFile);
+		return getThumbNailImageFile(fileName, baseName, frameNumber);
 	}
 
 	private double getFrameNumber(File videoFile) {

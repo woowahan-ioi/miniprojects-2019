@@ -1,7 +1,6 @@
 package com.wootube.ioi.service;
 
 import java.io.File;
-import java.io.IOException;
 
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.model.ProfileImage;
@@ -10,7 +9,10 @@ import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.service.dto.EditUserRequestDto;
 import com.wootube.ioi.service.dto.LogInRequestDto;
 import com.wootube.ioi.service.dto.SignUpRequestDto;
-import com.wootube.ioi.service.exception.*;
+import com.wootube.ioi.service.exception.InActivatedUserException;
+import com.wootube.ioi.service.exception.InvalidFileExtensionException;
+import com.wootube.ioi.service.exception.LoginFailedException;
+import com.wootube.ioi.service.exception.NotFoundUserException;
 import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
@@ -94,7 +96,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public User updateProfileImage(Long userId, MultipartFile uploadFile) throws IOException {
+	public User updateProfileImage(Long userId, MultipartFile uploadFile) {
 		checkMediaType(uploadFile);
 
 		User user = findByIdAndIsActiveTrue(userId);
@@ -104,8 +106,7 @@ public class UserService {
 			fileUploader.deleteFile(profileImage.getProfileImageFileName(), UploadType.PROFILE);
 		}
 
-		File convertedProfileImage = fileConverter.convert(uploadFile)
-				.orElseThrow(FileConvertException::new);
+		File convertedProfileImage = fileConverter.convert(uploadFile);
 
 		String profileImageUrl = fileUploader.uploadFile(convertedProfileImage, UploadType.PROFILE);
 		String originFileName = uploadFile.getOriginalFilename();
