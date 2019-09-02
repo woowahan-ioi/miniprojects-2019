@@ -40,10 +40,10 @@ const navButton = (() => {
 
         const appendVideos = (response) => {
             response.json().then((videos) => {
-               const videoArea = document.querySelector("#video-area").querySelector(".row");
-               for(video of videos) {
-                   videoArea.innerHTML += Templates.videoTemplate(video);
-               }
+                const videoArea = document.querySelector("#video-area").querySelector(".row");
+                for(video of videos) {
+                    videoArea.innerHTML += Templates.videoTemplate(video);
+                }
             }).catch(error => {alert("영상이 없습니다.")});
         }
 
