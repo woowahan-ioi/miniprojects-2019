@@ -58,6 +58,11 @@ header {
     float: left;
 }
 
+.reply-writer-img {
+    width: 4%;
+    float: left;
+}
+
 .comment-block {
     width: 94%;
     display: inline-block;
@@ -186,7 +191,7 @@ ul {
     border-right: none;
     border-bottom: 1px solid #dddddd;
     height: 30px;
-    width: 90%;
+    width: 93%;
 }
 
 .comment-input:focus {
@@ -256,7 +261,7 @@ ul {
     background: none;
 }
 
-.comment-dropdown-menu {
+.comment-dropdown-menu, .reply-dropdown-menu {
     width: 85px;
     min-width: 0px;
 }
@@ -271,4 +276,34 @@ ul {
     color: gray;
     position: relative;
     left: 35px;
+}
+
+.like-icon {
+    color: royalblue;
+}
+
+.comment-update-btn.disabled, .reply-save-btn.disabled, .reply-update-btn.disabled {
+    background: lightgray;
+    color: white;
+    border-radius: 5%;
+}
+
+.comment-update-btn, .reply-save-btn, .reply-update-btn {
+    background: #065fd4;
+    color: white;
+    border-radius: 5%;
+
+}
+
+.comment-update-cancel-btn, .reply-cancel-btn, .reply-update-cancel-btn {
+    background: none;
+    border-radius: 5%;
+}
+
+.fa-thumbs-up {
+    font-size: 18px;
+}
+
+.reply {
+    max-width: 95%;
 }
