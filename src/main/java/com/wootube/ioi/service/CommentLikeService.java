@@ -53,9 +53,21 @@ public class CommentLikeService {
         return new CommentLikeResponseDto(count);
     }
 
+    public List<CommentResponseDto> saveCommentLike(List<CommentResponseDto> comments, Long userId) {
+        comments.forEach(commentResponseDto -> {
+            long commentId = commentResponseDto.getId();
+            boolean likedUser = commentLikeRepository.existsByLikeUserIdAndCommentId(userId, commentId);
+
+            commentResponseDto.setLike(countByCommentId(commentId));
+            commentResponseDto.setLikedUser(likedUser);
+        });
+        return comments;
+    }
+
     public List<CommentResponseDto> saveCommentLike(List<CommentResponseDto> comments) {
         comments.forEach(commentResponseDto -> {
             long commentId = commentResponseDto.getId();
+
             commentResponseDto.setLike(countByCommentId(commentId));
         });
         return comments;

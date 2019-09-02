@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 public class CommentApiController {
     private static final Sort DESC_SORT_BY_UPDATE_TIME = new Sort(Sort.Direction.DESC, "updateTime");
+    private static final Sort ASC_SORT_BY_UPDATE_TIME = new Sort(Sort.Direction.ASC, "updateTime");
 
     private final CommentService commentService;
     private final CommentLikeService commentLikeService;
@@ -31,8 +32,27 @@ public class CommentApiController {
 
     @GetMapping("/sort/updatetime")
     public ResponseEntity<List<CommentResponseDto>> sortCommentByUpdateTime(@PathVariable Long videoId) {
+        List<CommentResponseDto> comments = commentService.sortComment(ASC_SORT_BY_UPDATE_TIME, videoId);
+        if (userSessionManager.getUserSession() == null) {
+            commentLikeService.saveCommentLike(comments);
+            return ResponseEntity.ok(comments);
+        }
+
+        UserSession userSession = userSessionManager.getUserSession();
+        commentLikeService.saveCommentLike(comments, userSession.getId());
+        return ResponseEntity.ok(comments);
+    }
+
+    @GetMapping("/sort/likecount")
+    public ResponseEntity<List<CommentResponseDto>> sortCommentByLikeCount(@PathVariable Long videoId) {
         List<CommentResponseDto> comments = commentService.sortComment(DESC_SORT_BY_UPDATE_TIME, videoId);
-        commentLikeService.saveCommentLike(comments);
+        if (userSessionManager.getUserSession() == null) {
+            commentLikeService.saveCommentLike(comments);
+            return ResponseEntity.ok(comments);
+        }
+
+        UserSession userSession = userSessionManager.getUserSession();
+        commentLikeService.saveCommentLike(comments, userSession.getId());
         return ResponseEntity.ok(comments);
     }
 
@@ -40,11 +60,10 @@ public class CommentApiController {
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long videoId,
                                                             @RequestBody CommentRequestDto commentRequestDto) {
         UserSession userSession = userSessionManager.getUserSession();
-
         CommentResponseDto commentResponseDto = commentService.save(commentRequestDto, videoId, userSession.getEmail());
-        long commentId = commentResponseDto.getId();
 
-        commentResponseDto.setLike(commentLikeService.countByCommentId(commentId));
+        commentLikeService.saveCommentLike(commentResponseDto);
+
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentResponseDto.getId()))
                 .body(commentResponseDto);
     }
@@ -53,17 +72,17 @@ public class CommentApiController {
     public ResponseEntity<CommentLikeResponseDto> like(@PathVariable Long videoId,
                                                        @PathVariable Long commentId) {
         UserSession userSession = userSessionManager.getUserSession();
-        CommentLikeResponseDto commentLikeResponseDto = commentLikeService.likeComment(userSession.getId(), commentId, videoId);
+        CommentLikeResponseDto commentLikeResponseDto = commentLikeService.likeComment(userSession.getId(), videoId, commentId);
 
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId))
                 .body(commentLikeResponseDto);
     }
 
     @DeleteMapping("/{commentId}/likes")
-    public ResponseEntity<CommentLikeResponseDto> unlike(@PathVariable Long videoId,
-                                                         @PathVariable Long commentId) {
+    public ResponseEntity<CommentLikeResponseDto> dislike(@PathVariable Long videoId,
+                                                          @PathVariable Long commentId) {
         UserSession userSession = userSessionManager.getUserSession();
-        CommentLikeResponseDto commentLikeResponseDto = commentLikeService.unlikeComment(userSession.getId(), commentId, videoId);
+        CommentLikeResponseDto commentLikeResponseDto = commentLikeService.dislikeComment(userSession.getId(), commentId, videoId);
 
         return ResponseEntity.created(URI.create("/api/videos/" + videoId + "/comments/" + commentId))
                 .body(commentLikeResponseDto);
