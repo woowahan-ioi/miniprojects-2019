@@ -101,18 +101,4 @@ public class UserServiceTest extends TestUtil {
         LogInRequestDto logInRequestDto = new LogInRequestDto("luffy@luffy.com", "aaaa1234");
         assertThrows(LoginFailedException.class, () -> userService.readUser(logInRequestDto));
     }
-
-    @DisplayName("프로필 사진 업데이트")
-    @Test
-    void updateProfileImage() {
-        given(userRepository.findByIdAndActiveTrue(USER_ID)).willReturn(Optional.of(testUser));
-        given(testUser.getProfileImage()).willReturn(PROFILE_IMAGE);
-        given(fileConverter.convert(updateTestUploadFile)).willReturn(testFile);
-        given(fileUploader.uploadFile(testFile, UploadType.PROFILE)).willReturn(PROFILE_IMAGE_URL);
-
-        userService.updateProfileImage(USER_ID, updateTestUploadFile);
-
-        verify(testFile).delete();
-        verify(testUser).updateProfileImage(UPDATE_PROFILE_IMAGE);
-    }
 }
