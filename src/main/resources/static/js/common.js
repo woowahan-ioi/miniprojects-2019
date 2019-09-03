@@ -7,7 +7,7 @@ const MONTH = 30 * DAY;
 const YEAR = 12 * MONTH;
 
 function calculateWrittenTime(updateTime) {
-    const writtenTime = new Date(Date.now() - new Date(updateTime)).getTime();
+    const writtenTime = new Date(Date.now() - new Date(new Date(updateTime).toISOString())).getTime();
 
     if (writtenTime > YEAR) {
         return Math.floor(writtenTime / YEAR) + "년 전";
