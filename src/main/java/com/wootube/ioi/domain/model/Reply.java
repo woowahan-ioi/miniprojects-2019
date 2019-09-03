@@ -1,5 +1,7 @@
 package com.wootube.ioi.domain.model;
 
+import javax.persistence.*;
+
 import com.wootube.ioi.domain.exception.NotMatchCommentException;
 import com.wootube.ioi.domain.exception.NotMatchWriterException;
 import lombok.AccessLevel;
@@ -7,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import javax.persistence.*;
 
 @Entity
 @Getter

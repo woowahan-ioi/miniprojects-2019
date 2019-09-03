@@ -35,7 +35,3 @@ function checkTextLength() {
 }
 
 document.querySelector("#description").addEventListener("keyup", checkTextLength);
-
-
-
-

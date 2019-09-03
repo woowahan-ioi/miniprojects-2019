@@ -1,5 +1,8 @@
 package com.wootube.ioi.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.wootube.ioi.domain.model.Subscription;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.SubscriptionRepository;
@@ -10,11 +13,9 @@ import com.wootube.ioi.service.exception.AlreadySubscribedException;
 import com.wootube.ioi.service.exception.IllegalUnsubscriptionException;
 import com.wootube.ioi.service.exception.NotFoundSubscriptionException;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SubscriptionService {
@@ -31,11 +32,13 @@ public class SubscriptionService {
     }
 
     public List<SubscriberResponseDto> findAllUsersBySubscriberId(Long subscriberId) {
-        List<Subscription> subscriptions = subscriptionRepository.findAllBySubscriberId(subscriberId);
-
-        return subscriptions.stream()
+        return findAllBySubscriberId(subscriberId).stream()
                 .map(subscription -> modelMapper.map(subscription.getSubscriber(), SubscriberResponseDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public List<Subscription> findAllBySubscriberId(Long subscriberId) {
+        return subscriptionRepository.findAllBySubscriberId(subscriberId);
     }
 
     public SubscriptionCountResponseDto countSubscription(Long subscribedUserId) {

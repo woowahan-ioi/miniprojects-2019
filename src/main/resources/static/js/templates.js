@@ -118,8 +118,8 @@ const Templates = {
     },
     videoTemplate : (video) => {
         video.createTime = calculateWrittenTime(video.createTime);
-        return `<div class="col-lg-2 padding-2">
-                        <a href="@{/videos/${video.id}}"
+        return `<div class="pdd-left-15 col-lg-2 padding-2">
+                        <a href="/videos/${video.id}"
                            style="text-decoration: none; color: #000;">
                             <div class="card bg-transparent no-border">
                                 <div class="card-media">
@@ -139,14 +139,15 @@ const Templates = {
                         </a>
                     </div>`
     },
-    videoArea : (areaName) => {
+    videoArea : (areaId, areaName) => {
         return `<div>
                     <div>
                         <h3 class="text-bold height-40px">${areaName}</h3>
                     </div>
-                    <div class="row">
+                    <div id="${areaId}" class="row">
                         
                     </div>
-                </div>`;
+                </div>
+                    <hr class="video-line">`;
     }
 }

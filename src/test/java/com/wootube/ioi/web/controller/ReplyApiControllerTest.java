@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.http.MediaType;
 
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -126,13 +124,13 @@ public class ReplyApiControllerTest extends CommonControllerTest {
 
     int getSavedReplyId(Long videoId, Long commentId, String sessionId) {
         return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    cookie("JSESSIONID", sessionId).
-                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
-                    getBody().
-                    jsonPath().
-                    get("id");
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                cookie("JSESSIONID", sessionId).
+                body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+        when().
+                post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
+                getBody().
+                jsonPath().
+                get("id");
     }
 }
