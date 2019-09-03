@@ -129,7 +129,7 @@
                                         </div>
                                         <span class="font-size-13" th:text="${video.writer.name}">name</span>
                                         <div class="font-size-13">
-                                            <span>조회수 952회</span>
+                                            <span>조회수 <span th:text="${video.views}"></span>회</span>
                                             <span> · </span>
                                             <span class="createTimeSpan" th:text="${video.createTime}"></span>
                                         </div>
