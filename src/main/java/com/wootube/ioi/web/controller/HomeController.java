@@ -1,7 +1,6 @@
 package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.service.VideoService;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

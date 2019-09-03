@@ -5,7 +5,6 @@ import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.model.VideoLike;
 import com.wootube.ioi.domain.repository.VideoLikeRepository;
 import com.wootube.ioi.service.dto.VideoLikeResponseDto;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

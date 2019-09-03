@@ -1,11 +1,11 @@
 package com.wootube.ioi.domain.validator;
 
-import java.util.Arrays;
-import java.util.List;
+import org.passay.*;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
-import org.passay.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class PasswordConstraintValidator implements ConstraintValidator<Password, String> {
     private static final int MIN_LENGTH = 8;

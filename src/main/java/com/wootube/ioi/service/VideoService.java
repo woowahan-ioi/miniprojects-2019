@@ -1,9 +1,5 @@
 package com.wootube.ioi.service;
 
-import java.util.Collection;
-import java.util.List;
-import javax.transaction.Transactional;
-
 import com.wootube.ioi.domain.model.S3UploadFileFactory;
 import com.wootube.ioi.domain.model.Subscription;
 import com.wootube.ioi.domain.model.User;
@@ -18,13 +14,16 @@ import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
 import org.modelmapper.ModelMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import static java.util.stream.Collectors.toList;
+import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.List;
+
+import static java.util.stream.Collectors.*;
 
 @Service
 public class VideoService {
@@ -137,9 +136,9 @@ public class VideoService {
                 .collect(toList());
     }
 
-	public List<VideoResponseDto> findLastestVideos(Pageable pageable) {
-		return videoRepository.findAll(pageable).stream()
-				.map(video -> modelMapper.map(video, VideoResponseDto.class))
-				.collect(toList());
-	}
+    public List<VideoResponseDto> findLatestVideos(Pageable pageable) {
+        return videoRepository.findAll(pageable).stream()
+                .map(video -> modelMapper.map(video, VideoResponseDto.class))
+                .collect(toList());
+    }
 }

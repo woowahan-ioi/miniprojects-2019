@@ -1,8 +1,5 @@
 package com.wootube.ioi.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.model.Reply;
 import com.wootube.ioi.domain.model.User;
@@ -12,10 +9,12 @@ import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import com.wootube.ioi.service.exception.NotFoundReplyException;
 import org.modelmapper.ModelMapper;
-
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ReplyService {

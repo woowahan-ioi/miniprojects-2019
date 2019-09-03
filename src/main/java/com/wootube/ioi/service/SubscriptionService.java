@@ -1,8 +1,5 @@
 package com.wootube.ioi.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.wootube.ioi.domain.model.Subscription;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.SubscriptionRepository;
@@ -13,9 +10,11 @@ import com.wootube.ioi.service.exception.AlreadySubscribedException;
 import com.wootube.ioi.service.exception.IllegalUnsubscriptionException;
 import com.wootube.ioi.service.exception.NotFoundSubscriptionException;
 import org.modelmapper.ModelMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SubscriptionService {
