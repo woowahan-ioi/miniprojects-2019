@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SubscriberResponseDto {
-	private Long id;
+    private Long id;
 }

@@ -32,6 +32,7 @@ class VideoControllerTest extends CommonControllerTest {
         request(HttpMethod.GET, "/videos/new")
                 .expectStatus().isFound();
     }
+
     @Test
     @DisplayName("비디오를 저장한다.")
     void save() throws IOException {
