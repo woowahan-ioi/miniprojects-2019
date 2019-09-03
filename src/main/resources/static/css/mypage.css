@@ -17,3 +17,8 @@
 .my-profile-image:hover:after {
     transition: opacity .3s;
 }
+
+.mypage-img-responsive {
+    max-width: 100%;
+    height: 100%;
+}
