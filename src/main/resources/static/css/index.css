@@ -127,7 +127,7 @@ header ul.nav-right li, header ul.nav-left li {
 }
 
 .side-nav {
-    left:-70px;
+    left: -70px;
 }
 
 .display-none {
@@ -136,4 +136,9 @@ header ul.nav-right li, header ul.nav-left li {
 
 #side-nav-toggle-list {
     cursor: pointer;
+}
+
+.img-responsive {
+    max-width: 180px;
+    height: 100px;
 }
