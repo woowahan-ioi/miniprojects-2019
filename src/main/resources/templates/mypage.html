@@ -30,21 +30,23 @@
                                 <input name="_method" type="hidden" value="PUT">
                                 <input id="file-input" name="uploadFile" type="file" hidden/>
                                 <label for="file-input">
-                                <v-row style="width: 5vw; align-content: center;">
-                                    <v-avatar
-                                            color="white"
-                                            size="100"
-                                            style="margin-right: 24px;"
-                                    >
-                                                <img id="profile-image" class="my-profile-image" alt="avatar" th:src="${session.user.profileImageUrl}">
-                                    </v-avatar>
-                                </v-row>
+                                    <v-row style="width: 5vw; align-content: center;">
+                                        <v-avatar
+                                                color="white"
+                                                size="100"
+                                                style="margin-right: 24px;">
+                                            <img id="profile-image" class="my-profile-image" alt="avatar"
+                                                 th:src="${session.user.profileImageUrl}">
+                                        </v-avatar>
+                                    </v-row>
                                 </label>
                             </form>
                         </v-col>
                         <v-col cols="8">
                             <v-col id="user-info" th:data-userid="${session.user.id}">
-                                <div style="font-size: 28px; font-weight: 500; height: 45px;" th:text="${session.user.name}">유저 아이디</div>
+                                <div style="font-size: 28px; font-weight: 500; height: 45px;"
+                                     th:text="${session.user.name}">유저 아이디
+                                </div>
                                 <div style="color: gray">구독자 수 : <span>{{ subscriptionCount }}</span></div>
                             </v-col>
                         </v-col>
@@ -56,8 +58,7 @@
                                       style="padding-top: 8px;">
                                     <input name="_method" type="hidden" value="delete"/>
                                     <v-btn class="red" dark depressed
-                                           @click="deleteSubmitBtnHandler"
-                                    >
+                                           @click="deleteSubmitBtnHandler">
                                         회원 탈퇴
                                     </v-btn>
                                 </form>
@@ -103,13 +104,15 @@
                             </v-dialog>
                         </v-row>
                     </v-row>
-                        <div class="container-fluid max-width-lg-2" id="video-area">
-                            <div>
-                                <h3 class="text-bold height-40px">업로드 영상</h3>
-                            </div>
+                    <div class="container-fluid max-width-lg-2" id="video-area">
+                        <div>
+                            <h3 class="text-bold height-40px">업로드 영상</h3>
+                        </div>
+                        <div class="row">
                             <div class="video col-lg-2 padding-2" th:each="video : ${videos}">
                                 <div class="card bg-transparent no-border">
-                                    <a th:href="@{'/videos/' + ${video.id} + '/edit'}" style="text-decoration: none; color: #000;">
+                                    <a th:href="@{'/videos/' + ${video.id} + '/edit'}"
+                                       style="text-decoration: none; color: #000;">
                                         <div class="card-media">
                                             <img alt="" class="mypage-img-responsive"
                                                  th:src="${video.thumbnailPath}">
@@ -122,7 +125,7 @@
                                                     th:text="${video.title}">title</h4>
                                             </div>
                                             <div class="col-lg-2">
-                                                <button class="remove-btn" type="button" th:data-videoid = "${video.id}">
+                                                <button class="remove-btn" type="button" th:data-videoid="${video.id}">
                                                     <i class="ti-trash"></i>
                                                 </button>
                                             </div>
@@ -137,7 +140,7 @@
                                 </div>
                             </div>
                         </div>
-
+                    </div>
                 </v-col>
             </v-app>
         </div>
@@ -149,9 +152,6 @@
 <script type="text/javascript" src="/js/index.js"></script>
 <script type="text/javascript" src="/js/mypage.js"></script>
 
-<!--<script type="text/javascript" src="/js/video.js"></script>/-->
-
-<!--<script type="text/javascript" src="/js/index.js"></script>-->
 <script type="text/javascript" src="/js/common.js"></script>
 
 <th:block th:replace="fragments/script :: scriptFragment"/>
