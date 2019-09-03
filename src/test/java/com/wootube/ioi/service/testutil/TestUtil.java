@@ -30,7 +30,7 @@ public class TestUtil {
 
     protected static final Video VIDEO = new Video("test", "test");
     protected static final User WRITER = new User("name", "test@email.com", "1234qwer");
-    protected static final Comment COMMENT1 = Comment.of(COMMENT_REQUEST1.getContents(), VIDEO, WRITER);
+
     protected static final Long EXIST_COMMENT_ID = 1L;
     protected static final Long EXIST_VIDEO_ID = 1L;
     protected static final Long NOT_EXIST_COMMENT_ID = 0L;
@@ -40,13 +40,18 @@ public class TestUtil {
     protected static final CommentResponseDto COMMENT_RESPONSE2 = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents 2",
             LocalDateTime.now(), WRITER.getName(), "profile");
-    protected static final ReplyResponseDto REPLY_RESPONSE_DTO1 = ReplyResponseDto.of(REPLY1.getId(), REPLY1.getContents(), REPLY1.getUpdateTime(), WRITER.getName(), "profile");
+
     private static final String COMMENT1_CONTENTS = "Comment Contents 1";
     protected static final CommentRequestDto COMMENT_REQUEST1 = CommentRequestDto.of(COMMENT1_CONTENTS);
+
     private static final String COMMENT2_CONTENTS = "Comment Contents 2";
     protected static final CommentRequestDto COMMENT_REQUEST2 = CommentRequestDto.of(COMMENT2_CONTENTS);
+
     private static final String REPLY1_CONTENTS = "Reply Contents 1";
+    protected static final Comment COMMENT1 = Comment.of(COMMENT_REQUEST1.getContents(), VIDEO, WRITER);
     protected static final Reply REPLY1 = Reply.of(REPLY1_CONTENTS, COMMENT1, WRITER);
+
+    protected static final ReplyResponseDto REPLY_RESPONSE_DTO1 = ReplyResponseDto.of(REPLY1.getId(), REPLY1.getContents(), REPLY1.getUpdateTime(), WRITER.getName(), "profile");
     protected static final ReplyRequestDto REPLY_REQUEST_DTO1 = ReplyRequestDto.of(REPLY1_CONTENTS);
 
 }
