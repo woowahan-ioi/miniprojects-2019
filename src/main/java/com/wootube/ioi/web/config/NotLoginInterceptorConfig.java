@@ -1,9 +1,6 @@
 package com.wootube.ioi.web.config;
 
-import java.util.Arrays;
-
 import com.wootube.ioi.web.interceptor.NotLoginInterceptor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -29,15 +26,15 @@ public class NotLoginInterceptorConfig implements WebMvcConfigurer {
                 .addPathPatterns("/user/**")
                 .addPathPatterns("/videos/**")
                 .addPathPatterns("/api/videos/**")
-                .addPathPatterns("/api/videos/**/comments/**")
                 .addPathPatterns("/api/subscriptions/**")
-                .addPathPatterns("/api/videos/**/comments/**/replies/**")
                 .excludePathPatterns(Arrays.asList(
                         "/api/videos/**/comments/sort/updatetime",
+                        "/api/videos/**/comments/sort/likecount",
                         "/api/videos/**/comments/**/replies/sort/updatetime",
                         "/api/videos/**/likes/counts",
                         "/user/signup",
-                        "/user/login"
+                        "/user/login",
+                        "/user/confirm/**"
                 ));
     }
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<header class="header navbar shadow-sm" id="header" th:fragment="videoHeaderFragment">
+    <div class="header-container">
+        <ul class="nav-left mrg-left-0 padding-8">
+            <li>
+                <a href="/" class="relative">
+                    <img class="logo bottom-10" src="/images/logo/youtube-logo.png" alt="main_logo">
+                </a>
+            </li>
+        </ul>
+        <ul class="nav-right padding-8">
+
+            <li class="">
+                <a class="pointer" href="/videos/new">
+                    <i class="material-icons">video_call</i>
+                </a>
+            </li>
+            <li>
+                <a class="pointer">
+                    <i class="material-icons">apps</i>
+                </a>
+            </li>
+            <li>
+                <a class="pointer">
+                    <i class="material-icons">notifications</i>
+                </a>
+            </li>
+            <li class="user-profile" th:if="${session.user}">
+                <ul class="nav-right">
+                    <li class="user-profile dropdown no-border pointer"
+                        id="header-user-dropdown-btn">
+                        <a class="user-info-link user-dropdown-menu dropdown-toggle"
+                           data-toggle="dropdown">
+                            <img alt="Brown"
+                                 class="profile-img img-fluid"
+                                 th:src="${session.user.profileImageUrl}">
+                            <div class="user-info text-white">
+                                <span class="name pdd-right-5"
+                                      th:text="${session.user.name}"></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="text-dark">
+                                <a href="/user/mypage">
+                                    <i class="ti-user pdd-right-10"></i>
+                                    <span class="text-dark">마이 페이지</span>
+                                </a>
+                            </li>
+                            <li class="divider" role="separator"></li>
+                            <li class="text-dark">
+                                <a href="/user/logout">
+                                    <i class="ti-power-off pdd-right-10"></i>
+                                    <span class="text-dark">로그아웃</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="user-profile" th:unless="${session.user}">
+                <a href="/user/login">
+                    <i class="material-icons">account_circle</i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</header>
+</html>

@@ -1,29 +1,38 @@
 const replyButton = (function () {
     const ReplyController = function () {
         const replyService = new ReplyService();
+        const commentArea = document.querySelector("#comment-area");
 
         const saveReply = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.save);
+            commentArea.addEventListener("click", replyService.save);
         }
 
         const updateReply = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.update);
+            commentArea.addEventListener("click", replyService.update);
         }
 
         const deleteReply = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.delete);
+            commentArea.addEventListener("click", replyService.delete);
         }
 
         const replyToggle = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyCancel);
-            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyWrite);
-            document.querySelector("#comment-area").addEventListener("keyup", replyService.toggleReplySaveButton);
-            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyEditButton);
-            document.querySelector("#comment-area").addEventListener("click", replyService.toggleReplyListButton);
+            commentArea.addEventListener("click", replyService.toggleReplyCancel);
+            commentArea.addEventListener("click", replyService.toggleReplyWrite);
+            commentArea.addEventListener("keyup", replyService.toggleReplySaveButton);
+            commentArea.addEventListener("click", replyService.toggleReplyEditButton);
+            commentArea.addEventListener("click", replyService.toggleReplyListButton);
         }
 
         const sortReplyByUpdateTime = function () {
-            document.querySelector("#comment-area").addEventListener("click", replyService.sortReplyByUpdateTime)
+            commentArea.addEventListener("click", replyService.sortReplyByUpdateTime)
+        }
+
+        const increaseLike = function () {
+            commentArea.addEventListener('click', replyService.increaseLike);
+        }
+
+        const decreaseLike = function () {
+            commentArea.addEventListener('click', replyService.decreaseLike);
         }
 
         const init = function () {
@@ -32,6 +41,8 @@ const replyButton = (function () {
             updateReply();
             deleteReply();
             sortReplyByUpdateTime();
+            increaseLike();
+            decreaseLike();
         };
 
         return {
@@ -42,6 +53,26 @@ const replyButton = (function () {
     const ReplyService = function () {
         const videoId = document.querySelector("#video-contents").dataset.videoid;
 
+        const markReplytLike = (replyListDiv, reply) => {
+            const replyId = reply.id;
+            const replyList = replyListDiv.querySelector("li");
+
+            if (!replyList.dataset.commentid === replyId) {
+                return;
+            }
+
+            if (reply.likedUser) {
+                replyList.querySelector(".reply-like-btn").classList.add("display-none");
+                replyList.querySelector(".reply-dislike-btn").classList.remove("display-none");
+            }
+
+            if (!reply.likedUser) {
+                replyList.querySelector(".reply-like-btn").classList.remove("display-none");
+                replyList.querySelector(".reply-dislike-btn").classList.add("display-none");
+            }
+        }
+
+
         const sortReplyByUpdateTime = (event) => {
             let target = event.target;
 
@@ -49,26 +80,27 @@ const replyButton = (function () {
                 target = target.parentElement;
             }
 
-            if(!target.classList.contains("reply-list-open-button")) {
+            if (!target.classList.contains("reply-list-open-button")) {
                 return;
             }
-            const commentId = target.parentElement.closest("li").dataset.commentid;
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId +'/replies/sort/updatetime';
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/sort/updatetime`;
 
             const callback = (response) => {
                 if (response.status === 200) {
                     response.json().then(data => {
-                        const replyListDiv = target.parentElement.nextElementSibling;
-                        $(replyListDiv).empty();
+                        const replyListDiv = commentList.querySelector(".reply-list");
+                        replyListDiv.innerHTML = "";
 
-                        console.log(data);
                         for (const reply of data) {
                             appendReply(reply, target);
+                            markReplytLike(replyListDiv, reply);
                         }
 
-                        target.classList.toggle("display-none");
-                        target.nextElementSibling.classList.toggle("display-none");
-                        target.parentElement.nextElementSibling.classList.remove("display-none");
+                        commentList.querySelector(".reply-list-open-button").classList.toggle("display-none");
+                        commentList.querySelector(".reply-list-close-button").classList.toggle("display-none");
+                        replyListDiv.classList.remove("display-none");
                     });
                     return;
                 }
@@ -83,14 +115,19 @@ const replyButton = (function () {
         }
 
         function saveReply(event) {
-            if(!event.target.classList.contains("reply-save-btn")) {
+            if (!event.target.classList.contains("reply-save-btn")) {
                 return;
             }
 
-            const id = event.target.closest("li").dataset.commentid;
-            const inputComment = event.target.closest("div").querySelector("input");
+            if (event.target.classList.contains("disabled")) {
+                return;
+            }
 
-            const requestUri = '/api/videos/' + videoId + '/comments/' + id + '/replies';
+            const commentList = event.target.closest("li");
+            const commentid = commentList.dataset.commentid;
+            const inputComment = event.target.closest(".reply-edit").querySelector(".comment-input");
+            const requestUri = `/api/videos/${videoId}/comments/${commentid}/replies`;
+
             const requestBody = {
                 contents: inputComment.value
             };
@@ -100,6 +137,7 @@ const replyButton = (function () {
                         appendReply(comment, event.target);
                         inputComment.value = "";
                         event.target.closest(".reply-edit").classList.add("display-none")
+                        commentList.querySelector("#reply-list-more-area").classList.toggle("display-none");
                     });
 
                     return;
@@ -113,30 +151,27 @@ const replyButton = (function () {
         }
 
         function updateReply(event) {
-            let target = event.target;
+            const target = event.target;
 
-            if(!target.classList.contains("reply-update-btn")) {
+            if (!target.classList.contains("reply-update-btn")) {
                 return;
             }
-            const replyId = target.closest("li").dataset.replyid;
-            const commentId = target.closest("ul").parentElement.parentElement.dataset.commentid;
+            const replyListDiv = target.closest("li");
+            const replyId = replyListDiv.dataset.replyid;
+            const commentId = target.closest("ul").closest("li").dataset.commentid;
             const inputEditReply = target.closest("div").querySelector("input");
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + '/replies/' + replyId;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}`;
 
             const requestBody = {
-                contents : inputEditReply.value
+                contents: inputEditReply.value
             }
 
             const callback = (response) => {
                 if (response.status === 204) {
-
-                    target.parentElement.previousElementSibling.querySelector(".reply-contents").innerText = inputEditReply.value;
-
-                    const replyButtonDiv = target.parentElement;
-                    replyButtonDiv.classList.toggle("display-none");
-                    replyButtonDiv.previousElementSibling.classList.toggle("display-none");
-                    replyButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
-
+                    replyListDiv.querySelector(".reply-contents").innerText = inputEditReply.value;
+                    replyListDiv.querySelector(".reply-update-area").classList.toggle("display-none");
+                    replyListDiv.querySelector(".comment-block").classList.toggle("display-none");
+                    replyListDiv.querySelector(".reply-writer-img").classList.toggle("display-none");
                     return;
                 }
                 throw response;
@@ -162,7 +197,7 @@ const replyButton = (function () {
 
             const replyId = target.closest("li").dataset.replyid;
             const commentId = target.closest("ul").closest("li").dataset.commentid;
-            const requestUri = '/api/videos/' + videoId + '/comments/' + commentId + '/replies/' + replyId;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}`;
 
             const callback = (response) => {
                 if (response.status === 204) {
@@ -181,13 +216,15 @@ const replyButton = (function () {
 
         function toggleReplyCancel(event) {
             if (event.target.classList.contains("reply-cancel-btn")) {
-                event.target.closest("li").querySelector(".reply-edit").classList.add("display-none");
+                event.target.closest("li").querySelector(".reply-edit").classList.toggle("display-none");
+                event.target.closest("li").querySelector("#reply-list-more-area").classList.toggle("display-none");
             }
         }
 
         function toggleReplyWrite(event) {
             if (event.target.classList.contains("reply-toggle-btn")) {
-                event.target.closest("li").querySelector(".reply-edit").classList.remove("display-none");
+                event.target.closest("li").querySelector(".reply-edit").classList.toggle("display-none");
+                event.target.closest("li").querySelector("#reply-list-more-area").classList.toggle("display-none");
             }
         }
 
@@ -211,36 +248,107 @@ const replyButton = (function () {
             }
 
             replyListButton.classList.toggle("display-none");
-            replyListButton.parentElement.nextElementSibling.classList.add("display-none");
-            replyListButton.previousElementSibling.classList.toggle("display-none");
+            replyListButton.parentElement.parentElement.querySelector(".reply-list").classList.add("display-none");
+            replyListButton.parentElement.querySelector(".reply-list-open-button").classList.toggle("display-none");
         }
 
         function toggleReplyEditButton(event) {
             let target = event.target;
-            if(target.tagName === "I" || target.tagName === "SPAN") {
+            if (target.tagName === "I" || target.tagName === "SPAN") {
                 target = target.parentElement;
             }
             if (target.classList.contains("reply-update-cancel-btn")) {
-                const replyButtonDiv = target.parentElement;
+                const replyButtonDiv = target.closest(".reply-update-area");
                 replyButtonDiv.classList.toggle("display-none");
-                replyButtonDiv.previousElementSibling.classList.toggle("display-none");
-                replyButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
+                replyButtonDiv.parentElement.querySelector(".comment-block").classList.toggle("display-none")
+                replyButtonDiv.parentElement.querySelector(".reply-writer-img").classList.toggle("display-none");
             }
             if (target.classList.contains("reply-edit-button")) {
-                const replyButtonDiv = target.parentElement.parentElement;
-                replyButtonDiv.parentElement.classList.toggle("display-none");
-                replyButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
-                replyButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");
+                const replyButtonDiv = target.closest(".reply-more-box");
+                replyButtonDiv.closest(".comment-block").classList.toggle("display-none");
+                replyButtonDiv.parentElement.parentElement.querySelector(".reply-writer-img").classList.toggle("display-none");
+                replyButtonDiv.parentElement.parentElement.querySelector(".reply-update-area").classList.toggle("display-none");
             }
         }
 
         function appendReply(reply, target) {
             const writtenTime = calculateWrittenTime(reply.updateTime);
-
             const replyList = target.closest(".reply-area").querySelector(".reply-list");
-
-            replyList.insertAdjacentHTML("beforeend", Templates.replyTemplate(reply, writtenTime));
+            replyList.insertAdjacentHTML("afterbegin", Templates.replyTemplate(reply, writtenTime));
         }
+
+        const increaseLike = (event) => {
+            let target = event.target;
+
+            if (target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if (!target.classList.contains("reply-like-btn")) {
+                return;
+            }
+
+            const replyId = target.closest("li").dataset.replyid;
+            const commentId = target.closest("li").parentElement.closest("li").dataset.commentid;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}/likes`;
+
+            const requestBody = {};
+
+            const callback = (response) => {
+                if (response.status === 201) {
+                    response.json().then(data => {
+                        const replyLikeCountDiv = target.parentElement.querySelector(".reply-like-count");
+                        replyLikeCountDiv.innerText = data.count;
+                        target.parentElement.querySelector(".reply-like-btn").classList.add("display-none");
+                        target.parentElement.querySelector(".reply-dislike-btn").classList.remove("display-none");
+                    })
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.POST(requestUri, requestBody, callback, handleError);
+        }
+
+        const decreaseLike = (event) => {
+            let target = event.target;
+
+            if (target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if (!target.classList.contains("reply-dislike-btn")) {
+                return;
+            }
+
+            const replyId = target.closest("li").dataset.replyid;
+            const commentId = target.closest("li").parentElement.closest("li").dataset.commentid;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/replies/${replyId}/likes`;
+
+            const callback = (response) => {
+                if (response.status === 201) {
+                    response.json().then(data => {
+                        const replyLikeCountDiv = target.parentElement.querySelector(".reply-like-count");
+                        replyLikeCountDiv.innerText = data.count;
+                        target.parentElement.querySelector(".reply-dislike-btn").classList.add("display-none");
+                        target.parentElement.querySelector(".reply-like-btn").classList.remove("display-none");
+                    })
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                alert(error);
+            };
+
+            AjaxRequest.DELETE(requestUri, callback, handleError);
+        }
+
 
         return {
             toggleReplyCancel: toggleReplyCancel,
@@ -251,7 +359,9 @@ const replyButton = (function () {
             save: saveReply,
             update: updateReply,
             delete: deleteReply,
-            sortReplyByUpdateTime: sortReplyByUpdateTime
+            sortReplyByUpdateTime: sortReplyByUpdateTime,
+            increaseLike: increaseLike,
+            decreaseLike: decreaseLike
         }
     };
 

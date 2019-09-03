@@ -1,13 +1,10 @@
 package com.wootube.ioi.web.controller;
 
-import java.util.List;
-
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -126,13 +123,13 @@ public class ReplyApiControllerTest extends CommonControllerTest {
 
     int getSavedReplyId(Long videoId, Long commentId, String sessionId) {
         return given().
-                    contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
-                    cookie("JSESSIONID", sessionId).
-                    body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-                when().
-                    post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
-                    getBody().
-                    jsonPath().
-                    get("id");
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                cookie("JSESSIONID", sessionId).
+                body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
+        when().
+                post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
+                getBody().
+                jsonPath().
+                get("id");
     }
 }

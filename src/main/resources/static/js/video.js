@@ -4,7 +4,7 @@ function readMoreTag() {
 
     if (descStorage.innerText.length > 30) {
         desc.innerText = descStorage.innerText.substr(0, 50) + " ...";
-        document.querySelector("#readMoreSpan").addEventListener("click", readMoreTagEvent);
+        document.querySelector("#read-more-span").addEventListener("click", readMoreTagEvent);
         return;
     }
 
@@ -13,7 +13,7 @@ function readMoreTag() {
 
 function readMoreTagEvent() {
     const desc = document.getElementById("description");
-    const readMoreSpan = document.querySelector("#readMoreSpan");
+    const readMoreSpan = document.querySelector("#read-more-span");
 
     if (readMoreSpan.classList.contains("clicked")) {
         readMoreSpan.innerText = "간략히";
@@ -42,12 +42,12 @@ function videoCreateTime() {
 
 function getLikeCount() {
     const videoId = document.querySelector("#video-contents").dataset.videoid;
-    const requestUri = '/api/videos/' + videoId + '/likes/counts';
+    const requestUri = `/api/videos/${videoId}/likes/counts`;
 
     const callback = (response) => {
         if(response.status === 200) {
             response.json()
-                .then(data => document.querySelector("#likeCount").innerHTML = data.count);
+                .then(data => document.querySelector("#like-count").innerHTML = data.count);
         }
     }
 
@@ -78,14 +78,14 @@ const videoButton = (function() {
 
     const VideoService = function () {
         function toggleVideoLike(count) {
-            document.querySelector("#likeCount").innerText = count;
+            document.querySelector("#like-count").innerText = count;
             document.querySelector("#title-like-btn").firstElementChild
                 .classList.toggle("like-icon")
         };
 
         const increaseLike = () => {
             const videoId = document.querySelector("#video-contents").dataset.videoid;
-            const requestUri = '/api/videos/' + videoId + '/likes';
+            const requestUri = `/api/videos/${videoId}/likes`;
 
             const callback = (response) => {
                 if(response.status === 200) {
