@@ -18,9 +18,9 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionValue).
                 body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-when().
+        when().
                 post(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments").
-then().
+        then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_COMMENT_RESPONSE.getContents())).
@@ -36,9 +36,9 @@ then().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", secondUserSession).
                 body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-when().
+        when().
                 post(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments").
-then().
+        then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_COMMENT_RESPONSE.getContents())).
@@ -54,9 +54,9 @@ then().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionValue).
                 body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-when().
+        when().
                 post(basicPath() + "/api/videos/" + NOT_EXIST_VIDEO_ID + "/comments").
-then().
+        then().
                 statusCode(302);
     }
 
