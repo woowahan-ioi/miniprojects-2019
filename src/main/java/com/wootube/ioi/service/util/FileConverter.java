@@ -26,10 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class FileConverter {
-	private final int THUMBNAIL_WIDTH = 200;
+	private static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd-HH-mm-ss-";
+	private static final int THUMBNAIL_WIDTH = 200;
 
 	public File convert(MultipartFile file) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-mm-ss-");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS);
 		File convertFile = new File(LocalDateTime.now().format(dateTimeFormatter) + file.getOriginalFilename());
 
 		try {
