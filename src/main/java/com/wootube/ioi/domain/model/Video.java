@@ -39,7 +39,7 @@ public class Video extends BaseEntity {
     private String thumbnailFileName;
 
     @Column(columnDefinition = "long default 0")
-    private long views;
+    private long views = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_to_user"), nullable = false)
