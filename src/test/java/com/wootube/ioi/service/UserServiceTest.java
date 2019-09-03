@@ -1,5 +1,9 @@
 package com.wootube.ioi.service;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.service.dto.LogInRequestDto;
@@ -8,6 +12,7 @@ import com.wootube.ioi.service.exception.LoginFailedException;
 import com.wootube.ioi.service.testutil.TestUtil;
 import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
+import com.wootube.ioi.service.util.UploadType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,13 +20,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

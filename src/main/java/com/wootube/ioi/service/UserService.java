@@ -9,6 +9,7 @@ import com.wootube.ioi.service.dto.SignUpRequestDto;
 import com.wootube.ioi.service.exception.InActivatedUserException;
 import com.wootube.ioi.service.exception.LoginFailedException;
 import com.wootube.ioi.service.exception.NotFoundUserException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

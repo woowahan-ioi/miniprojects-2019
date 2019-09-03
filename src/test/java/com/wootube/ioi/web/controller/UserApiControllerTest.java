@@ -3,6 +3,7 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.service.dto.EmailCheckRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
@@ -27,9 +28,9 @@ public class UserApiControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(requestDto).
-                when().
+        when().
                 post(baseUrl() + "/api/users").
-                then().
+        then().
                 statusCode(200).
                 body("message", equalTo("impossible"));
     }
@@ -42,9 +43,9 @@ public class UserApiControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(requestDto).
-                when().
+        when().
                 post(baseUrl() + "/api/users").
-                then().
+        then().
                 statusCode(200).
                 body("message", equalTo("possible"));
     }
