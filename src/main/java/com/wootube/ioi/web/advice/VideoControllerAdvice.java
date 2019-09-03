@@ -61,5 +61,4 @@ public class VideoControllerAdvice {
         redirectAttributes.addFlashAttribute("errors", e.getMessage());
         return new RedirectView(redirection.getRedirectUrl());
     }
-
 }

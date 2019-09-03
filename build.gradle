@@ -26,7 +26,7 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "Greenwich.BUILD-SNAPSHOT")
+    set('springCloudVersion', "Greenwich.RELEASE")
 }
 
 dependencies {

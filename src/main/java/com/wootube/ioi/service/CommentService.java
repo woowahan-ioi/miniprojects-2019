@@ -65,8 +65,7 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> sortComment(Sort sort, Long videoId) {
-        Video video = videoService.findById(videoId);
-        List<Comment> comments = commentRepository.findAllByVideo(sort, video);
+        List<Comment> comments = commentRepository.findAllByVideoId(sort, videoId);
         List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
 
         comments.forEach(comment -> {

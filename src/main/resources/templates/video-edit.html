@@ -26,7 +26,7 @@
                             </label>
                         </div>
                         <div class="image-upload-input">
-                            <input id="file-input" name="uploadFile" type="file"/>
+                            <input id="file-input" name="uploadFile" type="file" required/>
                         </div>
                         <div class="text-center pdd-top-10">
                             <p style="font-size: 15pt"> 버튼을 눌러 동영상을 선택해주세요. </p>
@@ -45,10 +45,10 @@
                             <br>
                             <label for="description" class="font-size-13">설명 :</label>
                             <textarea class="form-control" id="description" rows="15" name="description"
-                                      th:text="${#strings.isEmpty(video)? '' : video.description}"></textarea>
+                                      th:text="${#strings.isEmpty(video)? '' : video.description}" required></textarea>
                         </div>
                         <div class="form-group text-center">
-                            <button id="video-submit-button" class="font-size-13 confirm-btn">등록</button>
+                            <button id="video-submit-button" type="submit" class="font-size-13 confirm-btn">등록</button>
                         </div>
                     </div>
                 </div>

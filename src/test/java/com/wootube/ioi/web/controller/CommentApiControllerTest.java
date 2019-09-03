@@ -1,15 +1,11 @@
 package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.service.dto.CommentRequestDto;
-import com.wootube.ioi.service.dto.CommentResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class CommentApiControllerTest extends CommonControllerTest {
@@ -150,17 +146,11 @@ public class CommentApiControllerTest extends CommonControllerTest {
 
     @Test
     void sortCommentByUpdateTime() {
-        List<CommentResponseDto> comments =
-                given().
-                        when().
-                        get(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/sort/updatetime").
-                        then().
-                        statusCode(200).
-                        extract().
-                        response().
-                        jsonPath().
-                        getList(".", CommentResponseDto.class);
-
-        assertThat(comments.size()).isNotNull();
+        given().
+                when().
+                get(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/sort/updatetime").
+                then().
+                statusCode(200).
+                body("", is(not(empty())));
     }
 }

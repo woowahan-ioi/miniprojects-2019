@@ -28,7 +28,7 @@ public class FileConverter {
     private final int THUMBNAIL_WIDTH = 200;
 
     public Optional<File> convert(MultipartFile file) throws IOException {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh:mm:ss-");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:mm:ss-");
         File convertFile = new File(LocalDateTime.now().format(dateTimeFormatter) + file.getOriginalFilename());
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {

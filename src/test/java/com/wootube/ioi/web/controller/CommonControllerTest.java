@@ -49,16 +49,16 @@ public class CommonControllerTest {
     static final User SIGN_UP_USER = new User(SIGN_UP_COMMON_REQUEST_DTO.getName(), SIGN_UP_COMMON_REQUEST_DTO.getEmail(), SIGN_UP_COMMON_REQUEST_DTO.getPassword());
     static final CommentResponseDto SAVE_COMMENT_RESPONSE = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Comment Contents",
-            LocalDateTime.now(), SIGN_UP_USER.getName());
+            LocalDateTime.now(), SIGN_UP_USER.getName(), "");
     static final CommentResponseDto UPDATE_COMMENT_RESPONSE = CommentResponseDto.of(EXIST_COMMENT_ID,
             "Update Contents",
-            LocalDateTime.now(), SIGN_UP_USER.getName());
+            LocalDateTime.now(), SIGN_UP_USER.getName(), "");
     static final ReplyResponseDto SAVE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Reply Contents",
-            LocalDateTime.now(), SIGN_UP_USER.getName());
+            LocalDateTime.now(), SIGN_UP_USER.getName(), "");
     static final ReplyResponseDto UPDATE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Update Contents",
-            LocalDateTime.now(), SIGN_UP_USER.getName());
+            LocalDateTime.now(), SIGN_UP_USER.getName(), "");
     @LocalServerPort
     private int port;
 
