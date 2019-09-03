@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReplyRequestDto {
-	private String contents;
+    private String contents;
 
-	public static ReplyRequestDto of(String contents) {
-		ReplyRequestDto replyRequestDto = new ReplyRequestDto();
-		replyRequestDto.contents = contents;
-		return replyRequestDto;
-	}
+    public static ReplyRequestDto of(String contents) {
+        ReplyRequestDto replyRequestDto = new ReplyRequestDto();
+        replyRequestDto.contents = contents;
+        return replyRequestDto;
+    }
 }

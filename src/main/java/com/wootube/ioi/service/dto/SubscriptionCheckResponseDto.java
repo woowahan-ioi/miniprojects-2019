@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SubscriptionCheckResponseDto {
-	private boolean isSubscribe;
+    private boolean isSubscribe;
 
-	public SubscriptionCheckResponseDto(boolean isSubscribe) {
-		this.isSubscribe = isSubscribe;
-	}
+    public SubscriptionCheckResponseDto(boolean isSubscribe) {
+        this.isSubscribe = isSubscribe;
+    }
 }

@@ -29,7 +29,7 @@ public class FileConverter {
 	private final int THUMBNAIL_WIDTH = 200;
 
 	public File convert(MultipartFile file) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:mm:ss-");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-mm-ss-");
 		File convertFile = new File(LocalDateTime.now().format(dateTimeFormatter) + file.getOriginalFilename());
 
 		try {

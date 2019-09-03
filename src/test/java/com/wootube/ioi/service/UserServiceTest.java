@@ -54,13 +54,12 @@ public class UserServiceTest extends TestUtil {
     private File testFile;
 
     private MultipartFile updateTestUploadFile;
+    private User SAVED_USER = new User("루피", "luffy@luffy.com", "1234567a");
 
     @BeforeEach
     void setUp() {
         updateTestUploadFile = new MockMultipartFile(PROFILE_IMAGE_URL, UPDATE_PROFILE_IMAGE_FILE_NAME, "image/png", CONTENTS.getBytes(StandardCharsets.UTF_8));
     }
-
-    private User SAVED_USER = new User("루피", "luffy@luffy.com", "1234567a");
 
     @DisplayName("유저 등록 (회원 가입)")
     @Test

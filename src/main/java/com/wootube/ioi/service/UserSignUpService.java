@@ -9,19 +9,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserSignUpService {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	@Autowired
-	public UserSignUpService(UserService userService) {
-		this.userService = userService;
-	}
+    @Autowired
+    public UserSignUpService(UserService userService) {
+        this.userService = userService;
+    }
 
-	public EmailCheckResponseDto checkDuplicate(String email) {
-		try {
-			userService.findByEmail(email);
-			return EmailCheckResponseDto.impossible();
-		} catch (NotFoundUserException e) {
-			return EmailCheckResponseDto.possible();
-		}
-	}
+    public EmailCheckResponseDto checkDuplicate(String email) {
+        try {
+            userService.findByEmail(email);
+            return EmailCheckResponseDto.impossible();
+        } catch (NotFoundUserException e) {
+            return EmailCheckResponseDto.possible();
+        }
+    }
 }
