@@ -22,9 +22,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionValue).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-                when().
+        when().
                 post(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies").
-                then().
+        then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_REPLY_RESPONSE.getContents())).
@@ -40,9 +40,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
                 body(ReplyRequestDto.of(UPDATE_REPLY_RESPONSE.getContents())).
-                when().
+        when().
                 put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/" + replyId).
-                then().
+        then().
                 statusCode(204);
     }
 
@@ -54,9 +54,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-                when().
+        when().
                 put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/" + NOT_EXIST_REPLY_ID).
-                then().
+        then().
                 statusCode(400);
     }
 
@@ -69,9 +69,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
                 body(ReplyRequestDto.of(SAVE_REPLY_RESPONSE.getContents())).
-                when().
+        when().
                 put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + NOT_EXIST_COMMENT_ID + "/replies/" + replyId).
-                then().
+        then().
                 statusCode(400);
     }
 
@@ -82,9 +82,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
         int replyId = getSavedReplyId(USER_A_VIDEO_ID, USER_A_VIDEO_USER_A_COMMENT, sessionId);
         given().
                 cookie("JSESSIONID", sessionId).
-                when().
+        when().
                 delete(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/" + replyId).
-                then().
+        then().
                 statusCode(204);
     }
 
@@ -94,9 +94,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
         String sessionId = login(USER_A_LOGIN_REQUEST_DTO);
         given().
                 cookie("JSESSIONID", sessionId).
-                when().
+        when().
                 delete(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/" + NOT_EXIST_REPLY_ID).
-                then().
+        then().
                 statusCode(400);
     }
 
@@ -109,9 +109,9 @@ public class ReplyApiControllerTest extends CommonControllerTest {
 
         List<ReplyResponseDto> replies =
                 given().
-                        when().
+                when().
                         get(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/sort/updatetime").
-                        then().
+                then().
                         statusCode(200).
                         extract().
                         response().
@@ -126,7 +126,7 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionId).
                 body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-                when().
+        when().
                 post(basicPath() + "/api/videos/" + videoId + "/comments/" + commentId + "/replies").
                 getBody().
                 jsonPath().

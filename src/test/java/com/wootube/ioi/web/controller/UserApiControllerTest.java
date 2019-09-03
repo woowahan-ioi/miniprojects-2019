@@ -27,9 +27,9 @@ public class UserApiControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(requestDto).
-                when().
+        when().
                 post(baseUrl() + "/api/users").
-                then().
+        then().
                 statusCode(200).
                 body("message", equalTo("impossible"));
     }
@@ -42,9 +42,9 @@ public class UserApiControllerTest {
         given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 body(requestDto).
-                when().
+        when().
                 post(baseUrl() + "/api/users").
-                then().
+        then().
                 statusCode(200).
                 body("message", equalTo("possible"));
     }
