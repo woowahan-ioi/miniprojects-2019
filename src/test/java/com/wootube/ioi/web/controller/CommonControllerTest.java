@@ -27,9 +27,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 @Import(TestConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommonControllerTest {
-    public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
-    public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
-    public static final LogInRequestDto USER_D_LOGIN_REQUEST_DTO = new LogInRequestDto("d@test.com", "1234qwer");
     static final Long USER_A_ID = 1L;
     static final Long USER_B_ID = 2L;
     static final Long USER_C_ID = 3L;
@@ -60,6 +57,10 @@ public class CommonControllerTest {
     static final ReplyResponseDto UPDATE_REPLY_RESPONSE = ReplyResponseDto.of(EXIST_COMMENT_ID,
             "Update Contents",
             LocalDateTime.now(), SIGN_UP_USER.getName(), "");
+    public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
+    public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
+    public static final LogInRequestDto USER_D_LOGIN_REQUEST_DTO = new LogInRequestDto("d@test.com", "1234qwer");
+
     @LocalServerPort
     private int port;
 

@@ -112,18 +112,17 @@ const commentButton = (function () {
             const callback = (response) => {
                 const commentListDiv = document.querySelector("#comment-area");
                 commentListDiv.innerHTML = "";
-                console.log(response)
+
                 if (response.status === 200) {
                     response.json().then(data => {
                         let count = 0;
-                        console.log(data)
                         for (const comment of data) {
                             appendComment(comment);
                             markCommentLike(commentListDiv, comment);
                             count++;
                         }
                         commentCount.innerText = count;
-                    }).catch(error => alert("gg"));
+                    });
                     return;
                 }
                 throw response;
@@ -176,13 +175,14 @@ const commentButton = (function () {
                         const currentCommentCount = parseInt(commentCount.innerText)
                         commentCount.innerText = String(currentCommentCount + 1);
                         inputComment.value = "";
-                    })
+                    });
                     return;
                 }
                 throw response;
             };
             const handleError = (error) => {
-                alert(error);
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             };
 
             AjaxRequest.POST(requestUri, requestBody, callback, handleError);
@@ -220,7 +220,8 @@ const commentButton = (function () {
                 throw response;
             };
             const handleError = (error) => {
-                alert(error);
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             };
 
             AjaxRequest.PUT(requestUri, requestBody, callback, handleError);
@@ -253,7 +254,8 @@ const commentButton = (function () {
                 throw response;
             };
             const handleError = (error) => {
-                alert(error);
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             };
 
             AjaxRequest.DELETE(requestUri, callback, handleError);
@@ -315,7 +317,8 @@ const commentButton = (function () {
             };
 
             const handleError = (error) => {
-                alert(error);
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             };
 
             AjaxRequest.POST(requestUri, requestBody, callback, handleError);
@@ -350,7 +353,8 @@ const commentButton = (function () {
             };
 
             const handleError = (error) => {
-                alert(error);
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             };
 
             AjaxRequest.DELETE(requestUri, callback, handleError);

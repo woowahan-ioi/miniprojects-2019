@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VideoRepository extends JpaRepository<Video, Long> {
 
-    @Query("SELECT v FROM Video v ORDER BY Random()")
+    @Query("SELECT v FROM Video v ORDER BY RAND()")
     Page<Video> findAllRandom(Pageable pageable);
 
     List<Video> findByWriter(User writer);

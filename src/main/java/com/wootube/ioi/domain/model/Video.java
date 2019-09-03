@@ -38,7 +38,7 @@ public class Video extends BaseEntity {
     @Column(nullable = false)
     private String thumbnailFileName;
 
-    @Column(columnDefinition = "long default 0")
+    @Column(columnDefinition = "bigint default 0")
     private long views;
 
     @ManyToOne(fetch = FetchType.LAZY)

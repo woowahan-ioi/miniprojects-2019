@@ -1,8 +1,5 @@
 package com.wootube.ioi.web.controller.api;
 
-import java.net.URI;
-import java.util.List;
-
 import com.wootube.ioi.service.CommentLikeService;
 import com.wootube.ioi.service.CommentService;
 import com.wootube.ioi.service.dto.CommentLikeResponseDto;
@@ -10,10 +7,12 @@ import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
-
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/videos/{videoId}/comments")
 @RestController
@@ -34,27 +33,25 @@ public class CommentApiController {
     @GetMapping("/sort/updatetime")
     public ResponseEntity<List<CommentResponseDto>> sortCommentByUpdateTime(@PathVariable Long videoId) {
         List<CommentResponseDto> comments = commentService.sortComment(ASC_SORT_BY_UPDATE_TIME, videoId);
-        if (userSessionManager.getUserSession() == null) {
-            commentLikeService.saveCommentLike(comments);
-            return ResponseEntity.ok(comments);
-        }
 
-        UserSession userSession = userSessionManager.getUserSession();
-        commentLikeService.saveCommentLike(comments, userSession.getId());
+        saveCommentLikeByUserSession(comments);
         return ResponseEntity.ok(comments);
     }
 
     @GetMapping("/sort/likecount")
     public ResponseEntity<List<CommentResponseDto>> sortCommentByLikeCount(@PathVariable Long videoId) {
         List<CommentResponseDto> comments = commentService.sortComment(DESC_SORT_BY_UPDATE_TIME, videoId);
-        if (userSessionManager.getUserSession() == null) {
-            commentLikeService.saveCommentLike(comments);
-            return ResponseEntity.ok(comments);
-        }
 
-        UserSession userSession = userSessionManager.getUserSession();
-        commentLikeService.saveCommentLike(comments, userSession.getId());
+        saveCommentLikeByUserSession(comments);
         return ResponseEntity.ok(comments);
+    }
+
+    private void saveCommentLikeByUserSession(List<CommentResponseDto> comments) {
+        if (userSessionManager.getUserSession() != null) {
+            commentLikeService.saveCommentLike(comments, userSessionManager.getUserSession().getId());
+            return;
+        }
+        commentLikeService.saveCommentLike(comments);
     }
 
     @PostMapping
