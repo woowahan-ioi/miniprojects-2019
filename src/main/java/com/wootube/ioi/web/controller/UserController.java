@@ -3,6 +3,7 @@ package com.wootube.ioi.web.controller;
 import java.io.IOException;
 
 import com.wootube.ioi.domain.model.User;
+import com.wootube.ioi.service.FileService;
 import com.wootube.ioi.service.UserService;
 import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.EditUserRequestDto;
@@ -23,11 +24,13 @@ public class UserController {
 
     private final UserService userService;
     private final VideoService videoService;
+    private final FileService fileService;
     private final UserSessionManager userSessionManager;
 
-    public UserController(UserService userService, VideoService videoService, UserSessionManager userSessionManager) {
+    public UserController(UserService userService, VideoService videoService, FileService fileService, UserSessionManager userSessionManager) {
         this.userService = userService;
         this.videoService = videoService;
+        this.fileService = fileService;
         this.userSessionManager = userSessionManager;
     }
 
@@ -91,7 +94,7 @@ public class UserController {
     @PutMapping("/images")
     public RedirectView editProfileImage(MultipartFile uploadFile) throws IOException {
         UserSession userSession = userSessionManager.getUserSession();
-        User updatedUser = userService.updateProfileImage(userSession.getId(), uploadFile);
+        User updatedUser = fileService.updateProfileImage(userSession.getId(), uploadFile);
         userSessionManager.setUserSession(updatedUser);
         return new RedirectView("/user/mypage");
     }

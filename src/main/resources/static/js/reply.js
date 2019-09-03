@@ -131,7 +131,7 @@ const replyButton = (function () {
             const requestBody = {
                 contents: inputComment.value
             };
-            const callback = response => {
+            const callback = (response) => {
                 if (response.status === 201) {
                     response.json().then(comment => {
                         appendReply(comment, event.target);
@@ -144,8 +144,9 @@ const replyButton = (function () {
                 }
                 throw response;
             }
-            const handleError = error => {
-                alert(error)
+            const handleError = (error) => {
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             }
             AjaxRequest.POST(requestUri, requestBody, callback, handleError)
         }
@@ -177,8 +178,9 @@ const replyButton = (function () {
                 throw response;
             };
 
-            const handleError = error => {
-                alert(error)
+            const handleError = (error) => {
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             };
 
             AjaxRequest.PUT(requestUri, requestBody, callback, handleError);
@@ -208,7 +210,8 @@ const replyButton = (function () {
             };
 
             const handleError = (error) => {
-                alert(error);
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             };
 
             AjaxRequest.DELETE(requestUri, callback, handleError);
@@ -308,7 +311,8 @@ const replyButton = (function () {
             };
 
             const handleError = (error) => {
-                alert(error);
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             };
 
             AjaxRequest.POST(requestUri, requestBody, callback, handleError);
@@ -343,7 +347,8 @@ const replyButton = (function () {
             };
 
             const handleError = (error) => {
-                alert(error);
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
             };
 
             AjaxRequest.DELETE(requestUri, callback, handleError);

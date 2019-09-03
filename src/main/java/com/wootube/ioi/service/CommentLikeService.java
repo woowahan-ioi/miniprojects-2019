@@ -1,17 +1,16 @@
 package com.wootube.ioi.service;
 
-import java.util.List;
-
 import com.wootube.ioi.domain.model.Comment;
 import com.wootube.ioi.domain.model.CommentLike;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.CommentLikeRepository;
 import com.wootube.ioi.service.dto.CommentLikeResponseDto;
 import com.wootube.ioi.service.dto.CommentResponseDto;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CommentLikeService {
