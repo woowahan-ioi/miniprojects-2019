@@ -1,5 +1,9 @@
 package com.wootube.ioi.service;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.UserRepository;
 import com.wootube.ioi.service.dto.LogInRequestDto;
@@ -16,14 +20,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -104,10 +104,10 @@ public class UserServiceTest extends TestUtil {
 
     @DisplayName("프로필 사진 업데이트")
     @Test
-    void updateProfileImage() throws IOException {
+    void updateProfileImage() {
         given(userRepository.findByIdAndActiveTrue(USER_ID)).willReturn(Optional.of(testUser));
         given(testUser.getProfileImage()).willReturn(PROFILE_IMAGE);
-        given(fileConverter.convert(updateTestUploadFile)).willReturn(Optional.of(testFile));
+        given(fileConverter.convert(updateTestUploadFile)).willReturn(testFile);
         given(fileUploader.uploadFile(testFile, UploadType.PROFILE)).willReturn(PROFILE_IMAGE_URL);
 
         userService.updateProfileImage(USER_ID, updateTestUploadFile);

@@ -1,5 +1,7 @@
 package com.wootube.ioi.service;
 
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.VerifyKey;
 import com.wootube.ioi.domain.repository.VerifyKeyRepository;
 import com.wootube.ioi.service.exception.NotMatchVerifyKeyException;
@@ -8,9 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Optional;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;

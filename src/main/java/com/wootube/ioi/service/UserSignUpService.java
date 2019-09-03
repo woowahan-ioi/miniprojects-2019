@@ -2,6 +2,7 @@ package com.wootube.ioi.service;
 
 import com.wootube.ioi.service.dto.EmailCheckResponseDto;
 import com.wootube.ioi.service.exception.NotFoundUserException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

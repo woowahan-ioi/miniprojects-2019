@@ -1,5 +1,10 @@
 package com.wootube.ioi.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.model.Video;
 import com.wootube.ioi.domain.repository.VideoRepository;
@@ -15,14 +20,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -92,11 +93,11 @@ class VideoServiceTest extends TestUtil {
         videoService.create(testUploadMultipartFile, testVideoRequestDto, USER_ID);
     }
 
-    private void mockUploadVideo(File convertedVideo, File convertedThumbnail) throws IOException {
-        given(fileConverter.convert(testUploadMultipartFile)).willReturn(Optional.of(convertedVideo));
+    private void mockUploadVideo(File convertedVideo, File convertedThumbnail) {
+        given(fileConverter.convert(testUploadMultipartFile)).willReturn(convertedVideo);
         given(fileUploader.uploadFile(convertedVideo, UploadType.VIDEO)).willReturn(videoFileFullPath);
 
-        given(fileConverter.convert(convertedVideo)).willReturn(Optional.of(convertedThumbnail));
+        given(fileConverter.convert(convertedVideo)).willReturn(convertedThumbnail);
         given(fileUploader.uploadFile(convertedThumbnail, UploadType.THUMBNAIL)).willReturn(thumbnailImageFileFullPath);
     }
 
@@ -109,7 +110,7 @@ class VideoServiceTest extends TestUtil {
 
     @Test
     @DisplayName("서비스에서 비디오를 업데이트 한다.")
-    void update() throws IOException {
+    void update() {
         testVideo = mock(Video.class);
         given(videoRepository.findById(ID)).willReturn(Optional.of(testVideo));
         given(testVideo.matchWriter(any())).willReturn(true);

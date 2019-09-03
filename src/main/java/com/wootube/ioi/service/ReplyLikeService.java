@@ -1,16 +1,17 @@
 package com.wootube.ioi.service;
 
+import java.util.List;
+
 import com.wootube.ioi.domain.model.Reply;
 import com.wootube.ioi.domain.model.ReplyLike;
 import com.wootube.ioi.domain.model.User;
 import com.wootube.ioi.domain.repository.ReplyLikeRepository;
 import com.wootube.ioi.service.dto.ReplyLikeResponseDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class ReplyLikeService {

@@ -4,6 +4,7 @@ import com.wootube.ioi.domain.model.VerifyKey;
 import com.wootube.ioi.domain.model.VerifyKeyFactory;
 import com.wootube.ioi.domain.repository.VerifyKeyRepository;
 import com.wootube.ioi.service.exception.NotMatchVerifyKeyException;
+
 import org.springframework.stereotype.Service;
 
 @Service

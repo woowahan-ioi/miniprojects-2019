@@ -1,18 +1,19 @@
 package com.wootube.ioi.web.controller.api;
 
+import java.util.List;
+
 import com.wootube.ioi.service.VideoLikeService;
 import com.wootube.ioi.service.VideoService;
 import com.wootube.ioi.service.dto.VideoResponseDto;
 import com.wootube.ioi.web.session.UserSession;
 import com.wootube.ioi.web.session.UserSessionManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("/api/videos")
 @RestController

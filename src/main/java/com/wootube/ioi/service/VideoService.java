@@ -1,5 +1,9 @@
 package com.wootube.ioi.service;
 
+import java.util.Collection;
+import java.util.List;
+import javax.transaction.Transactional;
+
 import com.wootube.ioi.domain.model.S3UploadFileFactory;
 import com.wootube.ioi.domain.model.Subscription;
 import com.wootube.ioi.domain.model.User;
@@ -14,38 +18,34 @@ import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-
 import static java.util.stream.Collectors.toList;
 
 @Service
 public class VideoService {
-    private final FileUploader fileUploader;
     private final ModelMapper modelMapper;
     private final VideoRepository videoRepository;
     private final UserService userService;
-    private final FileConverter fileConverter;
     private final SubscriptionService subscriptionService;
+    private final FileConverter fileConverter;
+    private final FileUploader fileUploader;
 
     @Autowired
     public VideoService(FileUploader fileUploader, ModelMapper modelMapper, VideoRepository videoRepository, UserService userService, FileConverter fileConverter, SubscriptionService subscriptionService) {
         this.fileUploader = fileUploader;
+        this.fileConverter = fileConverter;
         this.modelMapper = modelMapper;
         this.videoRepository = videoRepository;
         this.userService = userService;
-        this.fileConverter = fileConverter;
         this.subscriptionService = subscriptionService;
     }
 
-    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) throws IOException {
+    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) {
         S3UploadFileFactory s3UploadFileFactory = new S3UploadFileFactory(uploadFile, fileConverter, fileUploader).invoke();
 
         User writer = userService.findByIdAndIsActiveTrue(writerId);
@@ -73,7 +73,7 @@ public class VideoService {
     }
 
     @Transactional
-    public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) throws IOException {
+    public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) {
         Video video = findById(id);
         matchWriter(writerId, id);
 
@@ -137,9 +137,9 @@ public class VideoService {
                 .collect(toList());
     }
 
-    public List<VideoResponseDto> findLastestVideos(Pageable pageable) {
-        return videoRepository.findAll(pageable).stream()
-                .map(video -> modelMapper.map(video, VideoResponseDto.class))
-                .collect(toList());
-    }
+	public List<VideoResponseDto> findLastestVideos(Pageable pageable) {
+		return videoRepository.findAll(pageable).stream()
+				.map(video -> modelMapper.map(video, VideoResponseDto.class))
+				.collect(toList());
+	}
 }

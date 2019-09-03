@@ -1,12 +1,13 @@
 const navButton = (() => {
     const NavController = function() {
         const navService = new NavService();
+        const pathName = location.pathname;
 
         const getPopularVideos = function() {
             const popularsButton = document.querySelector("#nav-item-populars");
             popularsButton.addEventListener("click", navService.resetVideoArea);
             popularsButton.addEventListener("click", navService.getPopularVideos);
-            navService.getPopularVideos();
+            appendVideosInMainPage("/", navService.getPopularVideos);
         }
 
         const getSubscribeVideos = function() {
@@ -17,21 +18,27 @@ const navButton = (() => {
 
             subscriptionsButton.addEventListener("click", navService.resetVideoArea);
             subscriptionsButton.addEventListener("click", navService.getSubscribeVideos);
-            navService.getSubscribeVideos();
+            appendVideosInMainPage("/", navService.getSubscribeVideos);
         }
 
         const getLatestVideos = function () {
             const latestsButton = document.querySelector("#nav-item-latests");
             latestsButton.addEventListener("click", navService.resetVideoArea);
             latestsButton.addEventListener("click", navService.getLatestVideos);
-            navService.getLatestVideos();
+            appendVideosInMainPage("/", navService.getLatestVideos);
         }
 
         const getRecommendedVideos = function () {
             const recommendedButton = document.querySelector("#nav-item-recommends");
             recommendedButton.addEventListener("click", navService.resetVideoArea);
             recommendedButton.addEventListener("click", navService.getRecommendedVideos);
-            navService.getRecommendedVideos();
+            appendVideosInMainPage("/", navService.getRecommendedVideos);
+        }
+
+        const appendVideosInMainPage = function (pageName, appendMethod) {
+            if(pathName === pageName) {
+                appendMethod();
+            }
         }
 
         const init = function() {
@@ -45,6 +52,7 @@ const navButton = (() => {
             init: init
         }
     }
+
     const NavService = function() {
         const getPopularVideos = () => {
             const uri = "/api/videos/populars";
